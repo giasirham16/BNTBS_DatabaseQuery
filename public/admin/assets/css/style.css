@@ -1379,6 +1379,11 @@ h6 {
     font-weight: 600;
 }
 
+.col-form-label{
+    color: #005C3C;
+    font-weight: 600;
+}
+
 .table-head-custom {
     background-color: #f0efe5;
     color: #005C3C;

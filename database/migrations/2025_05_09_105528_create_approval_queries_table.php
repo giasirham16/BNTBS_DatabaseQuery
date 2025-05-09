@@ -17,10 +17,11 @@ return new class extends Migration
             $table->string('ipHost');
             $table->string('port');
             $table->string('driver');
-            $table->string('queryRequest');
-            $table->string('queryResult');
+            $table->longText('queryRequest');
+            $table->longText('queryResult')->nullable();
             $table->string('username');
             $table->string('password');
+            $table->string('reason')->nullable();
             $table->string('executedBy');
             $table->string('executedRole');
             $table->integer('statusApproval');

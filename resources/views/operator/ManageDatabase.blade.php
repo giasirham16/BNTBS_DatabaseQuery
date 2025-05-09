@@ -47,7 +47,7 @@
                                         @foreach ($data as $key => $value)
                                             @if ($value->statusApproval != 99)
                                                 <tr>
-                                                    <td>{{ $value->id }}</td>
+                                                    <td>{{ $loop->iteration }}</td>
                                                     <td>{{ $value->namaDB }}</td>
                                                     <td>{{ $value->ipHost }}</td>
                                                     <td>{{ $value->port }}</td>

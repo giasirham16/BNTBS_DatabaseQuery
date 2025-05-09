@@ -17,8 +17,8 @@ return new class extends Migration
             $table->string('ipHost');
             $table->string('port');
             $table->string('driver');
-            $table->string('queryRequest');
-            $table->string('queryResult');
+            $table->longText('queryRequest');
+            $table->longText('queryResult')->nullable();
             $table->string('executedBy');
             $table->string('executedRole');
             $table->string('action');

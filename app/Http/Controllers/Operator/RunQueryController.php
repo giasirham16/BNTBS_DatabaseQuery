@@ -3,32 +3,48 @@
 namespace App\Http\Controllers\Operator;
 
 use App\Http\Controllers\Controller;
+use App\Models\ApprovalQuery;
 use App\Models\DatabaseParameter;
+use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Crypt;
 
 class RunQueryController extends Controller
 {
-    protected $data;
+    protected $data, $approval;
 
     public function __construct()
     {
         // Inisialisasi di constructor
-        $this->data = DatabaseParameter::where('statusApproval', 0)->get();
+        $this->data = DatabaseParameter::where('statusApproval', 2)->get();
+        $this->approval = ApprovalQuery::select(
+            'id',
+            'namaDB',
+            'ipHost',
+            'port',
+            'driver',
+            'queryRequest',
+            'queryResult',
+            'reason',
+            'statusApproval'
+        )->where('executedBy', Auth::user()->username)->get();
     }
 
     public function index()
     {
         // dd($this->data);
+        // dd($this->approval);
         session()->forget('success');
         return view('operator.RunQuery')
             ->with('data', $this->data)
+            ->with('approval', $this->approval)
             ->with('queryResult', $queryResult ?? []);
     }
 
     public function executeQuery(Request $request)
     {
-        // dd($request->all());
         // Ambil parameter dari request JSON
         $driver   = $request->input('driver');
         $host     = $request->input('ipHost');
@@ -70,21 +86,38 @@ class RunQueryController extends Controller
             $lowerQuery = strtolower(ltrim($query));
             // Jika query select
             if (str_starts_with($lowerQuery, 'select')) {
-                $queryResult = DB::connection('dynamic_connection')->select($query);
-                session()->flash('success', 'Query berhasil dieksekusi!');
+                ApprovalQuery::create([
+                    'namaDB' => $database,
+                    'ipHost' => $host,
+                    'port' => $port,
+                    'driver' => $driver,
+                    'queryRequest' => $query,
+                    'username' => $username,
+                    'statusApproval' => 0,
+                    'password' => Crypt::encryptString($password),
+                    'executedBy' => Auth::user()->username,
+                    'executedRole' => Auth::user()->role,
+                ]);
+                // $queryResult = DB::connection('dynamic_connection')->select($query);
+ 
+                // $approval = ApprovalQuery::find(1);
+
+                // $approval->queryResult = $queryResult;
+                // $approval->save();
+                // session()->flash('success', 'Query menunggu approval untuk dieksekusi!');
                 return view('operator.RunQuery')
                     ->with('data', $this->data)
-                    ->with('queryResult', $queryResult);
-            } 
+                    ->with('approval', $this->approval);
+            }
             // Jika query insert, update, delete
-            else if ((str_starts_with($lowerQuery, 'insert')) || (str_starts_with($lowerQuery, 'update')) || (str_starts_with($lowerQuery, 'delete'))) {   
+            else if ((str_starts_with($lowerQuery, 'insert')) || (str_starts_with($lowerQuery, 'update')) || (str_starts_with($lowerQuery, 'delete'))) {
                 $queryResult = DB::connection('dynamic_connection')->statement($query);
 
                 // session()->flash('success', 'Query menunggu approval untuk dieksekusi!');
                 return view('operator.RunQuery')
                     ->with('data', $this->data)
                     ->with('queryResult', []);
-            } 
+            }
             // Selain query select, insert, update, delete
             else {
                 return redirect()->route('viewQuery')->with('error', 'Query yang anda masukkan salah.');
