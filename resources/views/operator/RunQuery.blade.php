@@ -51,16 +51,12 @@
                         <div class="card">
                             <div class="row">
                                 <div class="card-body">
-                                    <label for="floatingSelect" class="form-label">Driver</label>
+                                    <label for="ipHostDBDropdown" class="form-label">IP Host</label>
                                     <div class="form-floating">
-                                        <select class="form-select" name="driver" id="driver">
+                                        <select class="form-select" name="ipHost" id="ipHostDBDropdown" required>
+                                            <option selected value="" disabled>--Select IP Host DB--</option>
                                             @foreach ($data as $key => $value)
-                                                @if ($loop->first)
-                                                    <option selected value={{ $value->driver }}>{{ $value->driver }}
-                                                    </option>
-                                                @else
-                                                    <option value={{ $value->driver }}>{{ $value->driver }}</option>
-                                                @endif
+                                                <option value={{ $value->ipHost }}>{{ $value->ipHost }}</option>
                                             @endforeach
                                         </select>
                                     </div>
@@ -68,130 +64,135 @@
                             </div>
                             <div class="row">
                                 <div class="card-body">
-                                    <label for="floatingSelect" class="form-label">Host DB</label>
+                                    <label for="driverInput" class="form-label">Driver</label>
+                                    <input type="text" placeholder="Autofill if IP Host Selected"
+                                        class="form-query bg-light" name="driver" id="driverInput" readonly>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="card-body">
+                                    <label for="portInput" class="form-label">Port</label>
+                                    <input type="text" placeholder="Autofill if IP Host Selected"
+                                        class="form-query bg-light" name="port" id="portInput" readonly>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="card-body">
+                                    <label for="namaDBDropdown" class="form-label">Nama Database</label>
                                     <div class="form-floating">
-                                        <select class="form-select" name="ipHost" id="ipHost">
-                                            @foreach ($data as $key => $value)
-                                                @if ($loop->first)
-                                                    <option selected value={{ $value->ipHost }}>{{ $value->ipHost }}
-                                                    </option>
-                                                @else
-                                                    <option value={{ $value->ipHost }}>{{ $value->ipHost }}</option>
-                                                @endif
-                                            @endforeach
+                                        <select class="form-select" name="namaDB" id="namaDBDropdown" required>
+                                            <option selected value="">--Select IP Host DB First--</option>
                                         </select>
                                     </div>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="card-body">
-                                    <label for="floatingSelect" class="form-label">Port</label>
-                                    <div class="form-floating">
-                                        <select class="form-select" name="port" id="port">
-                                            @foreach ($data as $key => $value)
-                                                @if ($loop->first)
-                                                    <option selected value={{ $value->port }}>{{ $value->port }}
-                                                    </option>
-                                                @else
-                                                    <option value={{ $value->port }}>{{ $value->port }}</option>
-                                                @endif
-                                            @endforeach
-                                        </select>
-                                    </div>
+                                    <label for="usernameDB" class="form-label">Username</label>
+                                    <input type="text" class="form-query" name="usernameDB" id="usernameDB" required>
                                 </div>
                             </div>
                             <div class="row">
                                 <div class="card-body">
-                                    <label for="floatingSelect" class="form-label">Database Name</label>
-                                    <div class="form-floating">
-                                        <select class="form-select" name="namaDB" id="namaDB">
-                                            @foreach ($data as $key => $value)
-                                                @if ($loop->first)
-                                                    <option selected value={{ $value->namaDB }}>{{ $value->namaDB }}
-                                                    </option>
-                                                @else
-                                                    <option value={{ $value->namaDB }}>{{ $value->namaDB }}</option>
-                                                @endif
-                                            @endforeach
-                                        </select>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="card-body">
-                                        <label for="usernameDB" class="form-label">Username</label>
-                                        <input type="text" class="form-query" name="usernameDB" id="usernameDB" required>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="card-body">
-                                        <label for="passwordDB" class="form-label">Password</label>
-                                        <input type="password" class="form-query" name="passwordDB" id="passwordDB">
-                                    </div>
+                                    <label for="passwordDB" class="form-label">Password</label>
+                                    <input type="password" class="form-query" name="passwordDB" id="passwordDB">
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </form>
+        </div>
+        </form>
 
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="card">
-                        <div class="card-body-table">
-                            <h5 class="card-title">Result</h5>
-                            <table id="resultTable" class="table table-hover table-bordered">
-                                <thead class="table-head-custom">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-body-table">
+                        <h5 class="card-title">Result</h5>
+                        <table id="resultTable" class="table table-hover table-bordered">
+                            <thead class="table-head-custom">
+                                <tr>
+                                    @if (isset($queryResult[0]))
+                                        @foreach (array_keys((array) $queryResult[0]) as $header)
+                                            <th>{{ ucfirst($header) }}</th>
+                                        @endforeach
+                                    @endif
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($queryResult as $row)
                                     <tr>
-                                        @if (isset($queryResult[0]))
-                                            @foreach (array_keys((array) $queryResult[0]) as $header)
-                                                <th>{{ ucfirst($header) }}</th>
-                                            @endforeach
-                                        @endif
+                                        @foreach ((array) $row as $cell)
+                                            <td>
+                                                @if (is_array($cell) || is_object($cell))
+                                                    <pre>{{ json_encode($cell, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) }}</pre>
+                                                @else
+                                                    {{ $cell ?? '-' }}
+                                                @endif
+                                            </td>
+                                        @endforeach
                                     </tr>
-                                </thead>
-                                <tbody>
-                                    @foreach ($queryResult as $row)
-                                        <tr>
-                                            @foreach ((array) $row as $cell)
-                                                <td>
-                                                    @if (is_array($cell) || is_object($cell))
-                                                        <pre>{{ json_encode($cell, JSON_UNESCAPED_UNICODE | JSON_PRETTY_PRINT) }}</pre>
-                                                    @else
-                                                        {{ $cell ?? '-' }}
-                                                    @endif
-                                                </td>
-                                            @endforeach
-                                        </tr>
-                                    @endforeach
-                                </tbody>
-                            </table>
-                        </div>
+                                @endforeach
+                            </tbody>
+                        </table>
                     </div>
                 </div>
             </div>
+        </div>
         </div>
     </section>
 @endsection
 
 @section('scripts')
     <script>
-        // Set timeout hilangkan notif
-        setTimeout(() => {
-            const alerts = document.querySelectorAll('.alert');
-            alerts.forEach(alert => {
-                const bsAlert = new bootstrap.Alert(alert);
-                bsAlert.close();
-            });
-        }, 5000); // hilang dalam 5 detik
+        // // Set timeout hilangkan notif
+        // setTimeout(() => {
+        //     const alerts = document.querySelectorAll('.alert');
+        //     alerts.forEach(alert => {
+        //         const bsAlert = new bootstrap.Alert(alert);
+        //         bsAlert.close();
+        //     });
+        // }, 5000); // hilang dalam 5 detik
+
+
+        // Map data dari IP ke port & driver
+        const ipMap = @json(collect($data)->keyBy('ipHost'));
+        const dbData = @json($data);
+        document.getElementById('ipHostDBDropdown').addEventListener('change', function() {
+            const selectedIp = this.value;
+            if (ipMap[selectedIp]) {
+                document.getElementById('portInput').value = ipMap[selectedIp].port;
+                document.getElementById('driverInput').value = ipMap[selectedIp].driver;
+
+                const matchedData = dbData.filter(entry => entry.ipHost === selectedIp);
+
+                let options = '<option value="" disabled>--Pilih Nama Database--</option>';
+                matchedData.forEach(entry => {
+                    options += `<option value="${entry.namaDB}">${entry.namaDB}</option>`;
+                });
+                // Isi dropdown namaDB
+                document.getElementById('namaDBDropdown').innerHTML = options;
+
+            } else {
+                document.getElementById('portInput').value = '';
+                document.getElementById('driverInput').value = '';
+            }
+        });
+
 
         // Aktifkan orderby, pagination dan search
         $(document).ready(function() {
-            $('#resultTable').DataTable({
-                scrollX: true,
-                "ordering": true,
-                "paging": true,
-                "searching": true,
-            });
+            try {
+                $('#resultTable').DataTable({
+                    scrollX: true,
+                    "ordering": true,
+                    "paging": true,
+                    "searching": true,
+                });
+            } catch (e) {
+                console.error("DataTable error ignored");
+                // Bisa juga mengabaikan error ini tanpa mengambil tindakan lebih lanjut
+            }
         });
     </script>
 @endsection

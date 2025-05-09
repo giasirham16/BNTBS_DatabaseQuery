@@ -31,7 +31,7 @@
                     <div class="card">
                         <div class="card-body-table">
                             <div class="table-responsive">
-                                <table id='databaseTable' class="table table-hover table-border">
+                                <table id='dbTable' class="table table-hover table-border">
                                     <thead>
                                         <tr>
                                             <th>Id</th>
@@ -138,8 +138,7 @@
 
         // Aktifkan orderby, pagination dan search
         $(document).ready(function() {
-            $('#databaseTable').DataTable({
-                scrollX: true
+            $('#dbTable').DataTable({
                 "ordering": true,
                 "paging": true,
                 "searching": true,

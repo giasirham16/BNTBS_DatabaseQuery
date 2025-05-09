@@ -19,6 +19,7 @@ class RunQueryController extends Controller
 
     public function index()
     {
+        // dd($this->data);
         session()->forget('success');
         return view('operator.RunQuery')
             ->with('data', $this->data)
@@ -58,7 +59,6 @@ class RunQueryController extends Controller
             ]);
         } catch (\PDOException $e) {
             return redirect()->route('viewQuery')->with('error', 'Error: Connection Failed, Reason: ' . $e->getMessage());
-            // return response()->json(['error' => $e->getMessage()], 500);
         }
 
         // Daftarkan koneksi dinamis
@@ -77,12 +77,13 @@ class RunQueryController extends Controller
                     ->with('queryResult', $queryResult);
             } 
             // Jika query insert, update, delete
-            else if ((str_starts_with($lowerQuery, 'insert')) || (str_starts_with($lowerQuery, 'update')) || (str_starts_with($lowerQuery, 'delete'))) {
+            else if ((str_starts_with($lowerQuery, 'insert')) || (str_starts_with($lowerQuery, 'update')) || (str_starts_with($lowerQuery, 'delete'))) {   
                 $queryResult = DB::connection('dynamic_connection')->statement($query);
-                session()->flash('success', 'Query berhasil dieksekusi!');
+
+                // session()->flash('success', 'Query menunggu approval untuk dieksekusi!');
                 return view('operator.RunQuery')
                     ->with('data', $this->data)
-                    ->with('queryResult', $queryResult);
+                    ->with('queryResult', []);
             } 
             // Selain query select, insert, update, delete
             else {
