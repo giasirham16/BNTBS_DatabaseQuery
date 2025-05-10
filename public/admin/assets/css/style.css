@@ -1374,12 +1374,17 @@ h6 {
     margin-bottom: -7px;
 }
 
+/* .table-responsive th{
+    text-align:center !important;
+} */
+
+
 .form-label {
     color: #005C3C;
     font-weight: 600;
 }
 
-.col-form-label{
+.col-form-label {
     color: #005C3C;
     font-weight: 600;
 }

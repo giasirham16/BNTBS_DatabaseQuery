@@ -10,7 +10,7 @@ class ManageDatabaseController extends Controller
 {
   public function index()
   {
-    session()->forget('success');
+    // session()->forget('success');
     $data = DatabaseParameter::all();
     return view('operator.ManageDatabase')->with('data', $data);
   }

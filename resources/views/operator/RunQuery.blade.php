@@ -119,10 +119,10 @@
                                     <th>IP Host DB</th>
                                     <th>Port</th>
                                     <th>Driver</th>
-                                    <th>Query Category</th>
+                                    <th>Query Kategori</th>
                                     <th>Reason</th>
                                     <th>Status Approval</th>
-                                    <th>Action</th>
+                                    <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -150,10 +150,14 @@
                                                 <label class="badge bg-light-warning">Menunggu approval
                                                     checker</label>
                                             @elseif ($item->statusApproval == 1)
-                                                <label class="badge bg-light-danger">Menunggu approval
+                                                <label class="badge bg-light-warning">Menunggu approval
                                                     supervisor</label>
                                             @elseif ($item->statusApproval == 2)
                                                 <label class="badge bg-light-success">Approved</label>
+                                            @elseif ($item->statusApproval == 3)
+                                                <label class="badge bg-light-danger">Reject by checker</label>
+                                            @elseif ($item->statusApproval == 4)
+                                                <label class="badge bg-light-danger">Reject by supervisor</label>
                                             @endif
                                         </td>
                                         <td class="text-center align-middle">
@@ -164,8 +168,7 @@
                                                 data-reason="{{ $item->reason ?? '-' }}"
                                                 data-statusApproval="{{ $item->statusApproval }}"
                                                 data-queryRequest="{{ $item->queryRequest }}"
-                                                data-query-result="{{ $item->queryResult }}"
-                                                data-action2="{{ route('deleteDatabase', ['id' => '__ID__']) }}"><i
+                                                data-query-result="{{ $item->queryResult }}"><i
                                                     class="bi bi-eye-fill text-dark"
                                                     style="font-size: 18px;"></i></button>
                                         </td>
@@ -254,6 +257,8 @@
                 if (statusApproval == 0) status = "Menunggu approval checker";
                 else if (statusApproval == 1) status = "Menunggu approval supervisor";
                 else if (statusApproval == 2) status = "Approved";
+                else if (statusApproval == 3) status = "Reject by checker";
+                else if (statusApproval == 4) status = "Reject by supervisor";
 
                 // Set nilai input di modal
                 document.getElementById('view-dataId').value = id;
@@ -273,9 +278,9 @@
                 tableHead.innerHTML = '';
                 tableBody.innerHTML = '';
                 if (!queryResultRaw || queryResultRaw.length === 0) {
-                        tableHead.innerHTML = '<tr><th>Data Kosong</th></tr>';
-                        return;
-                    }
+                    tableHead.innerHTML = '<tr><th>Data Kosong</th></tr>';
+                    return;
+                }
 
                 try {
                     const queryResult = JSON.parse(queryResultRaw);

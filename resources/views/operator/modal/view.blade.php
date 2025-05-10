@@ -42,7 +42,7 @@
                 <div class="row">
                     <div class="col">
                         <label for="view-queryRequest" class="col-form-label">Query Request</label>
-                        <input type="text-area" class="form-control bg-light" id="view-queryRequest" readonly>
+                        <textarea rows="3" style="resize: vertical; overflow-y: auto;" class="form-control bg-light" id="view-queryRequest" readonly></textarea>
                     </div>
                 </div>
                 <div class="row">

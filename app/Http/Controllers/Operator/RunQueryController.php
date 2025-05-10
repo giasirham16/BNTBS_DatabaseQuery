@@ -36,11 +36,11 @@ class RunQueryController extends Controller
     {
         // dd($this->data);
         // dd($this->approval);
-        session()->forget('success');
+        // session()->forget('success');
         return view('operator.RunQuery')
             ->with('data', $this->data)
-            ->with('approval', $this->approval)
-            ->with('queryResult', $queryResult ?? []);
+            ->with('approval', $this->approval);
+            // ->with('queryResult', $queryResult ?? []);
     }
 
     public function executeQuery(Request $request)
@@ -93,30 +93,43 @@ class RunQueryController extends Controller
                     'driver' => $driver,
                     'queryRequest' => $query,
                     'username' => $username,
+                    'statusApproval' => 1,
+                    'password' => Crypt::encryptString($password),
+                    'executedBy' => Auth::user()->username,
+                    'executedRole' => Auth::user()->role,
+                ]);
+                
+                return redirect()->route('viewQuery')->with('success', 'Query menunggu approval untuk dieksekusi!');
+                // $queryResult = DB::connection('dynamic_connection')->select($query);
+                // $approval = ApprovalQuery::find(1);
+                // $approval->queryResult = $queryResult;
+                // $approval->save();
+                // session()->flash('success', 'Query menunggu approval untuk dieksekusi!');
+                // return view('operator.RunQuery')
+                //     ->with('data', $this->data)
+                //     ->with('approval', $this->approval);
+            }
+            // Jika query insert, update, delete
+            else if ((str_starts_with($lowerQuery, 'insert')) || (str_starts_with($lowerQuery, 'update')) || (str_starts_with($lowerQuery, 'delete'))) {
+                ApprovalQuery::create([
+                    'namaDB' => $database,
+                    'ipHost' => $host,
+                    'port' => $port,
+                    'driver' => $driver,
+                    'queryRequest' => $query,
+                    'username' => $username,
                     'statusApproval' => 0,
                     'password' => Crypt::encryptString($password),
                     'executedBy' => Auth::user()->username,
                     'executedRole' => Auth::user()->role,
                 ]);
-                // $queryResult = DB::connection('dynamic_connection')->select($query);
- 
-                // $approval = ApprovalQuery::find(1);
 
-                // $approval->queryResult = $queryResult;
-                // $approval->save();
+                return redirect()->route('viewQuery')->with('success', 'Query menunggu approval untuk dieksekusi!');
+                // $queryResult = DB::connection('dynamic_connection')->statement($query);
                 // session()->flash('success', 'Query menunggu approval untuk dieksekusi!');
-                return view('operator.RunQuery')
-                    ->with('data', $this->data)
-                    ->with('approval', $this->approval);
-            }
-            // Jika query insert, update, delete
-            else if ((str_starts_with($lowerQuery, 'insert')) || (str_starts_with($lowerQuery, 'update')) || (str_starts_with($lowerQuery, 'delete'))) {
-                $queryResult = DB::connection('dynamic_connection')->statement($query);
-
-                // session()->flash('success', 'Query menunggu approval untuk dieksekusi!');
-                return view('operator.RunQuery')
-                    ->with('data', $this->data)
-                    ->with('queryResult', []);
+                // return view('operator.RunQuery')
+                //     ->with('data', $this->data)
+                //     ->with('approval', $this->approval);
             }
             // Selain query select, insert, update, delete
             else {

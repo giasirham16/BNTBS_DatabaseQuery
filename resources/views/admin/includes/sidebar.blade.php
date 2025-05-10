@@ -9,38 +9,54 @@
             </a>
         </li> --}}
         @if (strtolower(Auth::user()->role) === 'operator')
-        <li class="nav-item">
-            <a class="nav-link {{ Request::is('operator/v1/runQuery', 'operator/v1/runQuery/*') ? '' : 'collapsed' }}"
-                href="{{ url('operator/v1/runQuery') }}">
-                <i
-                    class="bi {{ Request::is('operator/v1/runQuery', 'operator/v1/runQuery/*') ? 'bi-database-fill' : 'bi-database' }}"></i>
-                <span>Run Query</span>
-            </a>
-        </li>
-        <li class="nav-item">
-            <a class="nav-link {{ Request::is('operator/v1/manageDatabase', 'operator/v1/manageDatabase/*') ? '' : 'collapsed' }}"
-                href="{{ url('operator/v1/manageDatabase') }}">
-                <i
-                    class="bi {{ Request::is('operator/v1/manageDatabase', 'operator/v1/manageDatabase/*') ? 'bi-database-fill-add' : 'bi-database-add' }}"></i>
-                <span>Manage Database</span>
-            </a>
-        </li>
+            <li class="nav-item">
+                <a class="nav-link {{ Request::is('operator/v1/runQuery', 'operator/v1/runQuery/*') ? '' : 'collapsed' }}"
+                    href="{{ url('operator/v1/runQuery') }}">
+                    <i
+                        class="bi {{ Request::is('operator/v1/runQuery', 'operator/v1/runQuery/*') ? 'bi-database-fill' : 'bi-database' }}"></i>
+                    <span>Run Query</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{ Request::is('operator/v1/manageDatabase', 'operator/v1/manageDatabase/*') ? '' : 'collapsed' }}"
+                    href="{{ url('operator/v1/manageDatabase') }}">
+                    <i
+                        class="bi {{ Request::is('operator/v1/manageDatabase', 'operator/v1/manageDatabase/*') ? 'bi-database-fill-add' : 'bi-database-add' }}"></i>
+                    <span>Manage Database</span>
+                </a>
+            </li>
         @elseif (strtolower(Auth::user()->role) == 'checker')
             <li class="nav-item">
-                <a class="nav-link {{ Request::is('admin/v1/dashboard', 'admin/v1/dashboard/*') ? '' : 'collapsed' }}"
-                    href="{{ url('admin/v1/dashboard') }}">
+                <a class="nav-link {{ Request::is('checker/v1/approveQuery', 'checker/v1/approveQuery/*') ? '' : 'collapsed' }}"
+                    href="{{ url('checker/v1/approveQuery') }}">
                     <i
-                        class="bi {{ Request::is('admin/v1/dashboard', 'admin/v1/dashboard/*') ? 'bi-database-fill' : 'bi-database' }}"></i>
-                    <span>Run Query</span>
+                        class="bi {{ Request::is('checker/v1/approveQuery', 'checker/v1/approveQuery/*') ? 'bi-database-fill' : 'bi-database' }}"></i>
+                    <span>Query Approval</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{ Request::is('checker/v1/approveDatabase', 'checker/v1/approveDatabase/*') ? '' : 'collapsed' }}"
+                    href="{{ url('checker/v1/approveDatabase') }}">
+                    <i
+                        class="bi {{ Request::is('checker/v1/approveDatabase', 'checker/v1/approveDatabase/*') ? 'bi-database-fill-add' : 'bi-database-add' }}"></i>
+                    <span>Database Approval</span>
                 </a>
             </li>
         @elseif (strtolower(Auth::user()->role) == 'supervisor')
             <li class="nav-item">
-                <a class="nav-link {{ Request::is('admin/v1/dashboard', 'admin/v1/dashboard/*') ? '' : 'collapsed' }}"
-                    href="{{ url('admin/v1/dashboard') }}">
+                <a class="nav-link {{ Request::is('supervisor/v1/approveQuery', 'supervisor/v1/approveQuery/*') ? '' : 'collapsed' }}"
+                    href="{{ url('supervisor/v1/approveQuery') }}">
                     <i
-                        class="bi {{ Request::is('admin/v1/dashboard', 'admin/v1/dashboard/*') ? 'bi-database-fill' : 'bi-database' }}"></i>
-                    <span>Run Query</span>
+                        class="bi {{ Request::is('supervisor/v1/approveQuery', 'supervisor/v1/approveQuery/*') ? 'bi-database-fill' : 'bi-database' }}"></i>
+                    <span>Query Approval</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{ Request::is('supervisor/v1/approveDatabase', 'supervisor/v1/approveDatabase/*') ? '' : 'collapsed' }}"
+                    href="{{ url('supervisor/v1/approveDatabase') }}">
+                    <i
+                        class="bi {{ Request::is('supervisor/v1/approveDatabase', 'supervisor/v1/approveDatabase/*') ? 'bi-database-fill-add' : 'bi-database-add' }}"></i>
+                    <span>Database Approval</span>
                 </a>
             </li>
         @else

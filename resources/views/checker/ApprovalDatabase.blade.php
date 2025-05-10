@@ -20,12 +20,6 @@
 
     <section class="section dashboard">
         <div class="container-fluid">
-            <!-- Button trigger modal -->
-            <button type="button" style="margin-bottom: 10px" class="btn btn-primary" data-bs-toggle="modal"
-                data-bs-target="#addDBModal">
-                Create Data
-            </button>
-
             <div class="row">
                 <div class="col-md-12">
                     <div class="card">
@@ -34,7 +28,7 @@
                                 <table id='dbTable' class="table table-hover table-border">
                                     <thead>
                                         <tr>
-                                            <th>No</th>
+                                            <th>Id</th>
                                             <th>Nama</th>
                                             <th>Source</th>
                                             <th>Port</th>
@@ -75,26 +69,19 @@
                                                                 supervisor</label>
                                                         @endif
                                                     </td>
-                                                    <td>
-                                                        <div style="display: flex; gap: 10px;">
-                                                            <button class="btn btn-outline-primary" data-bs-toggle="modal"
-                                                                data-bs-target="#updateDBModal"
-                                                                data-id="{{ $value->id }}"
-                                                                data-namadb="{{ $value->namaDB }}"
-                                                                data-iphost="{{ $value->ipHost }}"
-                                                                data-port="{{ $value->port }}"
-                                                                data-driver="{{ $value->driver }}"
-                                                                data-statusApproval="{{ $value->statusApproval }}"
-                                                                data-action="{{ route('editDatabase', ['id' => '__ID__']) }}"><i
-                                                                    class="bi bi-pencil-square text-success"
-                                                                    style="font-size: 18px;"></i></button>
-                                                            <button class="btn btn-outline-primary" data-bs-toggle="modal"
-                                                                data-bs-target="#deleteDBModal"
-                                                                data-id="{{ $value->id }}"
-                                                                data-action2="{{ route('deleteDatabase', ['id' => '__ID__']) }}"><i
-                                                                    class="bi bi-trash text-danger"
-                                                                    style="font-size: 18px;"></i></button>
-                                                        </div>
+                                                    <td class="text-center align-middle">
+                                                        <button class="btn btn-outline-primary" data-bs-toggle="modal"
+                                                            data-bs-target="#approvalQueryModal"
+                                                            data-id="{{ $value->id }}" data-namadb="{{ $value->namaDB }}"
+                                                            data-iphost="{{ $value->ipHost }}"
+                                                            data-port="{{ $value->port }}"
+                                                            data-driver="{{ $value->driver }}"
+                                                            data-reason="{{ $value->reason }}"
+                                                            data-statusApproval="{{ $value->statusApproval }}"
+                                                            data-queryRequest="{{ $value->queryRequest }}"
+                                                            data-query-result="{{ $value->queryResult }}"><i
+                                                                class="bi bi-eye-fill text-dark"
+                                                                style="font-size: 18px;"></i></button>
                                                     </td>
                                                 </tr>
                                             @endif

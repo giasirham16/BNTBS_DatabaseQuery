@@ -39,6 +39,12 @@ class AuthController extends Controller
             if(strtolower(Auth::user()->role) === 'operator'){
                 return redirect()->route('viewQuery');
             }
+            else if(strtolower(Auth::user()->role) === 'checker'){
+                return redirect()->route('chkViewQuery');
+            }
+            else if(strtolower(Auth::user()->role) === 'supervisor'){
+                return redirect()->route('spvViewQuery');
+            }
         }
     
         return back()->withErrors(['username' => 'Username atau password salah.'])->withInput();
