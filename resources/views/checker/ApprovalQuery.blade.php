@@ -1,7 +1,7 @@
 @extends('admin.layouts.app')
 
 @section('title')
-    Run Query | Bank NTB Syariah
+    Query Approval | Bank NTB Syariah
 @endsection
 
 @section('content')
@@ -27,7 +27,6 @@
                                             <th class="text-nowrap">Port</th>
                                             <th class="text-nowrap">Driver</th>
                                             <th class="text-nowrap">Query Kategori</th>
-                                            <th class="text-nowrap">Reason</th>
                                             <th class="text-nowrap">Status Approval</th>
                                             <th class="text-nowrap">Aksi</th>
                                         </tr>
@@ -51,7 +50,6 @@
                                                         Delete
                                                     @endif
                                                 </td>
-                                                <td>{{ $item->reason ?? '-' }}</td>
                                                 <td>
                                                     @if ($item->statusApproval == 0)
                                                         <label class="badge bg-light-warning">Menunggu approval
@@ -126,7 +124,7 @@
                 "searching": true,
                 columnDefs: [{
                         orderable: false,
-                        targets: [8]
+                        targets: [7]
                     } // index kolom mulai dari 0
                 ]
             });
@@ -146,7 +144,6 @@
                 const port = button.getAttribute('data-port');
                 const driver = button.getAttribute('data-driver');
                 const statusApproval = button.getAttribute('data-statusApproval');
-                const reason = button.getAttribute('data-reason');
                 const queryRequest = button.getAttribute('data-queryRequest');
                 const queryResultRaw = button.getAttribute('data-query-result');
 
@@ -165,7 +162,6 @@
                 document.getElementById('view-port').value = port;
                 document.getElementById('view-driver').value = driver;
                 document.getElementById('view-statusApproval').value = status;
-                document.getElementById('view-reason').value = reason;
                 document.getElementById('view-queryRequest').value = queryRequest;
             })
         });

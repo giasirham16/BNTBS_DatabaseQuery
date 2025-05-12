@@ -22,12 +22,12 @@ class ManageDatabaseController extends Controller
       $saved = DatabaseParameter::create($data);
 
       if ($saved) {
-        return redirect()->back()->with('success', 'Data saved successfully!');
+        return redirect()->route('viewDatabase')->with('success', 'Data saved successfully!');
       } else {
-        return redirect()->back()->with('error', 'Failed to save data.');
+        return redirect()->route('viewDatabase')->with('error', 'Failed to save data.');
       }
     } catch (\Exception $e) {
-      return redirect()->back()->with('error', 'Error: ' . $e->getMessage());
+      return redirect()->route('viewDatabase')->with('error', 'Error: ' . $e->getMessage());
     }
   }
 

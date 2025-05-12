@@ -18,6 +18,15 @@ Route::prefix('admin/v1')->group(function () {
     Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 });
 
+// Menu superadmin
+Route::prefix('superadmin/v1')->group(function () {
+    // Menu Manage User
+    Route::get('/manageUser', [AdminUserController::class, 'index'])->name('viewUser');
+    Route::post('/manageUser', [AdminUserController::class, 'store'])->name('addUser');
+    Route::post('/manageUser/approve', [AdminUserController::class, 'approve'])->name('approveUser');
+    Route::put('/manageUser/delete/{id}', [AdminUserController::class, 'destroy'])->name('deleteUser');
+});
+
 // Menu operator
 Route::prefix('operator/v1')->group(function () {
     // Menu Run Query

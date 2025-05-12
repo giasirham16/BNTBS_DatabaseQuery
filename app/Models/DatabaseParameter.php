@@ -11,6 +11,7 @@ class DatabaseParameter extends Model
         'ipHost',
         'port',
         'driver',
+        'reason',
         'statusApproval'
     ];
 }

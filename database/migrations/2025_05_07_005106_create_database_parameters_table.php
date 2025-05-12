@@ -17,6 +17,7 @@ return new class extends Migration
             $table->string('ipHost');
             $table->string('port');
             $table->string('driver');
+            $table->string('reason')->nullable();
             $table->integer('statusApproval')->default(0);
             $table->timestamps();
         });

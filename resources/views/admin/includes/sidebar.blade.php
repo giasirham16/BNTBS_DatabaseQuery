@@ -59,6 +59,15 @@
                     <span>Database Approval</span>
                 </a>
             </li>
+        @elseif (strtolower(Auth::user()->role) == 'superadmin')
+            <li class="nav-item">
+                <a class="nav-link {{ Request::is('superadmin/v1/manageUser', 'superadmin/v1/manageUser/*') ? '' : 'collapsed' }}"
+                    href="{{ url('superadmin/v1/manageUser') }}">
+                    <i
+                        class="bi {{ Request::is('superadmin/v1/manageUser', 'superadmin/v1/manageUser/*') ? 'bi-person-badge-fill' : 'bi-person-badge' }}"></i>
+                    <span>Manage User</span>
+                </a>
+            </li>
         @else
             <span>Invalid role</span>
         @endif

@@ -67,10 +67,10 @@
                                                         @elseif ($value->statusApproval == 4)
                                                             <label class="badge bg-light-danger">(Update) Menunggu approval
                                                                 supervisor</label>
-                                                        @elseif ($value->statusApproval == 4)
+                                                        @elseif ($value->statusApproval == 5)
                                                             <label class="badge bg-light-warning">(Delete) Menunggu approval
                                                                 checker</label>
-                                                        @elseif ($value->statusApproval == 4)
+                                                        @elseif ($value->statusApproval == 6)
                                                             <label class="badge bg-light-danger">(Delete) Menunggu approval
                                                                 supervisor</label>
                                                         @endif
