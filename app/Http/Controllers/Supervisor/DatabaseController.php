@@ -19,16 +19,15 @@ class DatabaseController extends Controller
     {
         try {
             $data = DatabaseParameter::find($request->id);
-            $statusMap = [
-                0 => 1, //Add
-                3 => 4, //Update
-                5 => 6, //Delete
-            ];
 
-            if ($request->approval == 1) {
-                $data->statusApproval = $statusMap[$data->statusApproval];
-            } else {
-                $data->statusApproval = 7;
+            if ($request->approval == 1 && $data->statusApproval == 6) {
+                $data->statusApproval = 99;
+            } 
+            else if ($request->approval == 1 && $data->statusApproval != 6) {
+                $data->statusApproval = 2;
+            }
+            else if ($request->approval == 0){
+                $data->statusApproval = 8;
             }
             $data->reason = $request->reasonApproval;
 

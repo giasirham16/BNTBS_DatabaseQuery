@@ -39,6 +39,7 @@
                                             <th>Source</th>
                                             <th>Port</th>
                                             <th>Driver</th>
+                                            <th>Reason</th>
                                             <th>Status Approval</th>
                                             <th>Aksi</th>
                                         </tr>
@@ -52,6 +53,7 @@
                                                     <td>{{ $value->ipHost }}</td>
                                                     <td>{{ $value->port }}</td>
                                                     <td>{{ $value->driver }}</td>
+                                                    <td>{{ $value->reason ?? '-' }}</td>
                                                     <td>
                                                         @if ($value->statusApproval == 0)
                                                             <label class="badge bg-light-warning">(Add) Menunggu approval
@@ -89,14 +91,13 @@
                                                                     data-iphost="{{ $value->ipHost }}"
                                                                     data-port="{{ $value->port }}"
                                                                     data-driver="{{ $value->driver }}"
-                                                                    data-statusApproval="{{ $value->statusApproval }}"
-                                                                    data-action="{{ route('editDatabase', ['id' => '__ID__']) }}"><i
+                                                                    data-statusApproval="{{ $value->statusApproval }}"><i
+                                                                    {{-- data-action="{{ route('editDatabase', ['id' => '__ID__']) }}"><i --}}
                                                                         class="bi bi-pencil-square text-success"
                                                                         style="font-size: 18px;"></i></button>
                                                                 <button class="btn btn-outline-primary"
                                                                     data-bs-toggle="modal" data-bs-target="#deleteDBModal"
-                                                                    data-id="{{ $value->id }}"
-                                                                    data-action2="{{ route('deleteDatabase', ['id' => '__ID__']) }}"><i
+                                                                    data-id="{{ $value->id }}"><i
                                                                         class="bi bi-trash text-danger"
                                                                         style="font-size: 18px;"></i></button>
                                                             </div>
@@ -180,11 +181,11 @@
                 document.getElementById('edit-port').value = port;
                 document.getElementById('edit-driver').value = driver;
 
-                // Ganti action form
-                let actionTemplate = button.getAttribute('data-action');
-                actionTemplate = actionTemplate.replace('__ID__', id);
-                const form = document.getElementById('updateForm');
-                form.action = actionTemplate;
+                // // Ganti action form
+                // let actionTemplate = button.getAttribute('data-action');
+                // actionTemplate = actionTemplate.replace('__ID__', id);
+                // const form = document.getElementById('updateForm');
+                // form.action = actionTemplate;
             });
         });
 
@@ -195,11 +196,12 @@
                 // Ganti action form
                 const button = event.relatedTarget;
                 const id = button.getAttribute('data-id');
-                let actionTemplate = button.getAttribute('data-action2');
-                actionTemplate = actionTemplate.replace('__ID__', id);
-                const form = document.getElementById('deleteForm');
-                // console.log(actionTemplate);
-                form.action = actionTemplate;
+                document.getElementById('delete-dataId').value = id;
+                // let actionTemplate = button.getAttribute('data-action2');
+                // actionTemplate = actionTemplate.replace('__ID__', id);
+                // const form = document.getElementById('deleteForm');
+                // // console.log(actionTemplate);
+                // form.action = actionTemplate;
             });
         });
     </script>

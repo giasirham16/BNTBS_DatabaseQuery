@@ -7,7 +7,7 @@
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                     aria-label="Tutup"></button>
             </div>
-            <form action="{{ route('chkApproveDatabase') }}" method="POST" id="approveForm">
+            <form action="{{ route('spvApproveDatabase') }}" method="POST" id="approveForm">
                 @csrf
                 <div class="modal-body">
                     <p>Mohon isi alasan approve/reject permintaan.</p>

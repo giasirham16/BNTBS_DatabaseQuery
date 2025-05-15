@@ -5,8 +5,8 @@ use App\Http\Controllers\Admin\AuthController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Checker\DatabaseController as CheckerDatabaseController;
 use App\Http\Controllers\Checker\QueryController as CheckerQueryController;
-use App\Http\Controllers\Checker\DatabaseController as SupervisorDatabaseController;
-use App\Http\Controllers\Checker\QueryController as SupervisorQueryController;
+use App\Http\Controllers\Supervisor\DatabaseController as SupervisorDatabaseController;
+use App\Http\Controllers\Supervisor\QueryController as SupervisorQueryController;
 use App\Http\Controllers\Operator\RunQueryController;
 use App\Http\Controllers\Operator\ManageDatabaseController;
 
@@ -38,8 +38,8 @@ Route::prefix('operator/v1')->group(function () {
     // Menu Manage Database
     Route::get('/manageDatabase', [ManageDatabaseController::class, 'index'])->name('viewDatabase');
     Route::post('/manageDatabase', [ManageDatabaseController::class, 'store'])->name('addDatabase');
-    Route::put('/manageDatabase/edit/{id}', [ManageDatabaseController::class, 'update'])->name('editDatabase');
-    Route::put('/manageDatabase/delete/{id}', [ManageDatabaseController::class, 'destroy'])->name('deleteDatabase');
+    Route::post('/manageDatabase/edit/', [ManageDatabaseController::class, 'update'])->name('editDatabase');
+    Route::post('/manageDatabase/delete/', [ManageDatabaseController::class, 'destroy'])->name('deleteDatabase');
 });
 
 // Menu checker

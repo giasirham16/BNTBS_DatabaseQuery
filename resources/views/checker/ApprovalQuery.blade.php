@@ -22,12 +22,12 @@
                                     <thead class="table-head-custom">
                                         <tr>
                                             <th class="text-nowrap">No</th>
-                                            <th class="text-nowrap">Nama DB</th>
                                             <th class="text-nowrap">IP Host DB</th>
-                                            <th class="text-nowrap">Port</th>
-                                            <th class="text-nowrap">Driver</th>
                                             <th class="text-nowrap">Query Kategori</th>
+                                            <th class="text-nowrap">Deskripsi</th>
+                                            <th class="text-nowrap">Requested by</th>
                                             <th class="text-nowrap">Status Approval</th>
+                                            <th class="text-nowrap">Tanggal Request</th>
                                             <th class="text-nowrap">Aksi</th>
                                         </tr>
                                     </thead>
@@ -35,10 +35,7 @@
                                         @foreach ($approval as $key => $item)
                                             <tr>
                                                 <td>{{ $loop->iteration }}</td>
-                                                <td>{{ $item->namaDB }}</td>
                                                 <td>{{ $item->ipHost }}</td>
-                                                <td>{{ $item->port }}</td>
-                                                <td>{{ $item->driver }}</td>
                                                 <td>
                                                     @if (str_starts_with(strtolower($item->queryRequest), 'select'))
                                                         Select
@@ -50,6 +47,8 @@
                                                         Delete
                                                     @endif
                                                 </td>
+                                                <td>{{ $item->deskripsi }}</td>
+                                                <td>{{ $item->executedBy }}</td>
                                                 <td>
                                                     @if ($item->statusApproval == 0)
                                                         <label class="badge bg-light-warning">Menunggu approval
@@ -65,18 +64,25 @@
                                                         <label class="badge bg-light-danger">Direject supervisor</label>
                                                     @endif
                                                 </td>
-                                                <td class="text-center align-middle">
-                                                    <button class="btn btn-outline-primary" data-bs-toggle="modal"
-                                                        data-bs-target="#approvalQueryModal" data-id="{{ $item->id }}"
-                                                        data-namadb="{{ $item->namaDB }}" data-iphost="{{ $item->ipHost }}"
-                                                        data-port="{{ $item->port }}" data-driver="{{ $item->driver }}"
-                                                        data-reason="{{ $item->reason }}"
-                                                        data-statusApproval="{{ $item->statusApproval }}"
-                                                        data-queryRequest="{{ $item->queryRequest }}"
-                                                        data-query-result="{{ $item->queryResult }}"><i
-                                                            class="bi bi-eye-fill text-dark"
-                                                            style="font-size: 18px;"></i></button>
-                                                </td>
+                                                <td>{{ $item->created_at }}</td>
+                                                @if ($item->statusApproval == 0)
+                                                    <td class="text-center align-middle">
+                                                        <button class="btn btn-outline-primary" data-bs-toggle="modal"
+                                                            data-bs-target="#approvalQueryModal"
+                                                            data-id="{{ $item->id }}" data-namadb="{{ $item->namaDB }}"
+                                                            data-iphost="{{ $item->ipHost }}"
+                                                            data-port="{{ $item->port }}"
+                                                            data-driver="{{ $item->driver }}"
+                                                            data-reason="{{ $item->reason }}"
+                                                            data-statusApproval="{{ $item->statusApproval }}"
+                                                            data-queryRequest="{{ $item->queryRequest }}"
+                                                            data-query-result="{{ $item->queryResult }}"><i
+                                                                class="bi bi-check-square-fill text-success"
+                                                                style="font-size: 18px;"></i></button>
+                                                    </td>
+                                                @else
+                                                    <td></td>
+                                                @endif
                                         @endforeach
                                     </tbody>
                                 </table>

@@ -13,6 +13,7 @@ class ApprovalQuery extends Model
         'driver',
         'queryRequest',
         'queryResult',
+        'deskripsi',
         'username',
         'password',
         'reason',

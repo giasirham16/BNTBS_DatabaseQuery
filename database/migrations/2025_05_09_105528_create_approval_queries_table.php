@@ -19,6 +19,7 @@ return new class extends Migration
             $table->string('driver');
             $table->longText('queryRequest');
             $table->longText('queryResult')->nullable();
+            $table->longText('deskripsi');
             $table->string('username');
             $table->string('password');
             $table->string('reason')->nullable();

@@ -18,7 +18,14 @@ class RunQueryController extends Controller
     public function __construct()
     {
         // Inisialisasi di constructor
-        $this->data = DatabaseParameter::where('statusApproval', 2)->get();
+        //Ambil data yang tidak direject
+        $this->data = DatabaseParameter::where('statusApproval', 2)
+            ->orWhere('statusApproval', 3)
+            ->orWhere('statusApproval', 4)
+            ->orWhere('statusApproval', 5)
+            ->orWhere('statusApproval', 6)
+            ->get();
+
         $this->approval = ApprovalQuery::select(
             'id',
             'namaDB',
@@ -27,6 +34,7 @@ class RunQueryController extends Controller
             'driver',
             'queryRequest',
             'queryResult',
+            'deskripsi',
             'reason',
             'statusApproval'
         )->where('executedBy', Auth::user()->username)->get();
@@ -40,7 +48,7 @@ class RunQueryController extends Controller
         return view('operator.RunQuery')
             ->with('data', $this->data)
             ->with('approval', $this->approval);
-            // ->with('queryResult', $queryResult ?? []);
+        // ->with('queryResult', $queryResult ?? []);
     }
 
     public function executeQuery(Request $request)
@@ -54,20 +62,6 @@ class RunQueryController extends Controller
         $password = $request->input('passwordDB');
         $query    = $request->input('query'); // SQL query
 
-        // Konfigurasi koneksi
-        $config = [
-            'driver'    => $driver,
-            'host'      => $host,
-            'port'      => $port,
-            'database'  => $database,
-            'username'  => $username,
-            'password'  => $password,
-            'charset'   => 'utf8mb4',
-            'collation' => 'utf8mb4_unicode_ci',
-            'prefix'    => '',
-            'strict'    => true,
-        ];
-
         // Cek koneksi ke server
         try {
             $pdo = new \PDO("mysql:host=$host;port=$port;dbname=$database", $username, $password, [
@@ -76,10 +70,6 @@ class RunQueryController extends Controller
         } catch (\PDOException $e) {
             return redirect()->route('viewQuery')->with('error', 'Error: Connection Failed, Reason: ' . $e->getMessage());
         }
-
-        // Daftarkan koneksi dinamis
-        DB::purge('dynamic_connection');
-        config(['database.connections.dynamic_connection' => $config]);
 
         try {
             // Deteksi tipe query
@@ -92,22 +82,15 @@ class RunQueryController extends Controller
                     'port' => $port,
                     'driver' => $driver,
                     'queryRequest' => $query,
+                    'deskripsi' => $request->deskripsi,
                     'username' => $username,
                     'statusApproval' => 1,
                     'password' => Crypt::encryptString($password),
                     'executedBy' => Auth::user()->username,
                     'executedRole' => Auth::user()->role,
                 ]);
-                
+
                 return redirect()->route('viewQuery')->with('success', 'Query menunggu approval untuk dieksekusi!');
-                // $queryResult = DB::connection('dynamic_connection')->select($query);
-                // $approval = ApprovalQuery::find(1);
-                // $approval->queryResult = $queryResult;
-                // $approval->save();
-                // session()->flash('success', 'Query menunggu approval untuk dieksekusi!');
-                // return view('operator.RunQuery')
-                //     ->with('data', $this->data)
-                //     ->with('approval', $this->approval);
             }
             // Jika query insert, update, delete
             else if ((str_starts_with($lowerQuery, 'insert')) || (str_starts_with($lowerQuery, 'update')) || (str_starts_with($lowerQuery, 'delete'))) {
@@ -117,6 +100,7 @@ class RunQueryController extends Controller
                     'port' => $port,
                     'driver' => $driver,
                     'queryRequest' => $query,
+                    'deskripsi' => $request->deskripsi,
                     'username' => $username,
                     'statusApproval' => 0,
                     'password' => Crypt::encryptString($password),
@@ -125,11 +109,6 @@ class RunQueryController extends Controller
                 ]);
 
                 return redirect()->route('viewQuery')->with('success', 'Query menunggu approval untuk dieksekusi!');
-                // $queryResult = DB::connection('dynamic_connection')->statement($query);
-                // session()->flash('success', 'Query menunggu approval untuk dieksekusi!');
-                // return view('operator.RunQuery')
-                //     ->with('data', $this->data)
-                //     ->with('approval', $this->approval);
             }
             // Selain query select, insert, update, delete
             else {

@@ -74,7 +74,7 @@
                                                             <label class="badge bg-light-danger">Direject supervisor</label>
                                                         @endif
                                                     </td>
-                                                    @if ($value->statusApproval == 0 || $value->statusApproval == 3 || $value->statusApproval == 5)
+                                                    @if ($value->statusApproval == 1 || $value->statusApproval == 4 || $value->statusApproval == 6)
                                                         <td class="text-center align-middle">
                                                             <button class="btn btn-outline-primary" data-bs-toggle="modal"
                                                                 data-bs-target="#approveDBModal"

@@ -42,7 +42,15 @@
                 <div class="row">
                     <div class="col">
                         <label for="view-queryRequest" class="col-form-label">Query Request</label>
-                        <textarea rows="3" style="resize: vertical; overflow-y: auto;" class="form-control bg-light" id="view-queryRequest" readonly></textarea>
+                        <textarea rows="2" style="resize: vertical; overflow-y: auto;" class="form-control bg-light"
+                            id="view-queryRequest" readonly></textarea>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label for="view-deskripsi" class="col-form-label">Deskripsi</label>
+                        <textarea rows="2" style="resize: vertical; overflow-y: auto;" class="form-control bg-light"
+                            id="view-deskripsi" readonly></textarea>
                     </div>
                 </div>
                 <div class="row">
@@ -51,12 +59,12 @@
                         <table id="queryResultTable" class="table table-hover table-bordered">
                             <thead class="table-head-custom">
                                 <tr>
-                                      <!-- Akan diisi oleh JavaScript -->
+                                    <!-- Akan diisi oleh JavaScript -->
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
-                                      <!-- Akan diisi oleh JavaScript -->
+                                    <!-- Akan diisi oleh JavaScript -->
                                 </tr>
                             </tbody>
                         </table>

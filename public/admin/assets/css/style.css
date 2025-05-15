@@ -254,7 +254,7 @@ h6 {
 }
 
 .card-title {
-    padding: 20px 0 15px 0;
+    padding: 20px 0 0 0;
     font-size: 18px;
     font-weight: 500;
     color: #006A3B;
@@ -1358,7 +1358,7 @@ h6 {
     padding-top: 4px !important;
     padding-bottom: 4px !important;
     line-height: 1.2 !important;
-    height: 30px !important;
+    height: 33px !important;
     width: 100%;
 }
 
@@ -1373,10 +1373,6 @@ h6 {
 .row {
     margin-bottom: -7px;
 }
-
-/* .table-responsive th{
-    text-align:center !important;
-} */
 
 
 .form-label {

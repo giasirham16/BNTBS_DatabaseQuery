@@ -7,7 +7,7 @@ Manage Database:
 5 = (Delete) Menunggu approval checker
 6 = (Delete) Menunggu approval supervisor
 7 = Direject checker
-6 = Direject supervisor
+8 = Direject supervisor
 
 Manage User:
 0 = (Add) Menunggu approval superadmin2
@@ -17,3 +17,18 @@ Manage User:
 4 = (Delete) Menunggu approval superadmin1
 5 = Direject superadmin2
 6 = Direject superadmin1
+
+Manage Query:
+0 = Menunggu approval checker
+1 = Menunggu approval supervisor
+2 = Approved
+3 = Direject checker
+4 = Direject supervisor
+
+Tambahan:
+Tampilkan user yang execute
+Tambahkan deskripsi query
+Tambahkan filter date
+Jika query select, tidak usah ditampilkan di checker
+Checker bisa melihat data sebelum diupdate
+Supervisor bisa melihat data sebelum dan sesudah di update

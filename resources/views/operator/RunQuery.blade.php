@@ -38,8 +38,14 @@
                     <div class="col-md-8">
                         <div class="card">
                             <div class="card-body">
-                                <h5 class="card-title">Query</h5>
-                                <textarea class="form-control" rows="13" placeholder="Write your query here" name="query" id="query"></textarea>
+                                <div class="row">
+                                    <h5 class="card-title">Query</h5>
+                                    <textarea class="form-control" rows="7" placeholder="Tuliskan query disini" name="query" id="query" required></textarea>
+                                </div>
+                                <div class="row">
+                                    <h5 class="card-title">Deskripsi</h5>
+                                    <textarea class="form-control" rows="5" placeholder="Deskripsi/penjelasan query" name="deskripsi" id="deskripsi" required></textarea>
+                                </div>
                                 <div class="row mt-3">
                                     <div class="col text-end">
                                         <button type=submit class="btn btn-secondary">Execute</button>
@@ -103,78 +109,74 @@
                     </div>
                 </div>
             </form>
-        </div>
 
-
-        <div class="row">
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="card-body-table">
-                        <h5 class="card-title">Result</h5>
-                        <table id="resultTable" class="table table-hover table-bordered w-100">
-                            <thead class="table-head-custom">
-                                <tr>
-                                    <th>No</th>
-                                    <th>Nama DB</th>
-                                    <th>IP Host DB</th>
-                                    <th>Port</th>
-                                    <th>Driver</th>
-                                    <th>Query Kategori</th>
-                                    <th>Reason</th>
-                                    <th>Status Approval</th>
-                                    <th>Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @foreach ($approval as $key => $item)
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card">
+                        <div class="card-body-table">
+                            <h5 class="card-title">Result</h5>
+                            <table id="resultTable" class="table table-hover table-bordered w-100">
+                                <thead class="table-head-custom">
                                     <tr>
-                                        <td>{{ $loop->iteration }}</td>
-                                        <td>{{ $item->namaDB }}</td>
-                                        <td>{{ $item->ipHost }}</td>
-                                        <td>{{ $item->port }}</td>
-                                        <td>{{ $item->driver }}</td>
-                                        <td>
-                                            @if (str_starts_with(strtolower($item->queryRequest), 'select'))
-                                                Select
-                                            @elseif (str_starts_with(strtolower($item->queryRequest), 'insert'))
-                                                Insert
-                                            @elseif (str_starts_with(strtolower($item->queryRequest), 'update'))
-                                                Update
-                                            @elseif (str_starts_with(strtolower($item->queryRequest), 'delete'))
-                                                Delete
-                                            @endif
-                                        </td>
-                                        <td>{{ $item->reason ?? '-' }}</td>
-                                        <td>
-                                            @if ($item->statusApproval == 0)
-                                                <label class="badge bg-light-warning">Menunggu approval
-                                                    checker</label>
-                                            @elseif ($item->statusApproval == 1)
-                                                <label class="badge bg-light-warning">Menunggu approval
-                                                    supervisor</label>
-                                            @elseif ($item->statusApproval == 2)
-                                                <label class="badge bg-light-success">Approved</label>
-                                            @elseif ($item->statusApproval == 3)
-                                                <label class="badge bg-light-danger">Reject by checker</label>
-                                            @elseif ($item->statusApproval == 4)
-                                                <label class="badge bg-light-danger">Reject by supervisor</label>
-                                            @endif
-                                        </td>
-                                        <td class="text-center align-middle">
-                                            <button class="btn btn-outline-primary" data-bs-toggle="modal"
-                                                data-bs-target="#viewApprovalModal" data-id="{{ $item->id }}"
-                                                data-namadb="{{ $item->namaDB }}" data-iphost="{{ $item->ipHost }}"
-                                                data-port="{{ $item->port }}" data-driver="{{ $item->driver }}"
-                                                data-reason="{{ $item->reason ?? '-' }}"
-                                                data-statusApproval="{{ $item->statusApproval }}"
-                                                data-queryRequest="{{ $item->queryRequest }}"
-                                                data-query-result="{{ $item->queryResult }}"><i
-                                                    class="bi bi-eye-fill text-dark"
-                                                    style="font-size: 18px;"></i></button>
-                                        </td>
-                                @endforeach
-                            </tbody>
-                        </table>
+                                        <th>No</th>
+                                        <th>IP Host DB</th>
+                                        <th>Query Kategori</th>
+                                        <th>Deskripsi</th>
+                                        <th>Reason</th>
+                                        <th>Status Approval</th>
+                                        <th>Aksi</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @foreach ($approval as $key => $item)
+                                        <tr>
+                                            <td>{{ $loop->iteration }}</td>
+                                            <td>{{ $item->ipHost }}</td>
+                                            <td>
+                                                @if (str_starts_with(strtolower($item->queryRequest), 'select'))
+                                                    Select
+                                                @elseif (str_starts_with(strtolower($item->queryRequest), 'insert'))
+                                                    Insert
+                                                @elseif (str_starts_with(strtolower($item->queryRequest), 'update'))
+                                                    Update
+                                                @elseif (str_starts_with(strtolower($item->queryRequest), 'delete'))
+                                                    Delete
+                                                @endif
+                                            </td>
+                                            <td>{{ $item->deskripsi }}</td>
+                                            <td>{{ $item->reason ?? '-' }}</td>
+                                            <td>
+                                                @if ($item->statusApproval == 0)
+                                                    <label class="badge bg-light-warning">Menunggu approval
+                                                        checker</label>
+                                                @elseif ($item->statusApproval == 1)
+                                                    <label class="badge bg-light-warning">Menunggu approval
+                                                        supervisor</label>
+                                                @elseif ($item->statusApproval == 2)
+                                                    <label class="badge bg-light-success">Approved</label>
+                                                @elseif ($item->statusApproval == 3)
+                                                    <label class="badge bg-light-danger">Direject checker</label>
+                                                @elseif ($item->statusApproval == 4)
+                                                    <label class="badge bg-light-danger">Direject supervisor</label>
+                                                @endif
+                                            </td>
+                                            <td class="text-center align-middle">
+                                                <button class="btn btn-outline-primary" data-bs-toggle="modal"
+                                                    data-bs-target="#viewApprovalModal" data-id="{{ $item->id }}"
+                                                    data-namadb="{{ $item->namaDB }}" data-iphost="{{ $item->ipHost }}"
+                                                    data-port="{{ $item->port }}" data-driver="{{ $item->driver }}"
+                                                    data-reason="{{ $item->reason ?? '-' }}"
+                                                    data-deskripsi="{{ $item->deskripsi }}"
+                                                    data-statusApproval="{{ $item->statusApproval }}"
+                                                    data-queryRequest="{{ $item->queryRequest }}"
+                                                    data-query-result="{{ $item->queryResult }}"><i
+                                                        class="bi bi-eye-fill text-dark"
+                                                        style="font-size: 18px;"></i></button>
+                                            </td>
+                                    @endforeach
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -228,7 +230,7 @@
                 "searching": true,
                 columnDefs: [{
                         orderable: false,
-                        targets: [8]
+                        targets: [5]
                     } // index kolom mulai dari 0
                 ]
             });
@@ -249,6 +251,7 @@
                 const driver = button.getAttribute('data-driver');
                 const statusApproval = button.getAttribute('data-statusApproval');
                 const reason = button.getAttribute('data-reason');
+                const deskripsi = button.getAttribute('data-deskripsi');
                 const queryRequest = button.getAttribute('data-queryRequest');
                 const queryResultRaw = button.getAttribute('data-query-result');
 
@@ -257,8 +260,8 @@
                 if (statusApproval == 0) status = "Menunggu approval checker";
                 else if (statusApproval == 1) status = "Menunggu approval supervisor";
                 else if (statusApproval == 2) status = "Approved";
-                else if (statusApproval == 3) status = "Reject by checker";
-                else if (statusApproval == 4) status = "Reject by supervisor";
+                else if (statusApproval == 3) status = "Direject checker";
+                else if (statusApproval == 4) status = "Direject =supervisor";
 
                 // Set nilai input di modal
                 document.getElementById('view-dataId').value = id;
@@ -268,6 +271,7 @@
                 document.getElementById('view-driver').value = driver;
                 document.getElementById('view-statusApproval').value = status;
                 document.getElementById('view-reason').value = reason;
+                document.getElementById('view-deskripsi').value = deskripsi;
                 document.getElementById('view-queryRequest').value = queryRequest;
 
                 // Set table

@@ -1,5 +1,5 @@
 <!-- Modal -->
-<form action="{{ route('chkApproveQuery') }}" method="POST" class="d-flex gap-2">
+<form action="{{ route('spvApproveQuery') }}" method="POST" class="d-flex gap-2">
     @csrf
     <div class="modal fade" id="approvalQueryModal" tabindex="-1" aria-labelledby="approvalQueryModal" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">

@@ -34,7 +34,7 @@ class ManageDatabaseController extends Controller
   public function update(Request $request, $id)
   {
     try {
-      $update = $request->only(['namaDB', 'ipHost', 'port', 'driver', 'statusApproval']);
+      $update = $request->only(['namaDB', 'ipHost', 'port', 'driver', 'reason', 'statusApproval']);
       $data = DatabaseParameter::find($id);
       $status = $data->update($update);
 

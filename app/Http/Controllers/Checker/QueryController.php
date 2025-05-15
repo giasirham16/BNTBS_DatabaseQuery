@@ -18,26 +18,34 @@ class QueryController extends Controller
             'driver',
             'queryRequest',
             'queryResult',
+            'deskripsi',
             'reason',
             'executedBy',
+            'created_at',
             'statusApproval'
-        )->where('statusApproval', 0)->get();
+        )->whereRaw("LOWER(queryRequest) NOT LIKE 'select%'")->get();
         return view('checker.ApprovalQuery')->with('approval', $approval);
     }
 
     public function approveQuery(Request $request)
     {
         try {
-            // dd($Request->reason);
             $data = ApprovalQuery::find($request->id);
             $data->reason = $request->reason ?? '-';
-            $data->statusApproval = $request->approval;
+
+            if ($request->approval == 1) {
+                $data->statusApproval = 1;
+            }
+            else {
+                $data->statusApproval = 3;
+            }
+            
             $status = $data->save();
 
             if ($status) {
-                return redirect()->route('chkViewQuery')->with('success', 'Data berhasil diapprove!');
+                return redirect()->route('chkViewQuery')->with('success', 'Data berhasil diproses!');
             } else {
-                return redirect()->route('chkViewQuery')->with('success', 'Data berhasil direject!');
+                return redirect()->route('chkViewQuery')->with('error', 'Data gagal diproses!');
             }
         } catch (\Exception $e) {
             return redirect()->route('chkViewQuery')->with('error', 'Error: ' . $e->getMessage());
