@@ -1,10 +1,9 @@
-<!-- Delete Confirmation Modal -->
-<div class="modal fade" id="approveDBModal" tabindex="-1" aria-labelledby="approveDBModal" aria-hidden="true">
+<div class="modal fade" id="approveUserModal" tabindex="-1" aria-labelledby="approveUserModal" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
-        <div class="modal-content border-danger">
-            <div class="modal-header bg-danger text-white">
-                <h5 class="modal-title" id="deleteConfirmLabel"><i
-                        class="bi bi-exclamation-triangle-fill me-2"></i>Konfirmasi Hapus</h5>
+        <div class="modal-content border-warning">
+            <div class="modal-header bg-warning text-white">
+                <h5 class="modal-title" id="approveUserModal"><i
+                        class="bi bi-exclamation-triangle-fill me-2"></i>Konfirmasi Approve</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"
                     aria-label="Tutup"></button>
             </div>
@@ -13,8 +12,8 @@
                 <div class="modal-body">
                     <p>Mohon isi alasan approve/reject permintaan.</p>
                     <div>
-                        <label for="view-reason" class="col-form-label">Reason</label>
-                        <input type="text" class="form-control bg-light" name="reason" id="view-reason" required>
+                        <label for="reasonApproval" class="col-form-label">Reason</label>
+                        <input type="text" class="form-control bg-light" name="reasonApproval" id="reasonApproval" required>
                     </div>
                 </div>
                 <div class="modal-footer d-flex justify-content-between">

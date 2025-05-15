@@ -17,7 +17,7 @@
         <div class="container-fluid">
             <!-- Button trigger modal -->
             <button type="button" style="margin-bottom: 10px" class="btn btn-primary" data-bs-toggle="modal"
-                data-bs-target="#addDBModal">
+                data-bs-target="#addUserModal">
                 Create Data
             </button>
 
@@ -31,6 +31,7 @@
                                         <tr>
                                             <th>No</th>
                                             <th>Username</th>
+                                            <th>Role</th>
                                             <th>Reason</th>
                                             <th>Status Approval</th>
                                             <th>Aksi</th>
@@ -42,24 +43,25 @@
                                                 <tr>
                                                     <td>{{ $loop->iteration }}</td>
                                                     <td>{{ $value->username }}</td>
-                                                    <td>{{ $value->reason ?? '-' }}</td>
+                                                    <td>{{ $value->role }}</td>
+                                                    <td>{{ $value->reasonApproval ?? '-' }}</td>
                                                     <td>
                                                         @if ($value->statusApproval == 0)
                                                             <label class="badge bg-light-warning">(Add) Menunggu approval
                                                                 superadmin2</label>
                                                         @elseif ($value->statusApproval == 1)
-                                                            <label class="badge bg-light-danger">(Add) Menunggu approval
+                                                            <label class="badge bg-light-warning">(Add) Menunggu approval
                                                                 superadmin1</label>
                                                         @elseif ($value->statusApproval == 2)
                                                             <label class="badge bg-light-success">Approved</label>
                                                         @elseif ($value->statusApproval == 3)
-                                                            <label class="badge bg-light-danger">(Delete) Menunggu approval
+                                                            <label class="badge bg-light-warning">(Delete) Menunggu approval
                                                                 superadmin2</label>
                                                         @elseif ($value->statusApproval == 4)
-                                                            <label class="badge bg-light-danger">(Delete) Menunggu approval
+                                                            <label class="badge bg-light-warning">(Delete) Menunggu approval
                                                                 superadmin1</label>
                                                         @elseif ($value->statusApproval == 5)
-                                                            <label class="badge bg-light-warning">Direject
+                                                            <label class="badge bg-light-danger">Direject
                                                                 superadmin2</label>
                                                         @elseif ($value->statusApproval == 6)
                                                             <label class="badge bg-light-danger">Direject
@@ -68,19 +70,32 @@
                                                     </td>
                                                     <td>
                                                         <div style="display: flex; gap: 10px;">
-                                                            @if ($value->statusApproval != 2)
+                                                            @if (strtolower(Auth::user()->username) == 'superadmin1')
+                                                                @if ($value->statusApproval == 1 || $value->statusApproval == 4)
+                                                                    <button class="btn btn-outline-primary"
+                                                                        data-bs-toggle="modal"
+                                                                        data-bs-target="#approveUserModal"
+                                                                        data-id="{{ $value->id }}"><i
+                                                                            class="bi bi-pencil-square text-success"
+                                                                            style="font-size: 18px;"></i></button>
+                                                                @endif
+                                                            @elseif (strtolower(Auth::user()->username) == 'superadmin2')
+                                                                @if ($value->statusApproval == 0 || $value->statusApproval == 3)
+                                                                    <button class="btn btn-outline-primary"
+                                                                        data-bs-toggle="modal"
+                                                                        data-bs-target="#approveUserModal"
+                                                                        data-id="{{ $value->id }}"><i
+                                                                            class="bi bi-pencil-square text-success"
+                                                                            style="font-size: 18px;"></i></button>
+                                                                @endif
+                                                            @endif
+                                                            @if ($value->statusApproval == 2)
                                                                 <button class="btn btn-outline-primary"
-                                                                    data-bs-toggle="modal" data-bs-target="#approveDBModal"
-                                                                    data-id="{{ $value->id }}"><i
-                                                                        class="bi bi-pencil-square text-success"
+                                                                    data-bs-toggle="modal" data-bs-target="#deleteUserModal"
+                                                                    data-id="{{ $value->id }}"><i {{-- data-action2="{{ route('deleteUser', ['id' => '__ID__']) }}"><i --}}
+                                                                        class="bi bi-trash text-danger"
                                                                         style="font-size: 18px;"></i></button>
                                                             @endif
-                                                            <button class="btn btn-outline-primary" data-bs-toggle="modal"
-                                                                data-bs-target="#deleteDBModal"
-                                                                data-id="{{ $value->id }}"
-                                                                data-action2="{{ route('deleteUser', ['id' => '__ID__']) }}"><i
-                                                                    class="bi bi-trash text-danger"
-                                                                    style="font-size: 18px;"></i></button>
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -139,7 +154,7 @@
 
         // Get value ke modal edit
         document.addEventListener('DOMContentLoaded', function() {
-            const approveModal = document.getElementById('approveDBModal');
+            const approveModal = document.getElementById('approveUserModal');
             approveModal.addEventListener('show.bs.modal', function(event) {
                 const button = event.relatedTarget;
 
@@ -153,16 +168,16 @@
 
         // Get value ke modal delete
         document.addEventListener('DOMContentLoaded', function() {
-            const deleteModal = document.getElementById('deleteDBModal');
+            const deleteModal = document.getElementById('deleteUserModal');
             deleteModal.addEventListener('show.bs.modal', function(event) {
-                // Ganti action form
                 const button = event.relatedTarget;
+                
+                // Get nilai dari button
                 const id = button.getAttribute('data-id');
-                let actionTemplate = button.getAttribute('data-action2');
-                actionTemplate = actionTemplate.replace('__ID__', id);
-                const form = document.getElementById('deleteForm');
-                // console.log(actionTemplate);
-                form.action = actionTemplate;
+
+                // Set nilai input di modal
+                document.getElementById('delete-dataId').value = id;
+                console.log('delete-dataId');
             });
         });
     </script>

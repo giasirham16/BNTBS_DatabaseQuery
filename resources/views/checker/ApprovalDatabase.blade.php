@@ -1,14 +1,14 @@
 @extends('admin.layouts.app')
 
 @section('title')
-    Manage Database | Bank NTB Syariah
+    Database Approval | Bank NTB Syariah
 @endsection
 
 @section('content')
     @include('checker.modal.database')
 
     <div class="pagetitle">
-        <h1>Manage Database</h1>
+        <h1>Database Approval</h1>
         {{-- <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{{url('admin/v1/dashboard')}}">Home</a></li>
@@ -25,13 +25,14 @@
                         <div class="card-body-table">
                             <div class="table-responsive">
                                 <table id='dbTable' class="table table-hover table-border w-100">
-                                    <thead>
+                                    <thead class="table-head-custom">
                                         <tr>
                                             <th>Id</th>
                                             <th>Nama</th>
                                             <th>Source</th>
                                             <th>Port</th>
                                             <th>Driver</th>
+                                            <th>Reason</th>
                                             <th>Status Approval</th>
                                             <th>Aksi</th>
                                         </tr>
@@ -45,12 +46,13 @@
                                                     <td>{{ $value->ipHost }}</td>
                                                     <td>{{ $value->port }}</td>
                                                     <td>{{ $value->driver }}</td>
+                                                    <td>{{ $value->reason ?? '-' }}</td>
                                                     <td>
                                                         @if ($value->statusApproval == 0)
                                                             <label class="badge bg-light-warning">(Add) Menunggu approval
                                                                 checker</label>
                                                         @elseif ($value->statusApproval == 1)
-                                                            <label class="badge bg-light-danger">(Add) Menunggu approval
+                                                            <label class="badge bg-light-warning">(Add) Menunggu approval
                                                                 supervisor</label>
                                                         @elseif ($value->statusApproval == 2)
                                                             <label class="badge bg-light-success">Approved</label>
@@ -58,30 +60,33 @@
                                                             <label class="badge bg-light-warning">(Update) Menunggu approval
                                                                 checker</label>
                                                         @elseif ($value->statusApproval == 4)
-                                                            <label class="badge bg-light-danger">(Update) Menunggu approval
+                                                            <label class="badge bg-light-warning">(Update) Menunggu approval
                                                                 supervisor</label>
-                                                        @elseif ($value->statusApproval == 4)
+                                                        @elseif ($value->statusApproval == 5)
                                                             <label class="badge bg-light-warning">(Delete) Menunggu approval
                                                                 checker</label>
-                                                        @elseif ($value->statusApproval == 4)
-                                                            <label class="badge bg-light-danger">(Delete) Menunggu approval
+                                                        @elseif ($value->statusApproval == 6)
+                                                            <label class="badge bg-light-warning">(Delete) Menunggu approval
                                                                 supervisor</label>
+                                                        @elseif ($value->statusApproval == 7)
+                                                            <label class="badge bg-light-danger">Direject checker</label>
+                                                        @elseif ($value->statusApproval == 8)
+                                                            <label class="badge bg-light-danger">Direject supervisor</label>
                                                         @endif
                                                     </td>
-                                                    <td class="text-center align-middle">
-                                                        <button class="btn btn-outline-primary" data-bs-toggle="modal"
-                                                            data-bs-target="#approveDBModal"
-                                                            data-id="{{ $value->id }}" data-namadb="{{ $value->namaDB }}"
-                                                            data-iphost="{{ $value->ipHost }}"
-                                                            data-port="{{ $value->port }}"
-                                                            data-driver="{{ $value->driver }}"
-                                                            data-reason="{{ $value->reason }}"
-                                                            data-statusApproval="{{ $value->statusApproval }}"
-                                                            data-queryRequest="{{ $value->queryRequest }}"
-                                                            data-query-result="{{ $value->queryResult }}"><i
-                                                                class="bi bi-eye-fill text-dark"
-                                                                style="font-size: 18px;"></i></button>
-                                                    </td>
+                                                    @if ($value->statusApproval == 0 || $value->statusApproval == 3 || $value->statusApproval == 5)
+                                                        <td class="text-center align-middle">
+                                                            <button class="btn btn-outline-primary" data-bs-toggle="modal"
+                                                                data-bs-target="#approveDBModal"
+                                                                data-id="{{ $value->id }}"><i
+                                                                    class="bi bi-check-square-fill text-success"
+                                                                    style="font-size: 18px;"></i></button>
+                                                        </td>
+                                                    @else
+                                                        <td>
+
+                                                        </td>
+                                                    @endif
                                                 </tr>
                                             @endif
                                         @endforeach
@@ -130,13 +135,13 @@
                 "searching": true,
                 columnDefs: [{
                         orderable: false,
-                        targets: [6]
+                        targets: [7]
                     } // index kolom mulai dari 0
                 ]
             });
         });
 
-        // Get value ke modal edit
+        // Get value ke modal approveDBModal
         document.addEventListener('DOMContentLoaded', function() {
             const updateModal = document.getElementById('approveDBModal');
             updateModal.addEventListener('show.bs.modal', function(event) {
@@ -144,38 +149,9 @@
 
                 // Get nilai dari button
                 const id = button.getAttribute('data-id');
-                const nama = button.getAttribute('data-namadb');
-                const ipHost = button.getAttribute('data-iphost');
-                const port = button.getAttribute('data-port');
-                const driver = button.getAttribute('data-driver');
 
                 // Set nilai input di modal
-                document.getElementById('edit-dataId').value = id;
-                document.getElementById('edit-namaDB').value = nama;
-                document.getElementById('edit-ipHost').value = ipHost;
-                document.getElementById('edit-port').value = port;
-                document.getElementById('edit-driver').value = driver;
-
-                // Ganti action form
-                let actionTemplate = button.getAttribute('data-action');
-                actionTemplate = actionTemplate.replace('__ID__', id);
-                const form = document.getElementById('updateForm');
-                form.action = actionTemplate;
-            });
-        });
-
-        // Get value ke modal delete
-        document.addEventListener('DOMContentLoaded', function() {
-            const deleteModal = document.getElementById('deleteDBModal');
-            deleteModal.addEventListener('show.bs.modal', function(event) {
-                // Ganti action form
-                const button = event.relatedTarget;
-                const id = button.getAttribute('data-id');
-                let actionTemplate = button.getAttribute('data-action2');
-                actionTemplate = actionTemplate.replace('__ID__', id);
-                const form = document.getElementById('deleteForm');
-                // console.log(actionTemplate);
-                form.action = actionTemplate;
+                document.getElementById('approve-dataId').value = id;
             });
         });
     </script>

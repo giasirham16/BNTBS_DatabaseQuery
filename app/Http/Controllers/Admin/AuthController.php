@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Validator;
 
@@ -27,13 +28,24 @@ class AuthController extends Controller
             'password' => 'required|string'
         ]);
 
-        $credentials = $request->only('username', 'password');
+        // $credentials = [
+        //     'username' => $request->username,
+        //     'password' => $request->password,
+        //     'statusApproval' => 2,
+        // ];
+
+        $user = User::where('username', $request->username)
+            ->whereIn('statusApproval', [2, 3, 4])
+            ->first();
 
         // 🔹 Logout session sebelumnya jika ada
         Auth::logout();
-        
+
         // 🔹 Coba login menggunakan Auth::attempt()
-        if (Auth::attempt($credentials)) {
+        // if (Auth::attempt($credentials)) {
+
+        if ($user && Hash::check($request->password, $user->password)) {
+            Auth::login($user);
             $request->session()->regenerate(); // 🔹 Regenerasi session untuk keamanan
             if (strtolower(Auth::user()->role) === 'operator') {
                 return redirect()->route('viewQuery');
@@ -44,9 +56,9 @@ class AuthController extends Controller
             } else if (strtolower(Auth::user()->role) === 'superadmin') {
                 return redirect()->route('viewUser');
             }
+        } else {
+            return back()->withErrors(['username' => 'Username atau password salah.'])->withInput();
         }
-
-        return back()->withErrors(['username' => 'Username atau password salah.'])->withInput();
     }
 
 

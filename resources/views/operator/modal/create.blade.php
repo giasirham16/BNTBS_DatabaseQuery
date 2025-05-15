@@ -25,10 +25,6 @@
                         <label for="port" class="col-form-label">Port</label>
                         <input type="text" class="form-control" name="port" id="port" required>
                     </div>
-                    <div class="mb-3">
-                        <label for="driver" class="col-form-label">Driver</label>
-                        <input type="text" class="form-control" name="driver" id="driver" required>
-                    </div>
 
                     <input type="hidden" name="statusApproval" value=0>
             </div>

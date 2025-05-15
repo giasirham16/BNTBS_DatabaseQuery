@@ -48,25 +48,33 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
-        try {
-            $data = $request->only(['username', 'password', 'role', 'statusApproval']);
-            $data['statusApproval'] = Hash::make($data['statusApproval']);
-            $saved = User::create($data);
+        $data = User::where('username', $request->username)
+            ->where('statusApproval', 2)
+            ->first();
 
-            if ($saved) {
-                return redirect()->route('viewUser')->with('success', 'Data menunggu approval untuk dibuat!');
-            } else {
-                return redirect()->route('viewUser')->with('error', 'Gagal membuat data!');
+        if ($data) {
+            return redirect()->route('viewUser')->with('error', 'Data user sudah ada!');
+        } else {
+            try {
+                $data = $request->only(['username', 'password', 'role', 'statusApproval']);
+                $saved = User::create($data);
+
+                if ($saved) {
+                    return redirect()->route('viewUser')->with('success', 'Data menunggu approval untuk dibuat!');
+                } else {
+                    return redirect()->route('viewUser')->with('error', 'Gagal membuat data!');
+                }
+            } catch (\Exception $e) {
+                return redirect()->route('viewUser')->with('error', 'Error: ' . $e->getMessage());
             }
-        } catch (\Exception $e) {
-            return redirect()->route('viewUser')->with('error', 'Error: ' . $e->getMessage());
         }
     }
 
-    public function destroy($id)
+    public function destroy(Request $request)
     {
         try {
-            $data = User::find($id);
+            $data = User::find($request->id);
+            // dd($request->id);
             $admin = Auth::user()->username;
             if ($admin == 'superadmin1') {
                 $data->statusApproval = 3;
@@ -75,6 +83,7 @@ class UserController extends Controller
             } else {
                 return redirect()->route('viewUser')->with('error', 'Invalid role!');
             }
+            $data->reasonApproval = $request->reason;
 
             $status = $data->save();
 
@@ -92,7 +101,28 @@ class UserController extends Controller
     {
         try {
             $data = User::find($request->id);
-            $data->statusApproval = $request->statusApproval;
+            if ($request->approval == 1) {
+                if ($data->statusApproval != 3 && $data->statusApproval != 4) {
+                    $data->statusApproval = 2;
+                } else {
+                    $data->statusApproval = 99;
+                }
+            } else {
+                if (Auth::user(strtolower(Auth::user()->username) == 'superadmin1')) {
+                    if ($data->statusApproval != 3 && $data->statusApproval != 4) {
+                        $data->statusApproval = 6;
+                    } else {
+                        $data->statusApproval = 2;
+                    }
+                } else {
+                    if ($data->statusApproval != 3 && $data->statusApproval != 4) {
+                        $data->statusApproval = 5;
+                    } else {
+                        $data->statusApproval = 2;
+                    }
+                }
+            }
+            $data->reasonApproval = $request->reasonApproval;
 
             $status = $data->save();
 

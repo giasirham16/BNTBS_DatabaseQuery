@@ -1,5 +1,5 @@
 <!-- Modal -->
-<div class="modal fade" id="addDBModal" tabindex="-1" aria-labelledby="addDBModal" aria-hidden="true">
+<div class="modal fade" id="addUserModal" tabindex="-1" aria-labelledby="addDBModal" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content">
             <div class="modal-header">
@@ -15,12 +15,12 @@
                     </div>
                     <div class="mb-3">
                         <label for="namaDB" class="col-form-label">Password</label>
-                        <input type="password" class="form-control" name="passUser" id="passUser" required>
+                        <input type="password" class="form-control" name="password" id="passUser" required>
                     </div>
                     <div class="mb-3">
                         <label for="roleDropdown" class="form-label">Role</label>
                         <div class="form-floating">
-                            <select class="form-select" name="roleDropdown" id="roleDropdown" required>
+                            <select class="form-select" name="role" id="roleDropdown" required>
                                 <option selected value="" disabled>--Select Role--</option>
                                 <option name="role" value="operator">Operator</option>
                                 <option name="role" value="checker">Checker</option>

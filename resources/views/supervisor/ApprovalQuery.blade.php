@@ -5,7 +5,7 @@
 @endsection
 
 @section('content')
-    @include('checker.modal.query')
+    @include('supervisor.modal.query')
 
     <div class="pagetitle">
         <h1>Query Approval</h1>
