@@ -1343,7 +1343,7 @@ h6 {
 .btn.btn-secondary {
     background-color: #efb305 !important;
     border-color: #efb305 !important;
-    color: #005C3C;
+    color: #fafafa;
     font-weight: 600;
 }
 
@@ -1470,3 +1470,4 @@ div.dataTables_wrapper .dataTables_scroll {
     padding-top: 10px;
     padding-bottom: 10px;
 }
+

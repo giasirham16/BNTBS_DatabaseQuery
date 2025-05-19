@@ -25,6 +25,30 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-body-table">
+                            {{-- Filter menu --}}
+                            <div class="row mb-4 align-items-end">
+                                <div class="col-md-3">
+                                    <label class="col-form-label" for="filter-type">Filter Berdasarkan:</label>
+                                    <select class="form-select" id="filter-type">
+                                        <option value="request" selected>Tanggal Request</option>
+                                        <option value="approval">Tanggal Approval</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="col-form-label" for="min-date">Dari:</label>
+                                    <input type="date" id="min-date" class="form-control">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="col-form-label" for="max-date">Sampai:</label>
+                                    <input type="date" id="max-date" class="form-control">
+                                </div>
+                                <div class="col-md-3 d-flex gap-2">
+                                    <button class="btn btn-primary mt-4" id="apply-filter">Terapkan</button>
+                                    <button class="btn btn-secondary mt-4" id="clear-filter">Clear</button>
+                                </div>
+                            </div>
+
+                            {{-- Badan table --}}
                             <div class="table-responsive">
                                 <table id='dbTable' class="table table-hover table-border">
                                     <thead>
@@ -34,6 +58,8 @@
                                             <th>Role</th>
                                             <th>Reason</th>
                                             <th>Status Approval</th>
+                                            <th>Tanggal Request</th>
+                                            <th>Tanggal Approval</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
@@ -67,6 +93,9 @@
                                                             <label class="badge bg-light-danger">Direject
                                                                 superadmin1</label>
                                                         @endif
+                                                    </td>
+                                                    <td>{{ $value->created_at }}</td>
+                                                    <td>{{ $value->updated_at == $value->created_at ? '-' : $value->updated_at }}
                                                     </td>
                                                     <td>
                                                         <div style="display: flex; gap: 10px;">
@@ -141,6 +170,7 @@
         // Aktifkan orderby, pagination dan search
         $(document).ready(function() {
             $('#dbTable').DataTable({
+                scrollX: true,
                 "ordering": true,
                 "paging": true,
                 "searching": true,
@@ -171,7 +201,7 @@
             const deleteModal = document.getElementById('deleteUserModal');
             deleteModal.addEventListener('show.bs.modal', function(event) {
                 const button = event.relatedTarget;
-                
+
                 // Get nilai dari button
                 const id = button.getAttribute('data-id');
 

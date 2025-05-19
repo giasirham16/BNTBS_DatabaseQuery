@@ -32,6 +32,7 @@
 
     <section class="section dashboard">
         <div class="container-fluid">
+            {{-- Request Field --}}
             <form action="{{ route('executeQuery') }}" method="POST">
                 @csrf
                 <div class="row">
@@ -112,11 +113,38 @@
                 </div>
             </form>
 
+            {{-- Result field --}}
             <div class="row">
                 <div class="col-md-12">
                     <div class="card">
+
+                        {{-- Table query --}}
                         <div class="card-body-table">
-                            <h5 class="card-title">Result</h5>
+                            <h8 class="card-title">Result</h8>
+                            {{-- Filter menu --}}
+                            <div class="row mb-4 align-items-end">
+                                <div class="col-md-3">
+                                    <label class="col-form-label" for="filter-type">Filter Berdasarkan:</label>
+                                    <select class="form-select" id="filter-type">
+                                        <option value="request" selected>Tanggal Request</option>
+                                        <option value="approval">Tanggal Approval</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="col-form-label" for="min-date">Dari:</label>
+                                    <input type="date" id="min-date" class="form-control">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="col-form-label" for="max-date">Sampai:</label>
+                                    <input type="date" id="max-date" class="form-control">
+                                </div>
+                                <div class="col-md-3 d-flex gap-2">
+                                    <button class="btn btn-primary mt-4" id="apply-filter">Terapkan</button>
+                                    <button class="btn btn-secondary mt-4" id="clear-filter">Clear</button>
+                                </div>
+                            </div>
+
+                            {{-- Badan table --}}
                             <table id="resultTable" class="table table-hover table-bordered w-100">
                                 <thead class="table-head-custom">
                                     <tr>
@@ -165,7 +193,8 @@
                                                 @endif
                                             </td>
                                             <td>{{ $item->created_at }}</td>
-                                            <td>{{ $item->updated_at == $item->created_at ? '-' :  $item->updated_at }}</td>
+                                            <td>{{ $item->updated_at == $item->created_at ? '-' : $item->updated_at }}
+                                            </td>
                                             <td class="text-center align-middle">
                                                 <button class="btn btn-outline-primary" data-bs-toggle="modal"
                                                     data-bs-target="#viewApprovalModal" data-id="{{ $item->id }}"
@@ -238,9 +267,46 @@
                 "searching": true,
                 columnDefs: [{
                         orderable: false,
-                        targets: [5]
+                        targets: [8]
                     } // index kolom mulai dari 0
                 ]
+            });
+
+            // Custom filter untuk tanggal
+            var table = $('#resultTable').DataTable();
+            $.fn.dataTable.ext.search.push(
+                function(settings, data, dataIndex) {
+                    let filterType = $('#filter-type').val(); // 'request' atau 'approval'
+                    let minDate = $('#min-date').val();
+                    let maxDate = $('#max-date').val();
+
+                    // Ambil kolom sesuai filter type
+                    let targetDate = filterType === 'request' ? data[6] : data[7]; // Index kolom
+
+                    const extractDate = str => {
+                        if (!str || str.trim() === '-' || str.trim() === '') return null;
+                        return str.trim().slice(0, 10); // Ambil Y-m-d dari timestamp
+                    };
+
+                    targetDate = extractDate(targetDate);
+
+                    const inRange = (!minDate || targetDate >= minDate) &&
+                        (!maxDate || targetDate <= maxDate);
+
+                    return inRange;
+                }
+            );
+
+            // Apply filter on button click
+            $('#apply-filter').on('click', function() {
+                table.draw();
+            });
+
+            // Clear filter
+            $('#clear-filter').on('click', function() {
+                $('#min-date').val('');
+                $('#max-date').val('');
+                table.draw();
             });
         });
 

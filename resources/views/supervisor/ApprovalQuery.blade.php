@@ -17,19 +17,45 @@
                 <div class="col-md-12">
                     <div class="card">
                         <div class="card-body-table">
+                            {{-- Filter menu --}}
+                            <div class="row mb-4 align-items-end">
+                                <div class="col-md-3">
+                                    <label class="col-form-label" for="filter-type">Filter Berdasarkan:</label>
+                                    <select class="form-select" id="filter-type">
+                                        <option value="request" selected>Tanggal Request</option>
+                                        <option value="approval">Tanggal Approval</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="col-form-label" for="min-date">Dari:</label>
+                                    <input type="date" id="min-date" class="form-control">
+                                </div>
+                                <div class="col-md-3">
+                                    <label class="col-form-label" for="max-date">Sampai:</label>
+                                    <input type="date" id="max-date" class="form-control">
+                                </div>
+                                <div class="col-md-3 d-flex gap-2">
+                                    <button class="btn btn-primary mt-4" id="apply-filter">Terapkan</button>
+                                    <button class="btn btn-secondary mt-4" id="clear-filter">Clear</button>
+                                </div>
+                            </div>
+
+                            {{-- Badan table --}}
                             <div class="table-responsive">
                                 <table id='queryTable' class="table table-hover table-border w-100">
                                     <thead class="table-head-custom">
                                         <tr>
-                                            <th class="text-nowrap">No</th>
+                                            <th>No</th>
                                             <th class="text-nowrap">IP Host DB</th>
-                                            <th class="text-nowrap">Query Kategori</th>
-                                            <th class="text-nowrap">Deskripsi</th>
-                                            <th class="text-nowrap">Requested By</th>
-                                            <th class="text-nowrap">Status Approval</th>
+                                            <th>Query Kategori</th>
+                                            <th>Deskripsi</th>
+                                            <th>Status Approval</th>
+                                            <th>Requested By</th>
+                                            <th>Checker</th>
+                                            <th>Supervisor</th>
                                             <th>Tanggal Request</th>
                                             <th>Tanggal Approval</th>
-                                            <th class="text-nowrap">Aksi</th>
+                                            <th>Aksi</th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -49,7 +75,6 @@
                                                     @endif
                                                 </td>
                                                 <td>{{ $item->deskripsi }}</td>
-                                                <td>{{ $item->operator }}</td>
                                                 <td>
                                                     @if ($item->statusApproval == 0)
                                                         <label class="badge bg-light-warning">Menunggu approval
@@ -65,6 +90,9 @@
                                                         <label class="badge bg-light-danger">Direject supervisor</label>
                                                     @endif
                                                 </td>
+                                                <td>{{ $item->operator }}</td>
+                                                <td>{{ $item->checker ?? '-' }}</td>
+                                                <td>{{ $item->supervisor ?? '-' }}</td>
                                                 <td>{{ $item->created_at }}</td>
                                                 <td>{{ $item->updated_at == $item->created_at ? '-' : $item->updated_at }}
                                                 </td>
@@ -133,9 +161,46 @@
                 "searching": true,
                 columnDefs: [{
                         orderable: false,
-                        targets: [7]
+                        targets: [10]
                     } // index kolom mulai dari 0
                 ]
+            });
+
+            // Custom filter untuk tanggal
+            var table = $('#queryTable').DataTable();
+            $.fn.dataTable.ext.search.push(
+                function(settings, data, dataIndex) {
+                    let filterType = $('#filter-type').val(); // 'request' atau 'approval'
+                    let minDate = $('#min-date').val();
+                    let maxDate = $('#max-date').val();
+
+                    // Ambil kolom sesuai filter type
+                    let targetDate = filterType === 'request' ? data[8] : data[9]; // Index kolom
+
+                    const extractDate = str => {
+                        if (!str || str.trim() === '-' || str.trim() === '') return null;
+                        return str.trim().slice(0, 10); // Ambil Y-m-d dari timestamp
+                    };
+
+                    targetDate = extractDate(targetDate);
+
+                    const inRange = (!minDate || targetDate >= minDate) &&
+                        (!maxDate || targetDate <= maxDate);
+
+                    return inRange;
+                }
+            );
+
+            // Apply filter on button click
+            $('#apply-filter').on('click', function() {
+                table.draw();
+            });
+
+            // Clear filter
+            $('#clear-filter').on('click', function() {
+                $('#min-date').val('');
+                $('#max-date').val('');
+                table.draw();
             });
         });
 
