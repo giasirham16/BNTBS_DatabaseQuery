@@ -31,7 +31,8 @@ Tambahkan deskripsi query (done)
 Jika query select, tidak usah ditampilkan di checker (done)
 Tambahkan approve by supervisor dan approve by checker (done)
 Tambahkan filter date (done)
+Tambahkan menu view pada data query checker dan supervisor (done)
+Tambahkan log (done)
 Checker bisa melihat data sebelum diupdate
 Supervisor bisa melihat data sebelum dan sesudah di update
-Tambahkan menu view pada data query checker dan supervisor
-Tambahkan log
+Hapus session dan cache

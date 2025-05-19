@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Operator;
 use App\Http\Controllers\Controller;
 use App\Models\ApprovalQuery;
 use App\Models\DatabaseParameter;
+use App\Models\LogActivity;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
@@ -78,6 +79,23 @@ class RunQueryController extends Controller
                     'operator' => Auth::user()->username
                 ]);
 
+                // Simpan ke log activity
+                LogActivity::create([
+                    'namaDB' => $database,
+                    'ipHost' => $host,
+                    'port' => $port,
+                    'driver' => $driver,
+                    'queryRequest' => $query,
+                    'queryResult' => null,
+                    'deskripsi' => $request->deskripsi,
+                    'reason' => null,
+                    'menu' => "Query",
+                    'statusApproval' => 1,
+                    'performedBy' => Auth::user()->username,
+                    'role' => Auth::user()->role,
+                    'action' => "Request Query"
+                ]);
+
                 return redirect()->route('viewQuery')->with('success', 'Query menunggu approval untuk dieksekusi!');
             }
             // Jika query insert, update, delete
@@ -95,6 +113,22 @@ class RunQueryController extends Controller
                     'operator' => Auth::user()->username,
                 ]);
 
+                // Simpan ke log activity
+                LogActivity::create([
+                    'namaDB' => $database,
+                    'ipHost' => $host,
+                    'port' => $port,
+                    'driver' => $driver,
+                    'queryRequest' => $query,
+                    'queryResult' => null,
+                    'deskripsi' => $request->deskripsi,
+                    'reason' => null,
+                    'menu' => "Query",
+                    'statusApproval' => 0,
+                    'performedBy' => Auth::user()->username,
+                    'role' => Auth::user()->role,
+                    'action' => "Request Query"
+                ]);
                 return redirect()->route('viewQuery')->with('success', 'Query menunggu approval untuk dieksekusi!');
             }
             // Selain query select, insert, update, delete

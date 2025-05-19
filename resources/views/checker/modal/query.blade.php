@@ -13,43 +13,62 @@
                 <div class="modal-body">
                     <div class="row">
                         <div class="col">
-                            <label for="view-namaDB" class="col-form-label">Nama DB</label>
-                            <input type="text" class="form-control bg-light" name="namaDB" id="view-namaDB"
+                            <label for="query-namaDB" class="col-form-label">Nama DB</label>
+                            <input type="text" class="form-control bg-light" name="namaDB" id="query-namaDB"
                                 readonly>
                         </div>
                         <div class="col">
-                            <label for="view-ipHost" class="col-form-label">Source</label>
-                            <input type="text" class="form-control bg-light" name="ipHost" id="view-ipHost"
-                                readonly>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col">
-                            <label for="view-port" class="col-form-label">Port</label>
-                            <input type="text" class="form-control bg-light" name="port" id="view-port" readonly>
-                        </div>
-                        <div class="col">
-                            <label for="view-driver" class="col-form-label">Driver</label>
-                            <input type="text" class="form-control bg-light" name="driver" id="view-driver"
+                            <label for="query-ipHost" class="col-form-label">Source</label>
+                            <input type="text" class="form-control bg-light" name="ipHost" id="query-ipHost"
                                 readonly>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col">
-                            <label for="view-statusApproval" class="col-form-label">Status Approval</label>
+                            <label for="query-port" class="col-form-label">Port</label>
+                            <input type="text" class="form-control bg-light" name="port" id="query-port" readonly>
+                        </div>
+                        <div class="col">
+                            <label for="query-driver" class="col-form-label">Driver</label>
+                            <input type="text" class="form-control bg-light" name="driver" id="query-driver"
+                                readonly>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label for="query-statusApproval" class="col-form-label">Status Approval</label>
                             <input type="text" class="form-control bg-light" name="statusApproval"
-                                id="view-statusApproval" readonly>
+                                id="query-statusApproval" readonly>
                         </div>
                         <div class="col">
-                            <label for="view-reason" class="col-form-label">Reason</label>
-                            <input type="text" class="form-control" name="reason" id="view-reason" required>
+                            <label for="query-reason" class="col-form-label">Reason</label>
+                            <input type="text" class="form-control" name="reason" id="query-reason" required>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col">
-                            <label for="view-queryRequest" class="col-form-label">Query Request</label>
-                            <textarea rows="3" style="resize: vertical; overflow-y: auto;" class="form-control bg-light"
-                                id="view-queryRequest" readonly></textarea>
+                            <label for="query-supervisor" class="col-form-label">Requested By</label>
+                            <input type="text" class="form-control bg-light" name="operator" id="query-operator"
+                                readonly>
+                        </div>
+                        <div class="col">
+                            <label for="query-checker" class="col-form-label">Checker</label>
+                            <input type="text" class="form-control bg-light" name="checker" id="query-checker"
+                                readonly>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label for="query-queryRequest" class="col-form-label">Query Request</label>
+                            <textarea rows="2" style="resize: vertical; overflow-y: auto;" class="form-control bg-light"
+                                id="query-queryRequest" readonly></textarea>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label for="query-deskripsi" class="col-form-label">Deskripsi</label>
+                            <textarea rows="2" style="resize: vertical; overflow-y: auto;" class="form-control bg-light" id="query-deskripsi"
+                                readonly></textarea>
                         </div>
                     </div>
                 </div>
@@ -59,8 +78,9 @@
 
                     <!-- Tombol Approve dan Reject di kanan -->
                     <div>
-                        <input type="hidden" name="id" id="view-dataId">
-                        <button type="submit" class="btn btn-primary" name="approval" value="1">Approve</button>
+                        <input type="hidden" name="id" id="query-dataId">
+                        <button type="submit" class="btn btn-primary" name="approval"
+                            value="1">Approve</button>
                         <button type="submit" class="btn btn-danger" name="approval" value="0">Reject</button>
                     </div>
                 </div>

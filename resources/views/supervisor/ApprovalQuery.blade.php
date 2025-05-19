@@ -6,6 +6,7 @@
 
 @section('content')
     @include('supervisor.modal.query')
+    @include('supervisor.modal.view')
 
     <div class="pagetitle">
         <h1>Query Approval</h1>
@@ -105,6 +106,9 @@
                                                             data-port="{{ $item->port }}"
                                                             data-driver="{{ $item->driver }}"
                                                             data-reason="{{ $item->reason }}"
+                                                            data-operator="{{ $item->operator }}"
+                                                            data-checker="{{ $item->checker ?? '-' }}"
+                                                            data-deskripsi="{{ $item->deskripsi }}"
                                                             data-statusApproval="{{ $item->statusApproval }}"
                                                             data-queryRequest="{{ $item->queryRequest }}"
                                                             data-query-result="{{ $item->queryResult }}"><i
@@ -112,7 +116,24 @@
                                                                 style="font-size: 18px;"></i></button>
                                                     </td>
                                                 @else
-                                                    <td></td>
+                                                    <td class="text-center align-middle">
+                                                        <button class="btn btn-outline-primary" data-bs-toggle="modal"
+                                                            data-bs-target="#detailQueryModal"
+                                                            data-id="{{ $item->id }}"
+                                                            data-namadb="{{ $item->namaDB }}"
+                                                            data-iphost="{{ $item->ipHost }}"
+                                                            data-port="{{ $item->port }}"
+                                                            data-driver="{{ $item->driver }}"
+                                                            data-reason="{{ $item->reason }}"
+                                                            data-operator="{{ $item->operator }}"
+                                                            data-checker="{{ $item->checker ?? '-' }}"
+                                                            data-deskripsi="{{ $item->deskripsi }}"
+                                                            data-statusApproval="{{ $item->statusApproval }}"
+                                                            data-queryRequest="{{ $item->queryRequest }}"
+                                                            data-query-result="{{ $item->queryResult }}"><i
+                                                                class="bi bi-eye-fill text-dark"
+                                                                style="font-size: 18px;"></i></button>
+                                                    </td>
                                                 @endif
                                         @endforeach
                                     </tbody>
@@ -143,14 +164,14 @@
 
 @section('scripts')
     <script>
-        // Set timeout hilangkan notif
-        setTimeout(() => {
-            const alerts = document.querySelectorAll('.alert');
-            alerts.forEach(alert => {
-                const bsAlert = new bootstrap.Alert(alert);
-                bsAlert.close();
-            });
-        }, 4000); // hilang dalam 4 detik
+        // // Set timeout hilangkan notif
+        // setTimeout(() => {
+        //     const alerts = document.querySelectorAll('.alert');
+        //     alerts.forEach(alert => {
+        //         const bsAlert = new bootstrap.Alert(alert);
+        //         bsAlert.close();
+        //     });
+        // }, 4000); // hilang dalam 4 detik
 
         // Aktifkan orderby, pagination dan search
         $(document).ready(function() {
@@ -204,10 +225,12 @@
             });
         });
 
-        // Get value ke modal view query
+        // Get value ke modal approval query dan detail query
         document.addEventListener('DOMContentLoaded', function() {
             const viewModal = document.getElementById('approvalQueryModal');
+            const detailModal = document.getElementById('detailQueryModal');
 
+            // Approval Query View Modal
             viewModal.addEventListener('show.bs.modal', function(event) {
                 const button = event.relatedTarget;
 
@@ -217,6 +240,9 @@
                 const ipHost = button.getAttribute('data-iphost');
                 const port = button.getAttribute('data-port');
                 const driver = button.getAttribute('data-driver');
+                const operator = button.getAttribute('data-operator');
+                const checker = button.getAttribute('data-checker');
+                const deskripsi = button.getAttribute('data-deskripsi');
                 const statusApproval = button.getAttribute('data-statusApproval');
                 const queryRequest = button.getAttribute('data-queryRequest');
                 const queryResultRaw = button.getAttribute('data-query-result');
@@ -230,13 +256,91 @@
                 else if (statusApproval == 4) status = "Reject by supervisor";
 
                 // Set nilai input di modal
-                document.getElementById('view-dataId').value = id;
-                document.getElementById('view-namaDB').value = nama;
-                document.getElementById('view-ipHost').value = ipHost;
-                document.getElementById('view-port').value = port;
-                document.getElementById('view-driver').value = driver;
-                document.getElementById('view-statusApproval').value = status;
-                document.getElementById('view-queryRequest').value = queryRequest;
+                document.getElementById('query-dataId').value = id;
+                document.getElementById('query-namaDB').value = nama;
+                document.getElementById('query-ipHost').value = ipHost;
+                document.getElementById('query-port').value = port;
+                document.getElementById('query-driver').value = driver;
+                document.getElementById('query-operator').value = operator;
+                document.getElementById('query-checker').value = checker;
+                document.getElementById('query-deskripsi').value = deskripsi;
+                document.getElementById('query-statusApproval').value = status;
+                document.getElementById('query-queryRequest').value = queryRequest;
+            })
+
+            // Detail Query View Modal
+            detailModal.addEventListener('show.bs.modal', function(event) {
+                const button = event.relatedTarget;
+
+                // Ambil nilai dari atribut data-*
+                const id = button.getAttribute('data-id');
+                const nama = button.getAttribute('data-namadb');
+                const ipHost = button.getAttribute('data-iphost');
+                const port = button.getAttribute('data-port');
+                const driver = button.getAttribute('data-driver');
+                const operator = button.getAttribute('data-operator');
+                const checker = button.getAttribute('data-checker');
+                const reason = button.getAttribute('data-reason');
+                const deskripsi = button.getAttribute('data-deskripsi');
+                const statusApproval = button.getAttribute('data-statusApproval');
+                const queryRequest = button.getAttribute('data-queryRequest');
+                const queryResultRaw = button.getAttribute('data-query-result');
+
+                // Konversi status approval
+                let status = "Tidak diketahui";
+                if (statusApproval == 0) status = "Menunggu approval checker";
+                else if (statusApproval == 1) status = "Menunggu approval supervisor";
+                else if (statusApproval == 2) status = "Approved";
+                else if (statusApproval == 3) status = "Reject by checker";
+                else if (statusApproval == 4) status = "Reject by supervisor";
+
+                // Set nilai input di modal
+                document.getElementById('detail-dataId').value = id;
+                document.getElementById('detail-namaDB').value = nama;
+                document.getElementById('detail-ipHost').value = ipHost;
+                document.getElementById('detail-port').value = port;
+                document.getElementById('detail-driver').value = driver;
+                document.getElementById('detail-operator').value = operator;
+                document.getElementById('detail-checker').value = checker;
+                document.getElementById('detail-reason').value = reason;
+                document.getElementById('detail-deskripsi').value = deskripsi;
+                document.getElementById('detail-statusApproval').value = status;
+                document.getElementById('detail-queryRequest').value = queryRequest;
+
+                // Set table
+                const tableHead = document.querySelector('#queryResultTable thead');
+                const tableBody = document.querySelector('#queryResultTable tbody');
+
+                // Kosongkan isi table
+                tableHead.innerHTML = '';
+                tableBody.innerHTML = '';
+                if (!queryResultRaw || queryResultRaw.length === 0) {
+                    tableHead.innerHTML = '<tr><th>Data Kosong</th></tr>';
+                    return;
+                }
+
+                try {
+                    const queryResult = JSON.parse(queryResultRaw);
+                    if (!queryResult || queryResult.length === 0) {
+                        tableHead.innerHTML = '<tr><th>Data Kosong</th></tr>';
+                        return;
+                    }
+
+                    // Ambil keys dari object pertama sebagai header
+                    const headers = Object.keys(queryResult[0]);
+                    const headerRow = headers.map(key => `<th>${key}</th>`).join('');
+                    tableHead.innerHTML = `<tr>${headerRow}</tr>`;
+
+                    // Isi data baris
+                    queryResult.forEach(item => {
+                        const row = headers.map(key => `<td>${item[key]}</td>`).join('');
+                        tableBody.insertAdjacentHTML('beforeend', `<tr>${row}</tr>`);
+                    });
+
+                } catch (err) {
+                    console.error('Gagal parse queryResult JSON:', err);
+                    tableHead.innerHTML = '<tr><th>Data tidak valid</th></tr>';
+                }
             })
         });
     </script>

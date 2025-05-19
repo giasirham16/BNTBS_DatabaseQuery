@@ -9,6 +9,7 @@ use App\Http\Controllers\Supervisor\DatabaseController as SupervisorDatabaseCont
 use App\Http\Controllers\Supervisor\QueryController as SupervisorQueryController;
 use App\Http\Controllers\Operator\RunQueryController;
 use App\Http\Controllers\Operator\ManageDatabaseController;
+use App\Http\Controllers\Supervisor\LogActivityController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -55,15 +56,20 @@ Route::prefix('checker/v1')->group(function () {
 
 // Menu supervisor
 Route::prefix('supervisor/v1')->group(function () {
-        // Menu Approve Query
+    // Menu Approve Query
     Route::get('/approveQuery', [SupervisorQueryController::class, 'index'])->name('spvViewQuery');
     Route::post('/approveQuery', [SupervisorQueryController::class, 'approveQuery'])->name('spvApproveQuery');
-
+    
     // Menu Approve Database
     Route::get('/approveDatabase', [SupervisorDatabaseController::class, 'index'])->name('spvViewDatabase');
     Route::post('/approveDatabase', [SupervisorDatabaseController::class, 'approveDatabase'])->name('spvApproveDatabase');
+    Route::post('/manageDatabase/edit/', [SupervisorDatabaseController::class, 'update'])->name('spvEditDatabase');
+    Route::post('/manageDatabase/delete/', [SupervisorDatabaseController::class, 'destroy'])->name('spvDeleteDatabase');
+
+    // Menu Log Activity
+    Route::get('/logActivity', [LogActivityController::class, 'index'])->name('spvViewLogActivity');
 });
 
 
-Route::get('pengguna/ubah-password', [AdminUserController::class, 'ubahPassword'])->name('pengguna.ubahPassword');
-Route::put('pengguna/update-password/{id}', [AdminUserController::class, 'updatePassword'])->name('pengguna.updatePassword');
+// Route::get('pengguna/ubah-password', [AdminUserController::class, 'ubahPassword'])->name('pengguna.ubahPassword');
+// Route::put('pengguna/update-password/{id}', [AdminUserController::class, 'updatePassword'])->name('pengguna.updatePassword');

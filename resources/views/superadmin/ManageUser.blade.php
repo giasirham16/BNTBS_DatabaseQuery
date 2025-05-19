@@ -50,7 +50,7 @@
 
                             {{-- Badan table --}}
                             <div class="table-responsive">
-                                <table id='dbTable' class="table table-hover table-border">
+                                <table id='userTable' class="table table-hover table-border">
                                     <thead>
                                         <tr>
                                             <th>No</th>
@@ -169,16 +169,53 @@
 
         // Aktifkan orderby, pagination dan search
         $(document).ready(function() {
-            $('#dbTable').DataTable({
+            $('#userTable').DataTable({
                 scrollX: true,
                 "ordering": true,
                 "paging": true,
                 "searching": true,
                 columnDefs: [{
                         orderable: false,
-                        targets: [4]
+                        targets: [7]
                     } // index kolom mulai dari 0
                 ]
+            });
+
+            // Custom filter untuk tanggal
+            var table = $('#userTable').DataTable();
+            $.fn.dataTable.ext.search.push(
+                function(settings, data, dataIndex) {
+                    let filterType = $('#filter-type').val(); // 'request' atau 'approval'
+                    let minDate = $('#min-date').val();
+                    let maxDate = $('#max-date').val();
+
+                    // Ambil kolom sesuai filter type
+                    let targetDate = filterType === 'request' ? data[5] : data[6]; // Index kolom
+
+                    const extractDate = str => {
+                        if (!str || str.trim() === '-' || str.trim() === '') return null;
+                        return str.trim().slice(0, 10); // Ambil Y-m-d dari timestamp
+                    };
+
+                    targetDate = extractDate(targetDate);
+
+                    const inRange = (!minDate || targetDate >= minDate) &&
+                        (!maxDate || targetDate <= maxDate);
+
+                    return inRange;
+                }
+            );
+
+            // Apply filter on button click
+            $('#apply-filter').on('click', function() {
+                table.draw();
+            });
+
+            // Clear filter
+            $('#clear-filter').on('click', function() {
+                $('#min-date').val('');
+                $('#max-date').val('');
+                table.draw();
             });
         });
 

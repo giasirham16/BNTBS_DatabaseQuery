@@ -16,36 +16,6 @@ class UserController extends Controller
         return view('superadmin.ManageUser')->with('data', $data);
     }
 
-    public function ubahPassword()
-    {
-        $pengguna = Auth::user();
-        return view('admin.pages.pengguna.ubahPasswordPengguna', compact('pengguna'));
-    }
-
-    public function updatePassword(Request $request, $id)
-    {
-        $request->validate([
-            'currentPassword' => 'required',
-            'password' => 'required|min:8',
-            'passwordConfirmation' => 'required|same:password'
-        ], [
-            'password.min' => "Password minimal 8",
-            'passwordConfirmation.same' => "Password tidak sama"
-        ]);
-
-        $user = User::findOrFail($id);
-
-        if (!Hash::check($request->currentPassword, $user->password)) {
-            return back()->with('error', 'Password lama tidak cocok');
-        }
-
-        $user->update([
-            'password' => Hash::make($request->password)
-        ]);
-
-        return redirect()->route('pengguna.ubahPassword', ['id' => $id])->with('success', 'Password berhasil diubah');
-    }
-
     public function store(Request $request)
     {
         $data = User::where('username', $request->username)
@@ -108,7 +78,7 @@ class UserController extends Controller
                     $data->statusApproval = 99;
                 }
             } else {
-                if (Auth::user(strtolower(Auth::user()->username) == 'superadmin1')) {
+                if (strtolower(Auth::user()->username) == 'superadmin1') {
                     if ($data->statusApproval != 3 && $data->statusApproval != 4) {
                         $data->statusApproval = 6;
                     } else {
@@ -135,4 +105,35 @@ class UserController extends Controller
             return redirect()->route('viewUser')->with('error', 'Error: ' . $e->getMessage());
         }
     }
+
+    
+    // public function ubahPassword()
+    // {
+    //     $pengguna = Auth::user();
+    //     return view('admin.pages.pengguna.ubahPasswordPengguna', compact('pengguna'));
+    // }
+
+    // public function updatePassword(Request $request, $id)
+    // {
+    //     $request->validate([
+    //         'currentPassword' => 'required',
+    //         'password' => 'required|min:8',
+    //         'passwordConfirmation' => 'required|same:password'
+    //     ], [
+    //         'password.min' => "Password minimal 8",
+    //         'passwordConfirmation.same' => "Password tidak sama"
+    //     ]);
+
+    //     $user = User::findOrFail($id);
+
+    //     if (!Hash::check($request->currentPassword, $user->password)) {
+    //         return back()->with('error', 'Password lama tidak cocok');
+    //     }
+
+    //     $user->update([
+    //         'password' => Hash::make($request->password)
+    //     ]);
+
+    //     return redirect()->route('pengguna.ubahPassword', ['id' => $id])->with('success', 'Password berhasil diubah');
+    // }
 }

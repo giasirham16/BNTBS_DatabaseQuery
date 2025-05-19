@@ -13,16 +13,18 @@ return new class extends Migration
     {
         Schema::create('log_activities', function (Blueprint $table) {
             $table->id();
-            $table->string('namaDB');
-            $table->string('ipHost');
-            $table->string('port');
-            $table->string('driver');
-            $table->longText('queryRequest');
+            $table->string('namaDB')->nullable();
+            $table->string('ipHost')->nullable();
+            $table->string('port')->nullable();
+            $table->string('driver')->nullable();
+            $table->longText('queryRequest')->nullable();
             $table->longText('queryResult')->nullable();
             $table->longText('deskripsi')->nullable();
-            $table->string('operator')->nullable();
-            $table->string('checker')->nullable();
-            $table->string('supervisor')->nullable();
+            $table->longText('reason')->nullable();
+            $table->string('performedBy')->nullable();
+            $table->string('role')->nullable();
+            $table->string('statusApproval')->nullable();
+            $table->string('menu')->nullable();
             $table->string('action');
             $table->timestamps();
         });

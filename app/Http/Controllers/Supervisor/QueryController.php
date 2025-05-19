@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Supervisor;
 
 use App\Http\Controllers\Controller;
 use App\Models\ApprovalQuery;
+use App\Models\LogActivity;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -73,7 +74,24 @@ class QueryController extends Controller
             }
             $data->supervisor = Auth::user()->username;
             $status = $data->save();
+
             if ($status) {
+                // Simpan ke log activity
+                LogActivity::create([
+                    'namaDB' => $data->namaDB,
+                    'ipHost' => $data->ipHost,
+                    'port' => $data->port,
+                    'driver' => $data->driver,
+                    'queryRequest' => $data->queryRequest,
+                    'queryResult' => json_encode($data->queryResult),
+                    'deskripsi' => $data->deskripsi,
+                    'reason' => $data->reason,
+                    'menu' => "Query",
+                    'statusApproval' => $data->statusApproval,
+                    'performedBy' => Auth::user()->username,
+                    'role' => Auth::user()->role,
+                    'action' => $request->approval == 1 ? "Approve Query" : "Reject Query"
+                ]);
                 return redirect()->route('spvViewQuery')->with('success', 'Data berhasil diproses!');
             } else {
                 return redirect()->route('spvViewQuery')->with('error', 'Data gagal diproses!');

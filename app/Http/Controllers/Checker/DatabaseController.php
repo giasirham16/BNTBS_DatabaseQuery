@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Checker;
 
 use App\Http\Controllers\Controller;
 use App\Models\DatabaseParameter;
+use App\Models\LogActivity;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 
@@ -11,7 +12,9 @@ class DatabaseController extends Controller
 {
     public function index()
     {
-        $data = DatabaseParameter::all();
+        $data = DatabaseParameter::where('checker', Auth::user()->username)
+            ->orWhere('checker', null)
+            ->get();
         return view('checker.ApprovalDatabase')->with('data', $data);
     }
 
@@ -43,6 +46,22 @@ class DatabaseController extends Controller
             $status = $data->save();
 
             if ($status) {
+                // Simpan ke log activity
+                LogActivity::create([
+                    'namaDB' => $data->namaDB,
+                    'ipHost' => $data->ipHost,
+                    'port' => $data->port,
+                    'driver' => $data->driver,
+                    'queryRequest' => $data->queryRequest,
+                    'queryResult' => $data->queryResult,
+                    'deskripsi' => $data->deskripsi,
+                    'reason' => $data->reasonApproval,
+                    'menu' => "Database",
+                    'statusApproval' => $data->statusApproval,
+                    'performedBy' => Auth::user()->username,
+                    'role' => Auth::user()->role,
+                    'action' => $request->approval == 1 ? "Approve Database Parameter" : "Reject Database Parameter"
+                ]);
                 return redirect()->route('chkViewDatabase')->with('success', 'Data berhasil diapprove!');
             } else {
                 return redirect()->route('chkViewDatabase')->with('success', 'Data berhasil direject!');

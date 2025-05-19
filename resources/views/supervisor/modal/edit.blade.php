@@ -6,7 +6,7 @@
                 <h1 class="modal-title fs-5">Update Data</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <form action="{{ route('editDatabase') }}" method="POST" id="updateForm">
+            <form action="{{ route('spvEditDatabase') }}" method="POST" id="updateForm">
                 @csrf
                 <div class="modal-body">
                     <input type="hidden" name="id" id="edit-dataId">

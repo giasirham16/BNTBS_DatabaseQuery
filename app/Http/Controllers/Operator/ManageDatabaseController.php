@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\DatabaseParameter;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use App\Models\LogActivity;
 
 class ManageDatabaseController extends Controller
 {
@@ -39,6 +40,22 @@ class ManageDatabaseController extends Controller
         $saved = DatabaseParameter::create($data);
 
         if ($saved) {
+          // Simpan ke log activity
+          LogActivity::create([
+            'namaDB' => $request->namaDB,
+            'ipHost' => $request->ipHost,
+            'port' => $request->port,
+            'driver' => $request->driver,
+            'queryRequest' => null,
+            'queryResult' => null,
+            'deskripsi' => null,
+            'reason' => null,
+            'menu' => "Database",
+            'statusApproval' => 0,
+            'performedBy' => Auth::user()->username,
+            'role' => Auth::user()->role,
+            'action' => "Add Database Parameter"
+          ]);
           return redirect()->route('viewDatabase')->with('success', 'Data saved successfully!');
         } else {
           return redirect()->route('viewDatabase')->with('error', 'Failed to save data.');
@@ -66,6 +83,21 @@ class ManageDatabaseController extends Controller
       $status = $data->update($update);
 
       if ($status) {
+        LogActivity::create([
+          'namaDB' => $request->namaDB,
+          'ipHost' => $request->ipHost,
+          'port' => $request->port,
+          'driver' => $request->driver,
+          'queryRequest' => null,
+          'queryResult' => null,
+          'deskripsi' => null,
+          'reason' => $request->reason,
+          'menu' => "Database",
+          'statusApproval' => 3,
+          'performedBy' => Auth::user()->username,
+          'role' => Auth::user()->role,
+          'action' => "Update Database Parameter"
+        ]);
         return redirect()->route('viewDatabase')->with('success', 'Update data menunggu approval atasan!');
       } else {
         return redirect()->route('viewDatabase')->with('error', 'Gagal membuat permintaan update data!');
@@ -85,6 +117,21 @@ class ManageDatabaseController extends Controller
       $status = $data->save();
 
       if ($status) {
+        LogActivity::create([
+          'namaDB' => $data->namaDB,
+          'ipHost' => $data->ipHost,
+          'port' => $data->port,
+          'driver' => $data->driver,
+          'queryRequest' => null,
+          'queryResult' => null,
+          'deskripsi' => null,
+          'reason' => $request->reason,
+          'menu' => "Database",
+          'statusApproval' => 5,
+          'performedBy' => Auth::user()->username,
+          'role' => Auth::user()->role,
+          'action' => "Delete Database Parameter"
+        ]);
         return redirect()->route('viewDatabase')->with('success', 'Delete data menunggu approval atasan!');
       } else {
         return redirect()->route('viewDatabase')->with('error', 'Gagal membuat permintaan delete data!');

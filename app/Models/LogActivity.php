@@ -15,9 +15,10 @@ class LogActivity extends Model
         'queryResult',
         'deskripsi',
         'reason',
-        'operator',
-        'checker',
-        'supervisor',
-        'action'
+        'performedBy',
+        'role',
+        'action',
+        'statusApproval',
+        'menu'
     ];
 }

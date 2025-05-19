@@ -40,11 +40,11 @@
                     <li>
                         <hr class="dropdown-divider">
                     </li>
-                    <li>
+                    {{-- <li>
                         <a class="dropdown-item" href="{{ route('pengguna.ubahPassword') }}">
                             <i class="bi bi-key"></i> Ubah Password
                         </a>
-                    </li>
+                    </li> --}}
                     <li>
                         <form id="logout-form" action="{{ url('admin/v1/logout') }}" method="POST"
                             style="display: none;">

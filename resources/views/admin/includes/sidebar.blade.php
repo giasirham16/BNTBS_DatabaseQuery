@@ -59,6 +59,14 @@
                     <span>Database Approval</span>
                 </a>
             </li>
+            <li class="nav-item">
+                <a class="nav-link {{ Request::is('supervisor/v1/logActivity', 'supervisor/v1/logActivity/*') ? '' : 'collapsed' }}"
+                    href="{{ url('supervisor/v1/logActivity') }}">
+                    <i
+                        class="bi {{ Request::is('supervisor/v1/logActivity', 'supervisor/v1/logActivity/*') ? 'bi-book-fill' : 'bi-book' }}"></i>
+                    <span>Log Activity</span>
+                </a>
+            </li>
         @elseif (strtolower(Auth::user()->role) == 'superadmin')
             <li class="nav-item">
                 <a class="nav-link {{ Request::is('superadmin/v1/manageUser', 'superadmin/v1/manageUser/*') ? '' : 'collapsed' }}"

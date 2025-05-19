@@ -6,6 +6,8 @@
 
 @section('content')
     @include('supervisor.modal.database')
+    @include('supervisor.modal.edit')
+    @include('supervisor.modal.delete')
 
     <div class="pagetitle">
         <h1>Database Approval</h1>
@@ -108,21 +110,42 @@
                                                     <td>{{ $value->supervisor ?? '-' }}</td>
                                                     <td>{{ $value->created_at }}</td>
                                                     <td>{{ $value->updated_at == $value->created_at ? '-' : $value->updated_at }}
-                                                        @if ($value->statusApproval == 1 || $value->statusApproval == 4 || $value->statusApproval == 6)
-                                                    <td class="text-center align-middle">
-                                                        <button class="btn btn-outline-primary" data-bs-toggle="modal"
-                                                            data-bs-target="#approveDBModal"
-                                                            data-id="{{ $value->id }}"><i
-                                                                class="bi bi-check-square-fill text-success"
-                                                                style="font-size: 18px;"></i></button>
                                                     </td>
-                                                @else
-                                                    <td>
+                                                    @if ($value->statusApproval == 1 || $value->statusApproval == 4 || $value->statusApproval == 6)
+                                                        <td class="text-center align-middle">
+                                                            <button class="btn btn-outline-primary" data-bs-toggle="modal"
+                                                                data-bs-target="#approveDBModal"
+                                                                data-id="{{ $value->id }}"><i
+                                                                    class="bi bi-check-square-fill text-success"
+                                                                    style="font-size: 18px;"></i></button>
+                                                        </td>
+                                                    @elseif ($value->statusApproval == 2)
+                                                        <td>
+                                                            <div style="display: flex; gap: 10px;">
+                                                                <button class="btn btn-outline-primary"
+                                                                    data-bs-toggle="modal" data-bs-target="#updateDBModal"
+                                                                    data-id="{{ $value->id }}"
+                                                                    data-namadb="{{ $value->namaDB }}"
+                                                                    data-iphost="{{ $value->ipHost }}"
+                                                                    data-port="{{ $value->port }}"
+                                                                    data-driver="{{ $value->driver }}"
+                                                                    data-statusApproval="{{ $value->statusApproval }}"><i
+                                                                        class="bi bi-pencil-square text-success"
+                                                                        style="font-size: 18px;"></i></button>
+                                                                <button class="btn btn-outline-primary"
+                                                                    data-bs-toggle="modal" data-bs-target="#deleteDBModal"
+                                                                    data-id="{{ $value->id }}"><i
+                                                                        class="bi bi-trash text-danger"
+                                                                        style="font-size: 18px;"></i></button>
+                                                            </div>
+                                                        </td>
+                                                    @else
+                                                        <td>
 
-                                                    </td>
+                                                        </td>
+                                                    @endif
+                                                </tr>
                                             @endif
-                                            </tr>
-                                        @endif
                                         @endforeach
                                     </tbody>
                                 </table>
@@ -224,6 +247,39 @@
 
                 // Set nilai input di modal
                 document.getElementById('approve-dataId').value = id;
+            });
+        });
+
+        // Get value ke modal edit
+        document.addEventListener('DOMContentLoaded', function() {
+            const updateModal = document.getElementById('updateDBModal');
+            updateModal.addEventListener('show.bs.modal', function(event) {
+                const button = event.relatedTarget;
+
+                // Get nilai dari button
+                const id = button.getAttribute('data-id');
+                const nama = button.getAttribute('data-namadb');
+                const ipHost = button.getAttribute('data-iphost');
+                const port = button.getAttribute('data-port');
+                const driver = button.getAttribute('data-driver');
+
+                // Set nilai input di modal
+                document.getElementById('edit-dataId').value = id;
+                document.getElementById('edit-namaDB').value = nama;
+                document.getElementById('edit-ipHost').value = ipHost;
+                document.getElementById('edit-port').value = port;
+                document.getElementById('edit-driver').value = driver;
+            });
+        });
+
+        // Get value ke modal delete
+        document.addEventListener('DOMContentLoaded', function() {
+            const deleteModal = document.getElementById('deleteDBModal');
+            deleteModal.addEventListener('show.bs.modal', function(event) {
+                // Ganti action form
+                const button = event.relatedTarget;
+                const id = button.getAttribute('data-id');
+                document.getElementById('delete-dataId').value = id;
             });
         });
     </script>
