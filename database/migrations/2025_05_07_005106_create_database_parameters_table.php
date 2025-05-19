@@ -18,6 +18,9 @@ return new class extends Migration
             $table->string('port');
             $table->string('driver');
             $table->string('reason')->nullable();
+            $table->string('operator')->nullable();
+            $table->string('checker')->nullable();
+            $table->string('supervisor')->nullable();
             $table->integer('statusApproval')->default(0);
             $table->timestamps();
         });

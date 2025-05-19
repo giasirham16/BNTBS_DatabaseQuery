@@ -26,18 +26,7 @@ class RunQueryController extends Controller
             ->orWhere('statusApproval', 6)
             ->get();
 
-        $this->approval = ApprovalQuery::select(
-            'id',
-            'namaDB',
-            'ipHost',
-            'port',
-            'driver',
-            'queryRequest',
-            'queryResult',
-            'deskripsi',
-            'reason',
-            'statusApproval'
-        )->where('executedBy', Auth::user()->username)->get();
+        $this->approval = ApprovalQuery::where('operator', Auth::user()->username)->get();
     }
 
     public function index()
@@ -84,10 +73,9 @@ class RunQueryController extends Controller
                     'queryRequest' => $query,
                     'deskripsi' => $request->deskripsi,
                     'username' => $username,
-                    'statusApproval' => 1,
                     'password' => Crypt::encryptString($password),
-                    'executedBy' => Auth::user()->username,
-                    'executedRole' => Auth::user()->role,
+                    'statusApproval' => 1,
+                    'operator' => Auth::user()->username
                 ]);
 
                 return redirect()->route('viewQuery')->with('success', 'Query menunggu approval untuk dieksekusi!');
@@ -104,8 +92,7 @@ class RunQueryController extends Controller
                     'username' => $username,
                     'statusApproval' => 0,
                     'password' => Crypt::encryptString($password),
-                    'executedBy' => Auth::user()->username,
-                    'executedRole' => Auth::user()->role,
+                    'operator' => Auth::user()->username,
                 ]);
 
                 return redirect()->route('viewQuery')->with('success', 'Query menunggu approval untuk dieksekusi!');

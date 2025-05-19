@@ -14,20 +14,7 @@ class QueryController extends Controller
 {
     public function index()
     {
-        $approval = ApprovalQuery::select(
-            'id',
-            'namaDB',
-            'ipHost',
-            'port',
-            'driver',
-            'queryRequest',
-            'queryResult',
-            'deskripsi',
-            'reason',
-            'executedBy',
-            'created_at',
-            'statusApproval'
-        )->get();
+        $approval = ApprovalQuery::get();
         return view('supervisor.ApprovalQuery')->with('approval', $approval);
     }
 
@@ -69,9 +56,14 @@ class QueryController extends Controller
                     $data->queryResult = '[{"Status":"Success"}]';
                 } else if ($queryResult === false) {
                     return redirect()->route('spvViewQuery')->with('error', 'Data gagal diproses, query salah!');
-                // } else if ($queryResult['error']) {
-                //     return redirect()->route('spvViewQuery')->with('error', 'Data gagal diapprove, query salah!');
-                } else{
+                } else {
+                    // Jika returnnya array error
+                    if (is_array($queryResult)) {
+                        if (isset($queryResult['error'])) {
+                            // dd($queryResult);
+                            return redirect()->route('spvViewQuery')->with('error', 'Data gagal diapprove, query salah!');
+                        }
+                    }
                     $data->queryResult = $queryResult;
                 }
             }
@@ -79,7 +71,7 @@ class QueryController extends Controller
             else {
                 $data->statusApproval = 4;
             }
-            // dd($data);
+            $data->supervisor = Auth::user()->username;
             $status = $data->save();
             if ($status) {
                 return redirect()->route('spvViewQuery')->with('success', 'Data berhasil diproses!');

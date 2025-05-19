@@ -32,8 +32,13 @@
                                             <th>Source</th>
                                             <th>Port</th>
                                             <th>Driver</th>
-                                            <th>Reason</th>
                                             <th>Status Approval</th>
+                                            <th>Reason</th>
+                                            <th>Requested By</th>
+                                            <th>Checker</th>
+                                            <th>Supervisor</th>
+                                            <th>Tanggal Request</th>
+                                            <th>Tanggal Approval</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
@@ -46,7 +51,6 @@
                                                     <td>{{ $value->ipHost }}</td>
                                                     <td>{{ $value->port }}</td>
                                                     <td>{{ $value->driver }}</td>
-                                                    <td>{{ $value->reason ?? '-' }}</td>
                                                     <td>
                                                         @if ($value->statusApproval == 0)
                                                             <label class="badge bg-light-warning">(Add) Menunggu approval
@@ -74,21 +78,27 @@
                                                             <label class="badge bg-light-danger">Direject supervisor</label>
                                                         @endif
                                                     </td>
-                                                    @if ($value->statusApproval == 1 || $value->statusApproval == 4 || $value->statusApproval == 6)
-                                                        <td class="text-center align-middle">
-                                                            <button class="btn btn-outline-primary" data-bs-toggle="modal"
-                                                                data-bs-target="#approveDBModal"
-                                                                data-id="{{ $value->id }}"><i
-                                                                    class="bi bi-check-square-fill text-success"
-                                                                    style="font-size: 18px;"></i></button>
-                                                        </td>
-                                                    @else
-                                                        <td>
+                                                    <td>{{ $value->reason ?? '-' }}</td>
+                                                    <td>{{ $value->operator ?? '-' }}</td>
+                                                    <td>{{ $value->checker ?? '-' }}</td>
+                                                    <td>{{ $value->supervisor ?? '-' }}</td>
+                                                    <td>{{ $value->created_at }}</td>
+                                                    <td>{{ $value->updated_at == $value->created_at ? '-' : $value->updated_at }}
+                                                        @if ($value->statusApproval == 1 || $value->statusApproval == 4 || $value->statusApproval == 6)
+                                                    <td class="text-center align-middle">
+                                                        <button class="btn btn-outline-primary" data-bs-toggle="modal"
+                                                            data-bs-target="#approveDBModal"
+                                                            data-id="{{ $value->id }}"><i
+                                                                class="bi bi-check-square-fill text-success"
+                                                                style="font-size: 18px;"></i></button>
+                                                    </td>
+                                                @else
+                                                    <td>
 
-                                                        </td>
-                                                    @endif
-                                                </tr>
+                                                    </td>
                                             @endif
+                                            </tr>
+                                        @endif
                                         @endforeach
                                     </tbody>
                                 </table>
@@ -135,7 +145,7 @@
                 "searching": true,
                 columnDefs: [{
                         orderable: false,
-                        targets: [7]
+                        targets: [10]
                     } // index kolom mulai dari 0
                 ]
             });

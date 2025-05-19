@@ -12,6 +12,9 @@ class DatabaseParameter extends Model
         'port',
         'driver',
         'reason',
+        'operator',
+        'checker',
+        'supervisor',
         'statusApproval'
     ];
 }

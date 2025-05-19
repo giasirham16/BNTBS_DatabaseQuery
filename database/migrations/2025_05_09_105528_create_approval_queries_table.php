@@ -23,8 +23,9 @@ return new class extends Migration
             $table->string('username');
             $table->string('password');
             $table->string('reason')->nullable();
-            $table->string('executedBy');
-            $table->string('executedRole');
+            $table->string('operator')->nullable();
+            $table->string('checker')->nullable();
+            $table->string('supervisor')->nullable();
             $table->integer('statusApproval');
             $table->timestamps();
         });

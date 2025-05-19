@@ -25,8 +25,6 @@
                         <label for="port" class="col-form-label">Port</label>
                         <input type="text" class="form-control" name="port" id="port" required>
                     </div>
-
-                    <input type="hidden" name="statusApproval" value=0>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>

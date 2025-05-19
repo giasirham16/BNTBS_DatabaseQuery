@@ -32,8 +32,12 @@
                                             <th>Source</th>
                                             <th>Port</th>
                                             <th>Driver</th>
-                                            <th>Reason</th>
                                             <th>Status Approval</th>
+                                            <th>Reason</th>
+                                            <th>Requested By</th>
+                                            <th>Supervisor</th>
+                                            <th>Tanggal Request</th>
+                                            <th>Tanggal Approval</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
@@ -46,7 +50,6 @@
                                                     <td>{{ $value->ipHost }}</td>
                                                     <td>{{ $value->port }}</td>
                                                     <td>{{ $value->driver }}</td>
-                                                    <td>{{ $value->reason ?? '-' }}</td>
                                                     <td>
                                                         @if ($value->statusApproval == 0)
                                                             <label class="badge bg-light-warning">(Add) Menunggu approval
@@ -73,6 +76,12 @@
                                                         @elseif ($value->statusApproval == 8)
                                                             <label class="badge bg-light-danger">Direject supervisor</label>
                                                         @endif
+                                                    </td>
+                                                    <td>{{ $value->reason ?? '-' }}</td>
+                                                    <td>{{ $value->operator ?? '-' }}</td>
+                                                    <td>{{ $value->supervisor ?? '-' }}</td>
+                                                    <td>{{ $value->created_at }}</td>
+                                                    <td>{{ $value->updated_at == $value->created_at ? '-' : $value->updated_at }}
                                                     </td>
                                                     @if ($value->statusApproval == 0 || $value->statusApproval == 3 || $value->statusApproval == 5)
                                                         <td class="text-center align-middle">

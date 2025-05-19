@@ -40,11 +40,13 @@
                             <div class="card-body">
                                 <div class="row">
                                     <h5 class="card-title">Query</h5>
-                                    <textarea class="form-control" rows="7" placeholder="Tuliskan query disini" name="query" id="query" required></textarea>
+                                    <textarea class="form-control" rows="7" placeholder="Tuliskan query disini" name="query" id="query"
+                                        required></textarea>
                                 </div>
                                 <div class="row">
                                     <h5 class="card-title">Deskripsi</h5>
-                                    <textarea class="form-control" rows="5" placeholder="Deskripsi/penjelasan query" name="deskripsi" id="deskripsi" required></textarea>
+                                    <textarea class="form-control" rows="5" placeholder="Deskripsi/penjelasan query" name="deskripsi" id="deskripsi"
+                                        required></textarea>
                                 </div>
                                 <div class="row mt-3">
                                     <div class="col text-end">
@@ -124,6 +126,8 @@
                                         <th>Deskripsi</th>
                                         <th>Reason</th>
                                         <th>Status Approval</th>
+                                        <th>Tanggal Request</th>
+                                        <th>Tanggal Approval</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
@@ -160,11 +164,15 @@
                                                     <label class="badge bg-light-danger">Direject supervisor</label>
                                                 @endif
                                             </td>
+                                            <td>{{ $item->created_at }}</td>
+                                            <td>{{ $item->updated_at == $item->created_at ? '-' :  $item->updated_at }}</td>
                                             <td class="text-center align-middle">
                                                 <button class="btn btn-outline-primary" data-bs-toggle="modal"
                                                     data-bs-target="#viewApprovalModal" data-id="{{ $item->id }}"
                                                     data-namadb="{{ $item->namaDB }}" data-iphost="{{ $item->ipHost }}"
                                                     data-port="{{ $item->port }}" data-driver="{{ $item->driver }}"
+                                                    data-checker="{{ $item->checker ?? '-' }}"
+                                                    data-supervisor="{{ $item->supervisor ?? '-' }}"
                                                     data-reason="{{ $item->reason ?? '-' }}"
                                                     data-deskripsi="{{ $item->deskripsi }}"
                                                     data-statusApproval="{{ $item->statusApproval }}"
@@ -250,6 +258,8 @@
                 const port = button.getAttribute('data-port');
                 const driver = button.getAttribute('data-driver');
                 const statusApproval = button.getAttribute('data-statusApproval');
+                const checker = button.getAttribute('data-checker');
+                const supervisor = button.getAttribute('data-supervisor');
                 const reason = button.getAttribute('data-reason');
                 const deskripsi = button.getAttribute('data-deskripsi');
                 const queryRequest = button.getAttribute('data-queryRequest');
@@ -270,6 +280,8 @@
                 document.getElementById('view-port').value = port;
                 document.getElementById('view-driver').value = driver;
                 document.getElementById('view-statusApproval').value = status;
+                document.getElementById('view-checker').value = checker;
+                document.getElementById('view-supervisor').value = supervisor;
                 document.getElementById('view-reason').value = reason;
                 document.getElementById('view-deskripsi').value = deskripsi;
                 document.getElementById('view-queryRequest').value = queryRequest;

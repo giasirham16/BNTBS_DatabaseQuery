@@ -39,8 +39,12 @@
                                             <th>Source</th>
                                             <th>Port</th>
                                             <th>Driver</th>
-                                            <th>Reason</th>
                                             <th>Status Approval</th>
+                                            <th>Reason</th>
+                                            <th>Checker</th>
+                                            <th>Supervisor</th>
+                                            <th>Tanggal Request</th>
+                                            <th>Tanggal Approval</th>
                                             <th>Aksi</th>
                                         </tr>
                                     </thead>
@@ -53,7 +57,6 @@
                                                     <td>{{ $value->ipHost }}</td>
                                                     <td>{{ $value->port }}</td>
                                                     <td>{{ $value->driver }}</td>
-                                                    <td>{{ $value->reason ?? '-' }}</td>
                                                     <td>
                                                         @if ($value->statusApproval == 0)
                                                             <label class="badge bg-light-warning">(Add) Menunggu approval
@@ -81,6 +84,12 @@
                                                             <label class="badge bg-light-danger">Direject supervisor</label>
                                                         @endif
                                                     </td>
+                                                    <td>{{ $value->reason ?? '-' }}</td>
+                                                    <td>{{ $value->checker ?? '-' }}</td>
+                                                    <td>{{ $value->supervisor ?? '-' }}</td>
+                                                    <td>{{ $value->created_at }}</td>
+                                                    <td>{{ $value->updated_at == $value->created_at ? '-' : $value->updated_at }}
+                                                    </td>
                                                     @if ($value->statusApproval == 2)
                                                         <td>
                                                             <div style="display: flex; gap: 10px;">
@@ -92,7 +101,7 @@
                                                                     data-port="{{ $value->port }}"
                                                                     data-driver="{{ $value->driver }}"
                                                                     data-statusApproval="{{ $value->statusApproval }}"><i
-                                                                    {{-- data-action="{{ route('editDatabase', ['id' => '__ID__']) }}"><i --}}
+                                                                        {{-- data-action="{{ route('editDatabase', ['id' => '__ID__']) }}"><i --}}
                                                                         class="bi bi-pencil-square text-success"
                                                                         style="font-size: 18px;"></i></button>
                                                                 <button class="btn btn-outline-primary"
@@ -155,7 +164,7 @@
                 "searching": true,
                 columnDefs: [{
                         orderable: false,
-                        targets: [6]
+                        targets: [9]
                     } // index kolom mulai dari 0
                 ]
             });

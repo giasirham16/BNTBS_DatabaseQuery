@@ -41,6 +41,16 @@
                 </div>
                 <div class="row">
                     <div class="col">
+                        <label for="view-checker" class="col-form-label">Checker</label>
+                        <input type="text" class="form-control bg-light" name="checker" id="view-checker" readonly>
+                    </div>
+                    <div class="col">
+                        <label for="view-supervisor" class="col-form-label">Supervisor</label>
+                        <input type="text" class="form-control bg-light" name="supervisor" id="view-supervisor" readonly>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
                         <label for="view-queryRequest" class="col-form-label">Query Request</label>
                         <textarea rows="2" style="resize: vertical; overflow-y: auto;" class="form-control bg-light"
                             id="view-queryRequest" readonly></textarea>
@@ -49,8 +59,8 @@
                 <div class="row">
                     <div class="col">
                         <label for="view-deskripsi" class="col-form-label">Deskripsi</label>
-                        <textarea rows="2" style="resize: vertical; overflow-y: auto;" class="form-control bg-light"
-                            id="view-deskripsi" readonly></textarea>
+                        <textarea rows="2" style="resize: vertical; overflow-y: auto;" class="form-control bg-light" id="view-deskripsi"
+                            readonly></textarea>
                     </div>
                 </div>
                 <div class="row">

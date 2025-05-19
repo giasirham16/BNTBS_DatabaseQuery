@@ -19,8 +19,10 @@ return new class extends Migration
             $table->string('driver');
             $table->longText('queryRequest');
             $table->longText('queryResult')->nullable();
-            $table->string('executedBy');
-            $table->string('executedRole');
+            $table->longText('deskripsi')->nullable();
+            $table->string('operator')->nullable();
+            $table->string('checker')->nullable();
+            $table->string('supervisor')->nullable();
             $table->string('action');
             $table->timestamps();
         });

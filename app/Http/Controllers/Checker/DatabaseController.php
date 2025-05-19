@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Checker;
 use App\Http\Controllers\Controller;
 use App\Models\DatabaseParameter;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class DatabaseController extends Controller
 {
@@ -25,12 +26,19 @@ class DatabaseController extends Controller
                 5 => 6, //Delete
             ];
 
+            $rejectMap = [
+                0 => 7,
+                3 => 2,
+                5 => 2
+            ];
+
             if ($request->approval == 1) {
                 $data->statusApproval = $statusMap[$data->statusApproval];
             } else {
-                $data->statusApproval = 7;
+                $data->statusApproval = $rejectMap[$data->statusApproval];
             }
             $data->reason = $request->reasonApproval;
+            $data->checker = Auth::user()->username;
 
             $status = $data->save();
 

@@ -25,9 +25,10 @@
                                             <th class="text-nowrap">IP Host DB</th>
                                             <th class="text-nowrap">Query Kategori</th>
                                             <th class="text-nowrap">Deskripsi</th>
-                                            <th class="text-nowrap">Requested by</th>
+                                            <th class="text-nowrap">Requested By</th>
                                             <th class="text-nowrap">Status Approval</th>
-                                            <th class="text-nowrap">Tanggal Request</th>
+                                            <th>Tanggal Request</th>
+                                            <th>Tanggal Approval</th>
                                             <th class="text-nowrap">Aksi</th>
                                         </tr>
                                     </thead>
@@ -48,7 +49,7 @@
                                                     @endif
                                                 </td>
                                                 <td>{{ $item->deskripsi }}</td>
-                                                <td>{{ $item->executedBy }}</td>
+                                                <td>{{ $item->operator }}</td>
                                                 <td>
                                                     @if ($item->statusApproval == 0)
                                                         <label class="badge bg-light-warning">Menunggu approval
@@ -65,6 +66,8 @@
                                                     @endif
                                                 </td>
                                                 <td>{{ $item->created_at }}</td>
+                                                <td>{{ $item->updated_at == $item->created_at ? '-' : $item->updated_at }}
+                                                </td>
                                                 @if ($item->statusApproval == 0)
                                                     <td class="text-center align-middle">
                                                         <button class="btn btn-outline-primary" data-bs-toggle="modal"

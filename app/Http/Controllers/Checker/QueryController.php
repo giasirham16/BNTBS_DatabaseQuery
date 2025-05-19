@@ -5,25 +5,13 @@ namespace App\Http\Controllers\Checker;
 use App\Http\Controllers\Controller;
 use App\Models\ApprovalQuery;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class QueryController extends Controller
 {
     public function index()
     {
-        $approval = ApprovalQuery::select(
-            'id',
-            'namaDB',
-            'ipHost',
-            'port',
-            'driver',
-            'queryRequest',
-            'queryResult',
-            'deskripsi',
-            'reason',
-            'executedBy',
-            'created_at',
-            'statusApproval'
-        )->whereRaw("LOWER(queryRequest) NOT LIKE 'select%'")->get();
+        $approval = ApprovalQuery::whereRaw("LOWER(queryRequest) NOT LIKE 'select%'")->get();
         return view('checker.ApprovalQuery')->with('approval', $approval);
     }
 
@@ -39,7 +27,7 @@ class QueryController extends Controller
             else {
                 $data->statusApproval = 3;
             }
-            
+            $data->checker = Auth::user()->username;
             $status = $data->save();
 
             if ($status) {

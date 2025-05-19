@@ -26,9 +26,11 @@ Manage Query:
 4 = Direject supervisor
 
 Tambahan:
-Tampilkan user yang execute
-Tambahkan deskripsi query
+Tampilkan user yang execute (done)
+Tambahkan deskripsi query (done)
+Jika query select, tidak usah ditampilkan di checker (done)
+Tambahkan approve by supervisor dan approve by checker (done)
 Tambahkan filter date
-Jika query select, tidak usah ditampilkan di checker
 Checker bisa melihat data sebelum diupdate
 Supervisor bisa melihat data sebelum dan sesudah di update
+Tambahkan log

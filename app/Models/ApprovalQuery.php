@@ -17,7 +17,9 @@ class ApprovalQuery extends Model
         'username',
         'password',
         'reason',
-        'executedBy',
+        'operator',
+        'checker',
+        'supervisor',
         'executedRole',
         'statusApproval'
     ];

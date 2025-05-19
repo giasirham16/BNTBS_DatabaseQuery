@@ -13,9 +13,11 @@ class LogActivity extends Model
         'driver',
         'queryRequest',
         'queryResult',
+        'deskripsi',
         'reason',
-        'executedBy',
-        'executedRole',
+        'operator',
+        'checker',
+        'supervisor',
         'action'
     ];
 }
