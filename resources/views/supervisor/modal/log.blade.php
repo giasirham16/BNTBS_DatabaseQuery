@@ -1,5 +1,5 @@
 <!-- Modal -->
-<div class="modal fade" id="detailQueryModal" tabindex="-1" aria-labelledby="detailQueryModal" aria-hidden="true">
+<div class="modal fade" id="logActivityModal" tabindex="-1" aria-labelledby="logActivityModal" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -7,61 +7,72 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <input type="hidden" name="id" id="detail-dataId">
+                <input type="hidden" name="id" id="log-dataId">
                 <div class="row">
                     <div class="col">
-                        <label for="detail-namaDB" class="col-form-label">Nama DB</label>
-                        <input type="text" class="form-control bg-light" name="namaDB" id="detail-namaDB" readonly>
+                        <label for="log-namaDB" class="col-form-label">Nama DB</label>
+                        <input type="text" class="form-control bg-light" name="namaDB" id="log-namaDB" readonly>
                     </div>
                     <div class="col">
-                        <label for="detail-ipHost" class="col-form-label">Source</label>
-                        <input type="text" class="form-control bg-light" name="ipHost" id="detail-ipHost" readonly>
+                        <label for="log-ipHost" class="col-form-label">Source</label>
+                        <input type="text" class="form-control bg-light" name="ipHost" id="log-ipHost" readonly>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col">
-                        <label for="detail-port" class="col-form-label">Port</label>
-                        <input type="text" class="form-control bg-light" name="port" id="detail-port" readonly>
+                        <label for="log-port" class="col-form-label">Port</label>
+                        <input type="text" class="form-control bg-light" name="port" id="log-port" readonly>
                     </div>
                     <div class="col">
-                        <label for="detail-driver" class="col-form-label">Driver</label>
-                        <input type="text" class="form-control bg-light" name="driver" id="detail-driver" readonly>
+                        <label for="log-driver" class="col-form-label">Driver</label>
+                        <input type="text" class="form-control bg-light" name="driver" id="log-driver" readonly>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col">
-                        <label for="detail-statusApproval" class="col-form-label">Status Approval</label>
+                        <label for="log-statusApproval" class="col-form-label">Status Approval</label>
                         <input type="text" class="form-control bg-light" name="statusApproval"
-                            id="detail-statusApproval" readonly>
+                            id="log-statusApproval" readonly>
                     </div>
                     <div class="col">
-                        <label for="detail-reason" class="col-form-label">Reason</label>
-                        <input type="text" class="form-control bg-light" name="reason" id="detail-reason" readonly>
+                        <label for="log-reason" class="col-form-label">Reason</label>
+                        <input type="text" class="form-control bg-light" name="reason" id="log-reason" readonly>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col">
-                        <label for="detail-supervisor" class="col-form-label">Requested By</label>
-                        <input type="text" class="form-control bg-light" name="operator" id="detail-operator"
+                        <label for="log-performedBy" class="col-form-label">Performed By</label>
+                        <input type="text" class="form-control bg-light" name="performedBy" id="log-performedBy"
                             readonly>
                     </div>
                     <div class="col">
-                        <label for="detail-checker" class="col-form-label">Checker</label>
-                        <input type="text" class="form-control bg-light" name="checker" id="detail-checker" readonly>
+                        <label for="log-role" class="col-form-label">Role</label>
+                        <input type="text" class="form-control bg-light" name="role" id="log-role" readonly>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col">
-                        <label for="detail-queryRequest" class="col-form-label">Query Request</label>
-                        <textarea rows="2" style="resize: vertical; overflow-y: auto;" class="form-control bg-light"
-                            id="detail-queryRequest" readonly></textarea>
+                        <label for="log-menu" class="col-form-label">Menu</label>
+                        <input type="text" class="form-control bg-light" name="menu" id="log-menu"
+                            readonly>
+                    </div>
+                    <div class="col">
+                        <label for="log-action" class="col-form-label">Aksi</label>
+                        <input type="text" class="form-control bg-light" name="action" id="log-action" readonly>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col">
-                        <label for="detail-deskripsi" class="col-form-label">Deskripsi</label>
-                        <textarea rows="2" style="resize: vertical; overflow-y: auto;" class="form-control bg-light" id="detail-deskripsi"
+                        <label for="log-queryRequest" class="col-form-label">Query Request</label>
+                        <textarea rows="2" style="resize: vertical; overflow-y: auto;" class="form-control bg-light" id="log-queryRequest"
                             readonly></textarea>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <label for="log-deskripsi" class="col-form-label">Deskripsi</label>
+                        <textarea rows="2" style="resize: vertical; overflow-y: auto;" class="form-control bg-light"
+                            id="log-deskripsi" readonly></textarea>
                     </div>
                 </div>
                 <div class="row">
@@ -69,10 +80,10 @@
                         <label for="queryResultTable" class="col-form-label">Query Result</label>
                         <table id="queryResultTable" class="table table-hover table-bordered">
                             <thead class="table-head-custom">
-                                    <!-- Akan diisi oleh JavaScript -->
+                                <!-- Akan diisi oleh JavaScript -->
                             </thead>
                             <tbody>
-                                    <!-- Akan diisi oleh JavaScript -->
+                                <!-- Akan diisi oleh JavaScript -->
                             </tbody>
                         </table>
                     </div>

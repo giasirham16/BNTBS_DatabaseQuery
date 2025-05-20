@@ -35,7 +35,7 @@
 
                             {{-- Badan table --}}
                             <div class="table-responsive">
-                                <table id='dbTable' class="table table-hover table-border w-100">
+                                <table id='logTable' class="table table-hover table-border w-100">
                                     <thead class="table-head-custom">
                                         <tr>
                                             <th>Id</th>
@@ -119,15 +119,17 @@
                                                     {{-- Aksi --}}
                                                     <td class="text-center align-middle">
                                                         <button class="btn btn-outline-primary" data-bs-toggle="modal"
-                                                            data-bs-target="#detailQueryModal" data-id="{{ $value->id }}"
+                                                            data-bs-target="#logActivityModal" data-id="{{ $value->id }}"
                                                             data-namadb="{{ $value->namaDB }}"
                                                             data-iphost="{{ $value->ipHost }}"
                                                             data-port="{{ $value->port }}"
                                                             data-driver="{{ $value->driver }}"
                                                             data-reason="{{ $value->reason }}"
-                                                            data-operator="{{ $value->operator }}"
-                                                            data-checker="{{ $value->checker ?? '-' }}"
                                                             data-deskripsi="{{ $value->deskripsi }}"
+                                                            data-menu="{{ $value->menu }}"
+                                                            data-performedBy="{{ $value->performedBy }}"
+                                                            data-role="{{ $value->role }}"
+                                                            data-action="{{ $value->action }}"
                                                             data-statusApproval="{{ $value->statusApproval }}"
                                                             data-queryRequest="{{ $value->queryRequest }}"
                                                             data-query-result="{{ $value->queryResult }}"><i
@@ -176,7 +178,7 @@
 
         // Aktifkan orderby, pagination dan search
         $(document).ready(function() {
-            $('#dbTable').DataTable({
+            $('#logTable').DataTable({
                 scrollX: true,
                 "ordering": true,
                 "paging": true,
@@ -189,7 +191,7 @@
             });
 
             // Custom filter untuk tanggal
-            var table = $('#dbTable').DataTable();
+            var table = $('#logTable').DataTable();
             $.fn.dataTable.ext.search.push(
                 function(settings, data, dataIndex) {
                     let minDate = $('#min-date').val();
@@ -225,51 +227,101 @@
             });
         });
 
-        // Get value ke modal approveDBModal
+        // Get value ke modal log activity
         document.addEventListener('DOMContentLoaded', function() {
-            const updateModal = document.getElementById('approveDBModal');
-            updateModal.addEventListener('show.bs.modal', function(event) {
+            const logModal = document.getElementById('logActivityModal');
+
+            // Detail Query View Modal
+            logModal.addEventListener('show.bs.modal', function(event) {
                 const button = event.relatedTarget;
 
-                // Get nilai dari button
-                const id = button.getAttribute('data-id');
-
-                // Set nilai input di modal
-                document.getElementById('approve-dataId').value = id;
-            });
-        });
-
-        // Get value ke modal edit
-        document.addEventListener('DOMContentLoaded', function() {
-            const updateModal = document.getElementById('updateDBModal');
-            updateModal.addEventListener('show.bs.modal', function(event) {
-                const button = event.relatedTarget;
-
-                // Get nilai dari button
+                // Ambil nilai dari atribut data-*
                 const id = button.getAttribute('data-id');
                 const nama = button.getAttribute('data-namadb');
                 const ipHost = button.getAttribute('data-iphost');
                 const port = button.getAttribute('data-port');
                 const driver = button.getAttribute('data-driver');
+                const reason = button.getAttribute('data-reason');
+                const deskripsi = button.getAttribute('data-deskripsi');
+                const menu = button.getAttribute('data-menu');
+                const performedBy = button.getAttribute('data-performedBy');
+                const role = button.getAttribute('data-role');
+                const action = button.getAttribute('data-action');
+                const statusApproval = button.getAttribute('data-statusApproval');
+                const queryRequest = button.getAttribute('data-queryRequest');
+                const queryResultRaw = button.getAttribute('data-query-result');
+
+                // Konversi status approval
+                let status = "Tidak diketahui";
+                if (menu == 'Query') {
+                    if (statusApproval == 0) status = "Menunggu approval checker";
+                    else if (statusApproval == 1) status = "Menunggu approval supervisor";
+                    else if (statusApproval == 2) status = "Approved";
+                    else if (statusApproval == 3) status = "Reject by checker";
+                    else if (statusApproval == 4) status = "Reject by supervisor";
+                } else {
+                    if (statusApproval == 0) status = "(Add) Menunggu approval checker";
+                    else if (statusApproval == 1) status = "(Add) Menunggu approval supervisor";
+                    else if (statusApproval == 2) status = "Approved";
+                    else if (statusApproval == 3) status = "(Update) Menunggu approval checker";
+                    else if (statusApproval == 4) status = "(Update) Menunggu approval supervisor";
+                    else if (statusApproval == 5) status = "(Delete) Menunggu approval checker";
+                    else if (statusApproval == 6) status = "(Delete) Menunggu approval supervisor";
+                    else if (statusApproval == 7) status = "Direject checker";
+                    else if (statusApproval == 8) status = "Direject supervisor";
+
+                }
 
                 // Set nilai input di modal
-                document.getElementById('edit-dataId').value = id;
-                document.getElementById('edit-namaDB').value = nama;
-                document.getElementById('edit-ipHost').value = ipHost;
-                document.getElementById('edit-port').value = port;
-                document.getElementById('edit-driver').value = driver;
-            });
-        });
+                document.getElementById('log-dataId').value = id;
+                document.getElementById('log-namaDB').value = nama;
+                document.getElementById('log-ipHost').value = ipHost;
+                document.getElementById('log-port').value = port;
+                document.getElementById('log-driver').value = driver;
+                document.getElementById('log-menu').value = menu;
+                document.getElementById('log-performedBy').value = performedBy;
+                document.getElementById('log-role').value = role;
+                document.getElementById('log-action').value = action;
+                document.getElementById('log-reason').value = reason;
+                document.getElementById('log-deskripsi').value = deskripsi;
+                document.getElementById('log-statusApproval').value = status;
+                document.getElementById('log-queryRequest').value = queryRequest;
 
-        // Get value ke modal delete
-        document.addEventListener('DOMContentLoaded', function() {
-            const deleteModal = document.getElementById('deleteDBModal');
-            deleteModal.addEventListener('show.bs.modal', function(event) {
-                // Ganti action form
-                const button = event.relatedTarget;
-                const id = button.getAttribute('data-id');
-                document.getElementById('delete-dataId').value = id;
-            });
+                // Set table
+                const tableHead = document.querySelector('#queryResultTable thead');
+                const tableBody = document.querySelector('#queryResultTable tbody');
+
+                // Kosongkan isi table
+                tableHead.innerHTML = '';
+                tableBody.innerHTML = '';
+                if (!queryResultRaw || queryResultRaw.length === 0) {
+                    tableHead.innerHTML = '<tr><th>Data Kosong</th></tr>';
+                    return;
+                }
+
+                try {
+                    const queryResult = JSON.parse(queryResultRaw);
+                    if (!queryResult || queryResult.length === 0) {
+                        tableHead.innerHTML = '<tr><th>Data Kosong</th></tr>';
+                        return;
+                    }
+
+                    // Ambil keys dari object pertama sebagai header
+                    const headers = Object.keys(queryResult[0]);
+                    const headerRow = headers.map(key => `<th>${key}</th>`).join('');
+                    tableHead.innerHTML = `<tr>${headerRow}</tr>`;
+
+                    // Isi data baris
+                    queryResult.forEach(item => {
+                        const row = headers.map(key => `<td>${item[key]}</td>`).join('');
+                        tableBody.insertAdjacentHTML('beforeend', `<tr>${row}</tr>`);
+                    });
+
+                } catch (err) {
+                    console.error('Gagal parse queryResult JSON:', err);
+                    tableHead.innerHTML = '<tr><th>Data tidak valid</th></tr>';
+                }
+            })
         });
     </script>
 @endsection

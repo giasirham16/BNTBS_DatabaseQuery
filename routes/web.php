@@ -21,53 +21,55 @@ Route::prefix('admin/v1')->group(function () {
     Route::post('/login', [AuthController::class, 'login'])->name('login.post');
 });
 
-// Menu superadmin
-Route::prefix('superadmin/v1')->group(function () {
-    // Menu Manage User
-    Route::get('/manageUser', [AdminUserController::class, 'index'])->name('viewUser');
-    Route::post('/manageUser', [AdminUserController::class, 'store'])->name('addUser');
-    Route::post('/manageUser/approve', [AdminUserController::class, 'approve'])->name('approveUser');
-    Route::post('/manageUser/delete', [AdminUserController::class, 'destroy'])->name('deleteUser');
-});
-
-// Menu operator
-Route::prefix('operator/v1')->group(function () {
-    // Menu Run Query
-    Route::get('/runQuery', [RunQueryController::class, 'index'])->name('viewQuery');
-    Route::post('/runQuery', [RunQueryController::class, 'executeQuery'])->name('executeQuery');
-
-    // Menu Manage Database
-    Route::get('/manageDatabase', [ManageDatabaseController::class, 'index'])->name('viewDatabase');
-    Route::post('/manageDatabase', [ManageDatabaseController::class, 'store'])->name('addDatabase');
-    Route::post('/manageDatabase/edit/', [ManageDatabaseController::class, 'update'])->name('editDatabase');
-    Route::post('/manageDatabase/delete/', [ManageDatabaseController::class, 'destroy'])->name('deleteDatabase');
-});
-
-// Menu checker
-Route::prefix('checker/v1')->group(function () {
-    // Menu Approve Query
-    Route::get('/approveQuery', [CheckerQueryController::class, 'index'])->name('chkViewQuery');
-    Route::post('/approveQuery', [CheckerQueryController::class, 'approveQuery'])->name('chkApproveQuery');
-
-    // Menu Approve Database
-    Route::get('/approveDatabase', [CheckerDatabaseController::class, 'index'])->name('chkViewDatabase');
-    Route::post('/approveDatabase', [CheckerDatabaseController::class, 'approveDatabase'])->name('chkApproveDatabase');
-});
-
-// Menu supervisor
-Route::prefix('supervisor/v1')->group(function () {
-    // Menu Approve Query
-    Route::get('/approveQuery', [SupervisorQueryController::class, 'index'])->name('spvViewQuery');
-    Route::post('/approveQuery', [SupervisorQueryController::class, 'approveQuery'])->name('spvApproveQuery');
+Route::prefix('admin/v1')->middleware(['auth','session.timeout'])->group(function () {
+    // Menu superadmin
+    Route::prefix('superadmin')->middleware(['superadmin'])->group(function () {
+        // Menu Manage User
+        Route::get('/manageUser', [AdminUserController::class, 'index'])->name('viewUser');
+        Route::post('/manageUser', [AdminUserController::class, 'store'])->name('addUser');
+        Route::post('/manageUser/approve', [AdminUserController::class, 'approve'])->name('approveUser');
+        Route::post('/manageUser/delete', [AdminUserController::class, 'destroy'])->name('deleteUser');
+    });
     
-    // Menu Approve Database
-    Route::get('/approveDatabase', [SupervisorDatabaseController::class, 'index'])->name('spvViewDatabase');
-    Route::post('/approveDatabase', [SupervisorDatabaseController::class, 'approveDatabase'])->name('spvApproveDatabase');
-    Route::post('/manageDatabase/edit/', [SupervisorDatabaseController::class, 'update'])->name('spvEditDatabase');
-    Route::post('/manageDatabase/delete/', [SupervisorDatabaseController::class, 'destroy'])->name('spvDeleteDatabase');
-
-    // Menu Log Activity
-    Route::get('/logActivity', [LogActivityController::class, 'index'])->name('spvViewLogActivity');
+    // Menu operator
+    Route::prefix('operator')->middleware(['role:operator'])->group(function () {
+        // Menu Run Query
+        Route::get('/runQuery', [RunQueryController::class, 'index'])->name('viewQuery');
+        Route::post('/runQuery', [RunQueryController::class, 'executeQuery'])->name('executeQuery');
+    
+        // Menu Manage Database
+        Route::get('/manageDatabase', [ManageDatabaseController::class, 'index'])->name('viewDatabase');
+        Route::post('/manageDatabase', [ManageDatabaseController::class, 'store'])->name('addDatabase');
+        Route::post('/manageDatabase/edit/', [ManageDatabaseController::class, 'update'])->name('editDatabase');
+        Route::post('/manageDatabase/delete/', [ManageDatabaseController::class, 'destroy'])->name('deleteDatabase');
+    });
+    
+    // Menu checker
+    Route::prefix('checker')->middleware(['role:checker'])->group(function () {
+        // Menu Approve Query
+        Route::get('/approveQuery', [CheckerQueryController::class, 'index'])->name('chkViewQuery');
+        Route::post('/approveQuery', [CheckerQueryController::class, 'approveQuery'])->name('chkApproveQuery');
+    
+        // Menu Approve Database
+        Route::get('/approveDatabase', [CheckerDatabaseController::class, 'index'])->name('chkViewDatabase');
+        Route::post('/approveDatabase', [CheckerDatabaseController::class, 'approveDatabase'])->name('chkApproveDatabase');
+    });
+    
+    // Menu supervisor
+    Route::prefix('supervisor')->middleware(['role:supervisor'])->group(function () {
+        // Menu Approve Query
+        Route::get('/approveQuery', [SupervisorQueryController::class, 'index'])->name('spvViewQuery');
+        Route::post('/approveQuery', [SupervisorQueryController::class, 'approveQuery'])->name('spvApproveQuery');
+        
+        // Menu Approve Database
+        Route::get('/approveDatabase', [SupervisorDatabaseController::class, 'index'])->name('spvViewDatabase');
+        Route::post('/approveDatabase', [SupervisorDatabaseController::class, 'approveDatabase'])->name('spvApproveDatabase');
+        Route::post('/manageDatabase/edit/', [SupervisorDatabaseController::class, 'update'])->name('spvEditDatabase');
+        Route::post('/manageDatabase/delete/', [SupervisorDatabaseController::class, 'destroy'])->name('spvDeleteDatabase');
+    
+        // Menu Log Activity
+        Route::get('/logActivity', [LogActivityController::class, 'index'])->name('spvViewLogActivity');
+    });
 });
 
 
