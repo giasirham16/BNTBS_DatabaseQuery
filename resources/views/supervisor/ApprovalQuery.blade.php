@@ -111,7 +111,8 @@
                                                             data-deskripsi="{{ $item->deskripsi }}"
                                                             data-statusApproval="{{ $item->statusApproval }}"
                                                             data-queryRequest="{{ $item->queryRequest }}"
-                                                            data-query-result="{{ $item->queryResult }}"><i
+                                                            data-before="{{ $item->updateBefore }}"
+                                                            data-after="{{ $item->updateAfter }}"><i
                                                                 class="bi bi-check-square-fill text-success"
                                                                 style="font-size: 18px;"></i></button>
                                                     </td>
@@ -129,6 +130,8 @@
                                                             data-checker="{{ $item->checker ?? '-' }}"
                                                             data-deskripsi="{{ $item->deskripsi }}"
                                                             data-statusApproval="{{ $item->statusApproval }}"
+                                                            data-tanggalRequest="{{ $item->created_at }}"
+                                                            data-tanggalApproval="{{ $item->updated_at }}"
                                                             data-queryRequest="{{ $item->queryRequest }}"
                                                             data-query-result="{{ $item->queryResult }}"><i
                                                                 class="bi bi-eye-fill text-dark"
@@ -225,13 +228,50 @@
             });
         });
 
+        // Fungsi load data ke table
+        function renderTable(tableId, jsonData) {
+            const tableHead = document.querySelector(`#${tableId} thead`);
+            const tableBody = document.querySelector(`#${tableId} tbody`);
+
+            // Kosongkan isi table
+            tableHead.innerHTML = '';
+            tableBody.innerHTML = '';
+
+            if (!jsonData || jsonData.length === 0) {
+                tableHead.innerHTML = '<tr><th>Data Kosong</th></tr>';
+                return;
+            }
+
+            try {
+                const data = typeof jsonData === 'string' ? JSON.parse(jsonData) : jsonData;
+
+                if (!data || data.length === 0) {
+                    tableHead.innerHTML = '<tr><th>Data Kosong</th></tr>';
+                    return;
+                }
+
+                const headers = Object.keys(data[0]);
+                const headerRow = headers.map(key => `<th>${key}</th>`).join('');
+                tableHead.innerHTML = `<tr>${headerRow}</tr>`;
+
+                data.forEach(item => {
+                    const row = headers.map(key => `<td>${item[key]}</td>`).join('');
+                    tableBody.insertAdjacentHTML('beforeend', `<tr>${row}</tr>`);
+                });
+
+            } catch (err) {
+                console.error(`Gagal parse data untuk table #${tableId}:`, err);
+                tableHead.innerHTML = '<tr><th>Data tidak valid</th></tr>';
+            }
+        }
+
         // Get value ke modal approval query dan detail query
         document.addEventListener('DOMContentLoaded', function() {
-            const viewModal = document.getElementById('approvalQueryModal');
+            const approvalModal = document.getElementById('approvalQueryModal');
             const detailModal = document.getElementById('detailQueryModal');
 
             // Approval Query View Modal
-            viewModal.addEventListener('show.bs.modal', function(event) {
+            approvalModal.addEventListener('show.bs.modal', function(event) {
                 const button = event.relatedTarget;
 
                 // Ambil nilai dari atribut data-*
@@ -243,9 +283,11 @@
                 const operator = button.getAttribute('data-operator');
                 const checker = button.getAttribute('data-checker');
                 const deskripsi = button.getAttribute('data-deskripsi');
+                const reason = button.getAttribute('data-reason');
                 const statusApproval = button.getAttribute('data-statusApproval');
                 const queryRequest = button.getAttribute('data-queryRequest');
-                const queryResultRaw = button.getAttribute('data-query-result');
+                const dataBeforeRaw = button.getAttribute('data-before');
+                const dataAfterRaw = button.getAttribute('data-after');
 
                 // Konversi status approval
                 let status = "Tidak diketahui";
@@ -266,6 +308,22 @@
                 document.getElementById('query-deskripsi').value = deskripsi;
                 document.getElementById('query-statusApproval').value = status;
                 document.getElementById('query-queryRequest').value = queryRequest;
+
+                // Deteksi apakah query adalah update
+                const isUpdateQuery = queryRequest.toUpperCase().startsWith('UPDATE');
+
+                // Ambil elemen wrapper
+                const beforeWrapper = document.getElementById('dataBeforeWrapper');
+                const afterWrapper = document.getElementById('dataAfterWrapper');
+
+                // Render table before update
+                renderTable('dataBeforeTable', dataBeforeRaw);
+                renderTable('dataAfterTable', dataAfterRaw);
+
+                // Tampilkan atau sembunyikan
+                beforeWrapper.style.display = isUpdateQuery ? 'block' : 'none';
+                afterWrapper.style.display = isUpdateQuery ? 'block' : 'none';
+
             })
 
             // Detail Query View Modal
@@ -281,6 +339,8 @@
                 const operator = button.getAttribute('data-operator');
                 const checker = button.getAttribute('data-checker');
                 const reason = button.getAttribute('data-reason');
+                const tanggalRequest = button.getAttribute('data-tanggalRequest');
+                const tanggalApproval = button.getAttribute('data-tanggalApproval');
                 const deskripsi = button.getAttribute('data-deskripsi');
                 const statusApproval = button.getAttribute('data-statusApproval');
                 const queryRequest = button.getAttribute('data-queryRequest');
@@ -295,7 +355,6 @@
                 else if (statusApproval == 4) status = "Reject by supervisor";
 
                 // Set nilai input di modal
-                document.getElementById('detail-dataId').value = id;
                 document.getElementById('detail-namaDB').value = nama;
                 document.getElementById('detail-ipHost').value = ipHost;
                 document.getElementById('detail-port').value = port;
@@ -304,43 +363,13 @@
                 document.getElementById('detail-checker').value = checker;
                 document.getElementById('detail-reason').value = reason;
                 document.getElementById('detail-deskripsi').value = deskripsi;
+                document.getElementById('detail-tanggalRequest').value = tanggalRequest;
+                document.getElementById('detail-tanggalApproval').value = tanggalApproval;
                 document.getElementById('detail-statusApproval').value = status;
                 document.getElementById('detail-queryRequest').value = queryRequest;
 
-                // Set table
-                const tableHead = document.querySelector('#queryResultTable thead');
-                const tableBody = document.querySelector('#queryResultTable tbody');
-
-                // Kosongkan isi table
-                tableHead.innerHTML = '';
-                tableBody.innerHTML = '';
-                if (!queryResultRaw || queryResultRaw.length === 0) {
-                    tableHead.innerHTML = '<tr><th>Data Kosong</th></tr>';
-                    return;
-                }
-
-                try {
-                    const queryResult = JSON.parse(queryResultRaw);
-                    if (!queryResult || queryResult.length === 0) {
-                        tableHead.innerHTML = '<tr><th>Data Kosong</th></tr>';
-                        return;
-                    }
-
-                    // Ambil keys dari object pertama sebagai header
-                    const headers = Object.keys(queryResult[0]);
-                    const headerRow = headers.map(key => `<th>${key}</th>`).join('');
-                    tableHead.innerHTML = `<tr>${headerRow}</tr>`;
-
-                    // Isi data baris
-                    queryResult.forEach(item => {
-                        const row = headers.map(key => `<td>${item[key]}</td>`).join('');
-                        tableBody.insertAdjacentHTML('beforeend', `<tr>${row}</tr>`);
-                    });
-
-                } catch (err) {
-                    console.error('Gagal parse queryResult JSON:', err);
-                    tableHead.innerHTML = '<tr><th>Data tidak valid</th></tr>';
-                }
+                // Render table query result
+                renderTable('queryResultTable', queryResultRaw);
             })
         });
     </script>

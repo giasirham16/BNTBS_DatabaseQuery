@@ -223,14 +223,14 @@
 
 @section('scripts')
     <script>
-        // // Set timeout hilangkan notif
-        // setTimeout(() => {
-        //     const alerts = document.querySelectorAll('.alert');
-        //     alerts.forEach(alert => {
-        //         const bsAlert = new bootstrap.Alert(alert);
-        //         bsAlert.close();
-        //     });
-        // }, 5000); // hilang dalam 5 detik
+        // Set timeout hilangkan notif
+        setTimeout(() => {
+            const alerts = document.querySelectorAll('.alert');
+            alerts.forEach(alert => {
+                const bsAlert = new bootstrap.Alert(alert);
+                bsAlert.close();
+            });
+        }, 5000); // hilang dalam 5 detik
 
 
         // Map data dari IP ke port & driver

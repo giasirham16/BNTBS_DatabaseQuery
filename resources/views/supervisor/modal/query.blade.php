@@ -14,30 +14,30 @@
                     <div class="row">
                         <div class="col">
                             <label for="query-namaDB" class="col-form-label">Nama DB</label>
-                            <input type="text" class="form-control bg-light" name="namaDB" id="query-namaDB"
+                            <input type="text" class="form-control bg-light" id="query-namaDB"
                                 readonly>
                         </div>
                         <div class="col">
                             <label for="query-ipHost" class="col-form-label">Source</label>
-                            <input type="text" class="form-control bg-light" name="ipHost" id="query-ipHost"
+                            <input type="text" class="form-control bg-light" id="query-ipHost"
                                 readonly>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col">
                             <label for="query-port" class="col-form-label">Port</label>
-                            <input type="text" class="form-control bg-light" name="port" id="query-port" readonly>
+                            <input type="text" class="form-control bg-light" id="query-port" readonly>
                         </div>
                         <div class="col">
                             <label for="query-driver" class="col-form-label">Driver</label>
-                            <input type="text" class="form-control bg-light" name="driver" id="query-driver"
+                            <input type="text" class="form-control bg-light" id="query-driver"
                                 readonly>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col">
                             <label for="query-statusApproval" class="col-form-label">Status Approval</label>
-                            <input type="text" class="form-control bg-light" name="statusApproval"
+                            <input type="text" class="form-control bg-light"
                                 id="query-statusApproval" readonly>
                         </div>
                         <div class="col">
@@ -48,19 +48,19 @@
                     <div class="row">
                         <div class="col">
                             <label for="query-supervisor" class="col-form-label">Requested By</label>
-                            <input type="text" class="form-control bg-light" name="operator" id="query-operator"
+                            <input type="text" class="form-control bg-light" id="query-operator"
                                 readonly>
                         </div>
                         <div class="col">
                             <label for="query-checker" class="col-form-label">Checker</label>
-                            <input type="text" class="form-control bg-light" name="checker" id="query-checker"
+                            <input type="text" class="form-control bg-light" id="query-checker"
                                 readonly>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col">
                             <label for="query-queryRequest" class="col-form-label">Query Request</label>
-                            <textarea rows="2" style="resize: vertical; overflow-y: auto;" class="form-control bg-light"
+                            <textarea rows="3" style="resize: vertical; overflow-y: auto;" class="form-control bg-light"
                                 id="query-queryRequest" readonly></textarea>
                         </div>
                     </div>
@@ -69,6 +69,40 @@
                             <label for="query-deskripsi" class="col-form-label">Deskripsi</label>
                             <textarea rows="2" style="resize: vertical; overflow-y: auto;" class="form-control bg-light" id="query-deskripsi"
                                 readonly></textarea>
+                        </div>
+                    </div>
+                    <div id="dataBeforeWrapper" class="row">
+                        <div class="col">
+                            <label for="dataBeforeTable" class="col-form-label">Data Before Update</label>
+                            <table id="dataBeforeTable" class="table table-hover table-bordered">
+                                <thead class="table-head-custom">
+                                    <tr>
+                                        <!-- Akan diisi oleh JavaScript -->
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <!-- Akan diisi oleh JavaScript -->
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    <div id="dataAfterWrapper" class="row">
+                        <div class="col">
+                            <label for="dataAfterTable" class="col-form-label">Data After Update</label>
+                            <table id="dataAfterTable" class="table table-hover table-bordered">
+                                <thead class="table-head-custom">
+                                    <tr>
+                                        <!-- Akan diisi oleh JavaScript -->
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr>
+                                        <!-- Akan diisi oleh JavaScript -->
+                                    </tr>
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>

@@ -1374,6 +1374,9 @@ h6 {
     margin-bottom: -7px;
 }
 
+.modal-body .row {
+    margin-bottom: 0.5rem;
+}
 
 .form-label {
     color: #005C3C;
@@ -1383,6 +1386,8 @@ h6 {
 .col-form-label {
     color: #005C3C;
     font-weight: 600;
+    padding-top: 4px !important;
+    padding-bottom: 4px !important;
 }
 
 .table-head-custom {
@@ -1470,4 +1475,3 @@ div.dataTables_wrapper .dataTables_scroll {
     padding-top: 10px;
     padding-bottom: 10px;
 }
-

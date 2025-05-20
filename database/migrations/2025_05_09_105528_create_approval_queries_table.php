@@ -26,6 +26,8 @@ return new class extends Migration
             $table->string('operator')->nullable();
             $table->string('checker')->nullable();
             $table->string('supervisor')->nullable();
+            $table->longText('updateBefore')->nullable();
+            $table->longText('updateAfter')->nullable();
             $table->integer('statusApproval');
             $table->timestamps();
         });

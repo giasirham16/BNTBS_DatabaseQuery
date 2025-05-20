@@ -43,7 +43,7 @@ class QueryController extends Controller
                     'queryRequest' => $data->queryRequest,
                     'queryResult' => json_encode($data->queryResult),
                     'deskripsi' => $data->deskripsi,
-                    'reason' => $data->reasonApproval,
+                    'reason' => $data->reason,
                     'menu' => "Query",
                     'statusApproval' => $data->statusApproval,
                     'performedBy' => Auth::user()->username,

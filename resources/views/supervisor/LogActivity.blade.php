@@ -236,7 +236,7 @@
                 const button = event.relatedTarget;
 
                 // Ambil nilai dari atribut data-*
-                const id = button.getAttribute('data-id');
+
                 const nama = button.getAttribute('data-namadb');
                 const ipHost = button.getAttribute('data-iphost');
                 const port = button.getAttribute('data-port');
@@ -273,7 +273,6 @@
                 }
 
                 // Set nilai input di modal
-                document.getElementById('log-dataId').value = id;
                 document.getElementById('log-namaDB').value = nama;
                 document.getElementById('log-ipHost').value = ipHost;
                 document.getElementById('log-port').value = port;

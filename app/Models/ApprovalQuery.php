@@ -20,7 +20,8 @@ class ApprovalQuery extends Model
         'operator',
         'checker',
         'supervisor',
-        'executedRole',
+        'updateBefore',
+        'updateAfter',
         'statusApproval'
     ];
 }

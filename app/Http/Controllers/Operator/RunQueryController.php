@@ -98,8 +98,8 @@ class RunQueryController extends Controller
 
                 return redirect()->route('viewQuery')->with('success', 'Query menunggu approval untuk dieksekusi!');
             }
-            // Jika query insert, update, delete
-            else if ((str_starts_with($lowerQuery, 'insert')) || (str_starts_with($lowerQuery, 'update')) || (str_starts_with($lowerQuery, 'delete'))) {
+            // Jika query insert, delete
+            else if ((str_starts_with($lowerQuery, 'insert')) || (str_starts_with($lowerQuery, 'delete'))) {
                 ApprovalQuery::create([
                     'namaDB' => $database,
                     'ipHost' => $host,
@@ -131,12 +131,211 @@ class RunQueryController extends Controller
                 ]);
                 return redirect()->route('viewQuery')->with('success', 'Query menunggu approval untuk dieksekusi!');
             }
+            // Jika query update
+            else if (str_starts_with($lowerQuery, 'update')) {
+                // Ambil data sebelum update
+
+                $querySelect = $this->convertUpdateToSelect($query);
+                // dd($querySelect);
+
+                // Konfigurasi koneksi
+                $config = [
+                    'driver'    => $driver,
+                    'host'      => $host,
+                    'port'      => $port,
+                    'database'  => $database,
+                    'username'  => $username,
+                    'password'  => $password,
+                    'charset'   => 'utf8mb4',
+                    'collation' => 'utf8mb4_unicode_ci',
+                    'prefix'    => '',
+                    'strict'    => true,
+                ];
+
+                $resultBefore = $this->runDynamicQuery($config, $querySelect);
+
+                if ($resultBefore === false) {
+                    return redirect()->route('viewQuery')->with('error', 'Data gagal diproses, query salah 1!');
+                } else if (is_array($resultBefore)) {
+                    // Jika returnnya array error
+                    if (isset($resultBefore['error'])) {
+                        // dd($queryResult);
+                        return redirect()->route('viewQuery')->with('error', 'Data gagal diproses, query salah 2!');
+                    }
+                }
+
+                $resultAfter = $this->applyUpdateToSelectResult($query, $resultBefore);
+
+                // Simpan data sebelum update ke database
+                ApprovalQuery::create([
+                    'namaDB' => $database,
+                    'ipHost' => $host,
+                    'port' => $port,
+                    'driver' => $driver,
+                    'queryRequest' => $query,
+                    'deskripsi' => $request->deskripsi,
+                    'username' => $username,
+                    'statusApproval' => 0,
+                    'password' => Crypt::encryptString($password),
+                    'operator' => Auth::user()->username,
+                    'updateBefore' => json_encode($resultBefore),
+                    'updateAfter' => json_encode($resultAfter),
+                ]);
+
+                // Simpan ke log activity
+                LogActivity::create([
+                    'namaDB' => $database,
+                    'ipHost' => $host,
+                    'port' => $port,
+                    'driver' => $driver,
+                    'queryRequest' => $query,
+                    'queryResult' => null,
+                    'deskripsi' => $request->deskripsi,
+                    'reason' => null,
+                    'menu' => "Query",
+                    'statusApproval' => 0,
+                    'performedBy' => Auth::user()->username,
+                    'role' => Auth::user()->role,
+                    'action' => "Request Query"
+                ]);
+                return redirect()->route('viewQuery')->with('success', 'Query menunggu approval untuk dieksekusi!');
+            }
             // Selain query select, insert, update, delete
             else {
                 return redirect()->route('viewQuery')->with('error', 'Query yang anda masukkan salah.');
             }
         } catch (\Throwable $e) {
             return redirect()->route('viewQuery')->with('error', 'Error: ' . $e->getMessage());
+        }
+    }
+
+    public function convertUpdateToSelect($updateQuery)
+    {
+        // Normalisasi spasi
+        $updateQuery = trim(preg_replace('/\s+/', ' ', $updateQuery));
+
+        // Cek apakah format valid
+        if (!preg_match('/^UPDATE\s+(\w+)\s+SET\s+.+\s+WHERE\s+(.+);?$/i', $updateQuery, $matches)) {
+            throw new \Exception("Query UPDATE tidak valid.");
+        }
+
+        $table = $matches[1]; // nama tabel
+        $whereClause = $matches[2]; // kondisi WHERE
+
+        // Gunakan DB::select untuk SELECT
+        $selectQuery = "SELECT * FROM {$table} WHERE {$whereClause}";
+
+        return $selectQuery;
+    }
+
+    public function applyUpdateToSelectResult($updateQuery, $queryResult)
+    {
+        // Normalisasi spasi
+        $updateQuery = trim(preg_replace('/\s+/', ' ', $updateQuery));
+
+        // Cek format dasar query
+        if (!preg_match('/^UPDATE\s+(\w+)\s+SET\s+(.+?)\s+WHERE\s+(.+);?$/i', $updateQuery, $matches)) {
+            throw new \Exception("Query UPDATE tidak valid.");
+        }
+
+        // Ambil bagian SET
+        $setClause = $matches[2];
+
+        // Parsing bagian SET jadi array
+        $updates = [];
+        $setParts = explode(',', $setClause);
+        foreach ($setParts as $part) {
+            [$column, $value] = explode('=', $part, 2);
+            $column = trim($column);
+            $value = trim($value);
+
+            // Hilangkan tanda kutip jika ada
+            $value = trim($value, "'\"");
+
+            $updates[$column] = $value;
+        }
+
+        // Terapkan update ke setiap baris dari hasil select
+        $updatedResults = [];
+        foreach ($queryResult as $row) {
+            $rowArray = (array) $row;
+            foreach ($updates as $col => $val) {
+                if (array_key_exists($col, $rowArray)) {
+                    $rowArray[$col] = $val;
+                }
+            }
+            $updatedResults[] = $rowArray;
+        }
+
+        return $updatedResults;
+    }
+
+    //Fungsi dinamic connection
+    public function runDynamicQuery(array $params, string $query, string $connectionName = 'dynamic_connection')
+    {
+        $commonConfig = [
+            'driver'    => $params['driver'] ?? 'mysql',
+            'host'      => $params['host'] ?? '127.0.0.1',
+            'port'      => $params['port'] ?? ($params['driver'] === 'pgsql' ? 5432 : 3306),
+            'database'  => $params['database'],
+            'username'  => $params['username'],
+            'password'  => $params['password'],
+            'prefix'    => '',
+            'strict'    => true,
+        ];
+
+        switch ($params['driver']) {
+            case 'mysql':
+                $config = array_merge($commonConfig, [
+                    'charset'   => 'utf8mb4',
+                    'collation' => 'utf8mb4_unicode_ci',
+                ]);
+                break;
+            case 'pgsql':
+                $config = array_merge($commonConfig, [
+                    'charset' => 'utf8',
+                    'schema'  => $params['schema'] ?? 'public',
+                    'sslmode' => $params['sslmode'] ?? 'prefer',
+                ]);
+                break;
+            case 'sqlite':
+                $config = [
+                    'driver'   => 'sqlite',
+                    'database' => $params['database'] ?? database_path('database.sqlite'),
+                    'prefix'   => '',
+                    'foreign_key_constraints' => true,
+                ];
+                break;
+            case 'sqlsrv':
+                $config = array_merge($commonConfig, [
+                    'charset' => 'utf8',
+                ]);
+                break;
+            default:
+                throw new \InvalidArgumentException("Unsupported driver: {$params['driver']}");
+        }
+
+        // Set koneksi
+        config(["database.connections.{$connectionName}" => $config]);
+        DB::purge($connectionName);
+        $db = DB::connection($connectionName);
+
+        // Deteksi query type
+        $queryType = strtolower(strtok(trim($query), ' '));
+
+        try {
+            switch ($queryType) {
+                case 'select':
+                    return $db->select($query);
+                case 'insert':
+                case 'update':
+                case 'delete':
+                    return $db->statement($query); // true/false
+                default:
+                    throw new \InvalidArgumentException("Unsupported query type: $queryType");
+            }
+        } catch (\Exception $e) {
+            return ['error' => $e->getMessage()];
         }
     }
 }

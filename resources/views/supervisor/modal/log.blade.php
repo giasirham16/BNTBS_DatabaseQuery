@@ -7,58 +7,57 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <input type="hidden" name="id" id="log-dataId">
                 <div class="row">
                     <div class="col">
                         <label for="log-namaDB" class="col-form-label">Nama DB</label>
-                        <input type="text" class="form-control bg-light" name="namaDB" id="log-namaDB" readonly>
+                        <input type="text" class="form-control bg-light" id="log-namaDB" readonly>
                     </div>
                     <div class="col">
                         <label for="log-ipHost" class="col-form-label">Source</label>
-                        <input type="text" class="form-control bg-light" name="ipHost" id="log-ipHost" readonly>
+                        <input type="text" class="form-control bg-light" id="log-ipHost" readonly>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col">
                         <label for="log-port" class="col-form-label">Port</label>
-                        <input type="text" class="form-control bg-light" name="port" id="log-port" readonly>
+                        <input type="text" class="form-control bg-light" id="log-port" readonly>
                     </div>
                     <div class="col">
                         <label for="log-driver" class="col-form-label">Driver</label>
-                        <input type="text" class="form-control bg-light" name="driver" id="log-driver" readonly>
+                        <input type="text" class="form-control bg-light" id="log-driver" readonly>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col">
                         <label for="log-statusApproval" class="col-form-label">Status Approval</label>
-                        <input type="text" class="form-control bg-light" name="statusApproval"
+                        <input type="text" class="form-control bg-light"
                             id="log-statusApproval" readonly>
                     </div>
                     <div class="col">
                         <label for="log-reason" class="col-form-label">Reason</label>
-                        <input type="text" class="form-control bg-light" name="reason" id="log-reason" readonly>
+                        <input type="text" class="form-control bg-light" id="log-reason" readonly>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col">
                         <label for="log-performedBy" class="col-form-label">Performed By</label>
-                        <input type="text" class="form-control bg-light" name="performedBy" id="log-performedBy"
+                        <input type="text" class="form-control bg-light" id="log-performedBy"
                             readonly>
                     </div>
                     <div class="col">
                         <label for="log-role" class="col-form-label">Role</label>
-                        <input type="text" class="form-control bg-light" name="role" id="log-role" readonly>
+                        <input type="text" class="form-control bg-light" id="log-role" readonly>
                     </div>
                 </div>
                 <div class="row">
                     <div class="col">
                         <label for="log-menu" class="col-form-label">Menu</label>
-                        <input type="text" class="form-control bg-light" name="menu" id="log-menu"
+                        <input type="text" class="form-control bg-light" id="log-menu"
                             readonly>
                     </div>
                     <div class="col">
                         <label for="log-action" class="col-form-label">Aksi</label>
-                        <input type="text" class="form-control bg-light" name="action" id="log-action" readonly>
+                        <input type="text" class="form-control bg-light" id="log-action" readonly>
                     </div>
                 </div>
                 <div class="row">
