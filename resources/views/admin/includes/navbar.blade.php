@@ -3,17 +3,22 @@
 
     <div class="d-flex align-items-center justify-content-between">
         @if (strtolower(Auth::user()->role) === 'operator')
-            <a href="{{ url('operator/v1/runQuery') }}" class="logo d-flex align-items-center">
+            <a href="{{ route('viewQuery') }}" class="logo d-flex align-items-center">
                 <img src="{{ url('admin/assets/img/logobankntb.png') }}" alt="logo" class="logo-img" />
             </a>
             <i class="bi bi-list toggle-sidebar-btn"></i>
         @elseif (strtolower(Auth::user()->role) === 'checker')
-            <a href="{{ url('operator/v1/runQuery') }}" class="logo d-flex align-items-center">
+            <a href="{{ route('chkViewQuery') }}" class="logo d-flex align-items-center">
                 <img src="{{ url('admin/assets/img/logobankntb.png') }}" alt="logo" class="logo-img" />
             </a>
             <i class="bi bi-list toggle-sidebar-btn"></i>
         @elseif (strtolower(Auth::user()->role) === 'supervisor')
-            <a href="{{ url('operator/v1/runQuery') }}" class="logo d-flex align-items-center">
+            <a href="{{ route('spvViewQuery') }}" class="logo d-flex align-items-center">
+                <img src="{{ url('admin/assets/img/logobankntb.png') }}" alt="logo" class="logo-img" />
+            </a>
+            <i class="bi bi-list toggle-sidebar-btn"></i>
+        @elseif (strtolower(Auth::user()->role) === 'superadmin')
+            <a href="{{ route('viewUser') }}" class="logo d-flex align-items-center">
                 <img src="{{ url('admin/assets/img/logobankntb.png') }}" alt="logo" class="logo-img" />
             </a>
             <i class="bi bi-list toggle-sidebar-btn"></i>

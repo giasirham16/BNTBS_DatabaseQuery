@@ -53,12 +53,10 @@ class RunQueryController extends Controller
         $query    = $request->input('query'); // SQL query
 
         // Cek koneksi ke server
-        try {
-            $pdo = new \PDO("mysql:host=$host;port=$port;dbname=$database", $username, $password, [
-                \PDO::ATTR_TIMEOUT => 10, // 10 detik timeout
-            ]);
-        } catch (\PDOException $e) {
-            return redirect()->route('viewQuery')->with('error', 'Error: Connection Failed, Reason: ' . $e->getMessage());
+        $connectionStatus = $this->testDatabaseConnection($driver, $host, $port, $database, $username, $password);
+        // dd($connectionStatus);
+        if ($connectionStatus !== true) {
+            return redirect()->route('viewQuery')->with('error', $connectionStatus);
         }
 
         try {
@@ -336,6 +334,38 @@ class RunQueryController extends Controller
             }
         } catch (\Exception $e) {
             return ['error' => $e->getMessage()];
+        }
+    }
+
+    function testDatabaseConnection($driver, $host, $port, $database, $username, $password)
+    {
+        try {
+            switch (strtolower($driver)) {
+                case 'mysql':
+                    $dsn = "mysql:host=$host;port=$port;dbname=$database";
+                    break;
+                case 'pgsql':
+                    $dsn = "pgsql:host=$host;port=$port;dbname=$database";
+                    break;
+                case 'sqlite':
+                    $dsn = "sqlite:$database"; // Untuk SQLite, $database adalah path ke file
+                    break;
+                case 'sqlsrv':
+                    $dsn = "sqlsrv:Server=$host,$port;Database=$database";
+                    break;
+                default:
+                    throw new \Exception("Unsupported database driver: $driver");
+            }
+
+            $pdo = new \PDO($dsn, $username, $password, [
+                \PDO::ATTR_TIMEOUT => 10,
+            ]);
+
+            return true; // Koneksi berhasil
+        } catch (\PDOException $e) {
+            return 'Error: Connection Failed, Reason: ' . $e->getMessage();
+        } catch (\Exception $e) {
+            return 'Error: ' . $e->getMessage();
         }
     }
 }

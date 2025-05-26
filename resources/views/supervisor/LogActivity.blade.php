@@ -31,6 +31,10 @@
                                     <button class="btn btn-primary mt-4" id="apply-filter">Terapkan</button>
                                     <button class="btn btn-secondary mt-4" id="clear-filter">Clear</button>
                                 </div>
+                                {{-- Export CSV button --}}
+                                <div class="col-md-3 text-end">
+                                    <a href="{{ route('log.export') }}" class="btn btn-primary mt-4">Export to CSV</a>
+                                </div>
                             </div>
 
                             {{-- Badan table --}}

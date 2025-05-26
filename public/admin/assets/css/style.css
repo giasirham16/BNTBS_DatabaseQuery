@@ -1340,6 +1340,11 @@ h6 {
     border-color: #005C3C !important;
 }
 
+.btn.btn-primary:hover {
+    background-color: #00754c !important;
+    border-color: #00754c !important;
+}
+
 .btn.btn-secondary {
     background-color: #efb305 !important;
     border-color: #efb305 !important;
@@ -1474,4 +1479,17 @@ div.dataTables_filter {
 div.dataTables_wrapper .dataTables_scroll {
     padding-top: 10px;
     padding-bottom: 10px;
+}
+
+.btn-login {
+    background: linear-gradient(to right, #009245, #005C3C);
+    color: white !important;
+    border-radius: 20px;
+    transition: background 0.3s ease;
+    padding-bottom: 10px;
+}
+
+.btn-login:hover {
+    background: linear-gradient(to right, #007a35, #00452e);
+    /* versi lebih gelap */
 }

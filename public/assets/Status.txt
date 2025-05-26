@@ -34,6 +34,12 @@ Tambahkan filter date (done)
 Tambahkan menu view pada data query checker dan supervisor (done)
 Tambahkan log (done)
 Hapus session dan cache (done)
-Checker bisa melihat data sebelum diupdate
-Supervisor bisa melihat data sebelum dan sesudah di update
+Checker bisa melihat data sebelum diupdate (done)
+Supervisor bisa melihat data sebelum dan sesudah di update (done)
 
+Tambahan
+Tambahkan download csv auditlog (done)
+
+captcha dan version (jangan im not robot)dan OTP
+*saat login menggunakan otp (service sms) validasi kode otp.
+Blokir 3x salah

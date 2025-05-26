@@ -69,6 +69,7 @@ Route::prefix('admin/v1')->middleware(['auth','session.timeout'])->group(functio
     
         // Menu Log Activity
         Route::get('/logActivity', [LogActivityController::class, 'index'])->name('spvViewLogActivity');
+        Route::get('/log-activity/export', [LogActivityController::class, 'exportCsv'])->name('log.export');
     });
 });
 
