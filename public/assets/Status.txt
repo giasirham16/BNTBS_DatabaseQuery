@@ -44,7 +44,7 @@ Supervisor bisa melihat data sebelum dan sesudah di update (done)
 
 Tambahan SIT
 Tambahkan download csv auditlog (done)
-Blokir 3x salah
+Blokir 3x salah (done)
 Login sensitiv case (done)
 Pembuatan password harus minimal 8 karakter, ada huruf besar, angka, dan symbol (done)
 captcha dan version (jangan im not robot)dan OTP (done) *saat login menggunakan otp (service sms/email) validasi kode otp.
