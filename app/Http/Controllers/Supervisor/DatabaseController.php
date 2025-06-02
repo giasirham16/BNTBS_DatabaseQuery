@@ -12,7 +12,7 @@ class DatabaseController extends Controller
 {
     public function index()
     {
-        $data = DatabaseParameter::all();
+        $data = DatabaseParameter::orderBy('created_at', 'desc')->get();
         return view('supervisor.ApprovalDatabase')->with('data', $data);
     }
 

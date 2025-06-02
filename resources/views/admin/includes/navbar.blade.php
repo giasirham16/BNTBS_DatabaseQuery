@@ -36,11 +36,11 @@
         <ul class="navbar-nav ms-auto align-items-center">
             <li class="nav-item dropdown">
                 <a class="nav-link nav-profile d-flex align-items-center" href="#" data-bs-toggle="dropdown">
-                    <span class="d-sm-block dropdown-toggle fs-6">Bank NTB Syariah</span>
+                    <i class="bi bi-person-circle fs-4"></i>
                 </a><!-- End Profile Image Icon -->
                 <ul class="dropdown-menu dropdown-menu-end dropdown-menu-arrow profile">
                     <li class="dropdown-header">
-                        <h6>Bank NTB Syariah</h6>
+                        <h6>{{ Auth::user()->username }}</h6>
                     </li>
                     <li>
                         <hr class="dropdown-divider">

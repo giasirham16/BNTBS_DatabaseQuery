@@ -22,6 +22,7 @@ class UserSeeder extends Seeder
             'username' => 'superadmin1',
             'password' => Hash::make('password'), // Ganti dengan password yang aman
             'role' => 'superadmin',
+            'email'=> 'superadmin1@example.com',
             'statusApproval' => 2,
             'reasonApproval' => '-'
         ]);
@@ -30,6 +31,7 @@ class UserSeeder extends Seeder
             'username' => 'superadmin2',
             'password' => Hash::make('password'), // Ganti dengan password yang aman
             'role' => 'superadmin',
+            'email'=> 'superadmin2@example.com',
             'statusApproval' => 2,
             'reasonApproval' => '-'
         ]);

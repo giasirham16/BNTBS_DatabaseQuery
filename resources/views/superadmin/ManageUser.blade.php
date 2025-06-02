@@ -15,6 +15,20 @@
 
     <section class="section dashboard">
         <div class="container-fluid">
+
+            @if (session('success'))
+                <div class="alert alert-success alert-dismissible fade show mt-2" role="alert">
+                    {{ session('success') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+
+            @if (session('error'))
+                <div class="alert alert-danger alert-dismissible fade show mt-2" role="alert">
+                    {{ session('error') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
             <!-- Button trigger modal -->
             <button type="button" style="margin-bottom: 10px" class="btn btn-primary" data-bs-toggle="modal"
                 data-bs-target="#addUserModal">
@@ -139,21 +153,6 @@
             </div>
         </div>
     </section>
-
-
-    @if (session('success'))
-        <div class="alert alert-success alert-dismissible fade show mt-2" role="alert">
-            {{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    @endif
-
-    @if (session('error'))
-        <div class="alert alert-danger alert-dismissible fade show mt-2" role="alert">
-            {{ session('error') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    @endif
 @endsection
 
 @section('scripts')
@@ -218,6 +217,40 @@
                 table.draw();
             });
         });
+
+
+        // Jika terdapat error pada password, tampilkan modal
+        @if (session('show_modal'))
+            document.addEventListener('DOMContentLoaded', function() {
+                // Buka modal karena error
+                var modal = new bootstrap.Modal(document.getElementById('addUserModal'));
+                modal.show();
+            });
+
+            @php
+                session()->forget(['show_modal']);
+            @endphp
+        @endif
+
+        // Reset form ketika modal ditutup
+        document.addEventListener('DOMContentLoaded', function() {
+            const createModal = document.getElementById('addUserModal');
+
+            createModal.addEventListener('hidden.bs.modal', function() {
+                const form = createModal.querySelector('form');
+                if (form) {
+                    form.reset();
+                    form.querySelectorAll('.is-invalid').forEach(el => el.classList.remove('is-invalid'));
+                }
+
+                // Sembunyikan pesan error manual
+                const passwordError = document.getElementById('password-error');
+                if (passwordError) {
+                    passwordError.classList.add('d-none');
+                }
+            });
+        });
+
 
         // Get value ke modal edit
         document.addEventListener('DOMContentLoaded', function() {

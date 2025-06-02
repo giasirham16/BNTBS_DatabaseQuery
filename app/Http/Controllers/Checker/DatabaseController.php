@@ -14,6 +14,7 @@ class DatabaseController extends Controller
     {
         $data = DatabaseParameter::where('checker', Auth::user()->username)
             ->orWhere('checker', null)
+            ->orderBy('created_at', 'desc')
             ->get();
         return view('checker.ApprovalDatabase')->with('data', $data);
     }

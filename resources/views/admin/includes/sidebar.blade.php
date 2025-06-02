@@ -35,10 +35,10 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('chkApproveDatabase') ? '' : 'collapsed' }}"
+                <a class="nav-link {{ request()->routeIs('chkViewDatabase') ? '' : 'collapsed' }}"
                     href="{{ route('chkApproveDatabase') }}">
                     <i
-                        class="bi {{ request()->routeIs('chkApproveDatabase') ? 'bi-database-fill-add' : 'bi-database-add' }}"></i>
+                        class="bi {{ request()->routeIs('chkViewDatabase') ? 'bi-database-fill-add' : 'bi-database-add' }}"></i>
                     <span>Database Approval</span>
                 </a>
             </li>
@@ -52,10 +52,10 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link {{ request()->routeIs('spvApproveDatabase') ? '' : 'collapsed' }}"
+                <a class="nav-link {{ request()->routeIs('spvViewDatabase') ? '' : 'collapsed' }}"
                     href="{{ route('spvApproveDatabase') }}">
                     <i
-                        class="bi {{ request()->routeIs('spvApproveDatabase') ? 'bi-database-fill-add' : 'bi-database-add' }}"></i>
+                        class="bi {{ request()->routeIs('spvViewDatabase') ? 'bi-database-fill-add' : 'bi-database-add' }}"></i>
                     <span>Database Approval</span>
                 </a>
             </li>

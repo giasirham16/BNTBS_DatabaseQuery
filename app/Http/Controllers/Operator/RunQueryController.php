@@ -25,6 +25,7 @@ class RunQueryController extends Controller
             ->orWhere('statusApproval', 4)
             ->orWhere('statusApproval', 5)
             ->orWhere('statusApproval', 6)
+            ->orderBy('created_at', 'desc')
             ->get();
 
         $this->approval = ApprovalQuery::where('operator', Auth::user()->username)->get();

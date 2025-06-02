@@ -15,8 +15,17 @@
                     </div>
                     <div class="mb-3">
                         <label for="namaDB" class="col-form-label">Password</label>
-                        <input type="password" class="form-control" name="password" id="passUser" required>
+                        <input type="password"
+                            class="form-control {{ session('show_modal') && $errors->has('password') ? 'is-invalid' : '' }}"
+                            name="password" id="passUser" required>
                     </div>
+
+                    {{-- Error per field --}}
+                    <div class="invalid-feedback d-block {{ session('show_modal') && $errors->has('password') ? '' : 'd-none' }}"
+                        id="password-error">
+                        {{ $errors->first('password') }}
+                    </div>
+
                     <div class="mb-3">
                         <label for="roleDropdown" class="form-label">Role</label>
                         <div class="form-floating">

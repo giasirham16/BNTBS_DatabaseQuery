@@ -14,6 +14,20 @@
 
     <section class="section dashboard">
         <div class="container-fluid">
+
+            @if (session('success'))
+                <div class="alert alert-success alert-dismissible fade show mt-2" role="alert">
+                    {{ session('success') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+
+            @if (session('error'))
+                <div class="alert alert-danger alert-dismissible fade show mt-2" role="alert">
+                    {{ session('error') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
             <div class="row">
                 <div class="col-md-12">
                     <div class="card">
@@ -101,7 +115,8 @@
                                                     <td class="text-center align-middle">
                                                         <button class="btn btn-outline-primary" data-bs-toggle="modal"
                                                             data-bs-target="#approvalQueryModal"
-                                                            data-id="{{ $item->id }}" data-namadb="{{ $item->namaDB }}"
+                                                            data-id="{{ $item->id }}"
+                                                            data-namadb="{{ $item->namaDB }}"
                                                             data-iphost="{{ $item->ipHost }}"
                                                             data-port="{{ $item->port }}"
                                                             data-driver="{{ $item->driver }}"
@@ -148,21 +163,6 @@
             </div>
         </div>
     </section>
-
-
-    @if (session('success'))
-        <div class="alert alert-success alert-dismissible fade show mt-2" role="alert">
-            {{ session('success') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    @endif
-
-    @if (session('error'))
-        <div class="alert alert-danger alert-dismissible fade show mt-2" role="alert">
-            {{ session('error') }}
-            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-        </div>
-    @endif
 @endsection
 
 @section('scripts')

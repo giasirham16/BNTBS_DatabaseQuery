@@ -7,23 +7,43 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 class UserController extends Controller
 {
     public function index()
     {
-        $data = User::all();
+        $data = User::orderBy('created_at', 'desc')->get();
         return view('superadmin.ManageUser')->with('data', $data);
     }
 
     public function store(Request $request)
     {
+        $validator = Validator::make($request->all(), [
+            'password' => [
+                'required',
+                'string',
+                'min:8',
+                'regex:/^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&]).+$/', // At least one uppercase letter, one digit, and one special character
+            ],
+        ], [
+            'password.min' => 'Password minimal 8 karakter.',
+            'password.regex' => 'Password harus mengandung huruf besar, angka, dan simbol.',
+        ]);
+
+        if ($validator->fails()) {
+            return redirect()->back()
+                ->withErrors($validator)
+                ->withInput()
+                ->with('show_modal', true);
+        }
+
         $data = User::where('username', $request->username)
             ->where('statusApproval', 2)
             ->first();
 
         if ($data) {
-            return redirect()->route('viewUser')->with('error', 'Data user sudah ada!');
+            return redirect()->route('viewUser')->with('error', 'Username sudah digunakan!');
         } else {
             try {
                 $data = $request->only(['username', 'password', 'role', 'statusApproval']);
@@ -58,9 +78,9 @@ class UserController extends Controller
             $status = $data->save();
 
             if ($status) {
-                return redirect()->route('viewUser')->with('success', 'Data menunggu approval untuk dihapus!');
+                return redirect()->route('viewUser')->with('success', 'Data berhasil diproses!');
             } else {
-                return redirect()->route('viewUser')->with('error', 'Data gagal dihapus!');
+                return redirect()->route('viewUser')->with('error', 'Data gagal diproses!');
             }
         } catch (\Exception $e) {
             return redirect()->route('viewUser')->with('error', 'Error: ' . $e->getMessage());
@@ -72,10 +92,18 @@ class UserController extends Controller
         try {
             $data = User::find($request->id);
             if ($request->approval == 1) {
-                if ($data->statusApproval != 3 && $data->statusApproval != 4) {
-                    $data->statusApproval = 2;
+                $users = User::where('username', $data->username)
+                    ->where('statusApproval', 2)
+                    ->first();
+
+                if ($users) {
+                    return redirect()->route('viewUser')->with('error', 'Gagal Approve, username sudah digunakan!');
                 } else {
-                    $data->statusApproval = 99;
+                    if ($data->statusApproval != 3 && $data->statusApproval != 4) {
+                        $data->statusApproval = 2;
+                    } else {
+                        $data->statusApproval = 99;
+                    }
                 }
             } else {
                 if (strtolower(Auth::user()->username) == 'superadmin1') {
@@ -97,16 +125,16 @@ class UserController extends Controller
             $status = $data->save();
 
             if ($status) {
-                return redirect()->route('viewUser')->with('success', 'Data menunggu approval untuk dihapus!');
+                return redirect()->route('viewUser')->with('success', 'Data berhasil diproses!');
             } else {
-                return redirect()->route('viewUser')->with('error', 'Data gagal dihapus!');
+                return redirect()->route('viewUser')->with('error', 'Data gagal diproses!');
             }
         } catch (\Exception $e) {
             return redirect()->route('viewUser')->with('error', 'Error: ' . $e->getMessage());
         }
     }
 
-    
+
     // public function ubahPassword()
     // {
     //     $pengguna = Auth::user();

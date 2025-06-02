@@ -34,15 +34,14 @@ class AuthController extends Controller
         //     'statusApproval' => 2,
         // ];
 
-        $user = User::where('username', $request->username)
+        $user = User::whereRaw('BINARY username = ?', [$request->username])
+        // PostgresQL
+        //User::whereRaw('username COLLATE "C" = ?', [$request->username])
             ->whereIn('statusApproval', [2, 3, 4])
             ->first();
 
         // 🔹 Logout session sebelumnya jika ada
         Auth::logout();
-
-        // 🔹 Coba login menggunakan Auth::attempt()
-        // if (Auth::attempt($credentials)) {
 
         if ($user && Hash::check($request->password, $user->password)) {
             Auth::login($user);

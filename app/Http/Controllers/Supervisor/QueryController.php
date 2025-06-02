@@ -15,7 +15,7 @@ class QueryController extends Controller
 {
     public function index()
     {
-        $approval = ApprovalQuery::get();
+        $approval = ApprovalQuery::orderBy('created_at', 'desc')->get();
         return view('supervisor.ApprovalQuery')->with('approval', $approval);
     }
 

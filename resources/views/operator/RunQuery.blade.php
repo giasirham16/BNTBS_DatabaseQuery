@@ -9,19 +9,6 @@
     {{-- {{ dd($data) }} --}}
     <div class="pagetitle">
         <h1>Run Query</h1>
-        @if (session('success'))
-            <div class="alert alert-success alert-dismissible fade show mt-2" role="alert">
-                {{ session('success') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        @endif
-
-        @if (session('error'))
-            <div class="alert alert-danger alert-dismissible fade show mt-2" role="alert">
-                {{ session('error') }}
-                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-            </div>
-        @endif
         {{-- <nav>
         <ol class="breadcrumb">
             <li class="breadcrumb-item"><a href="{{url('admin/v1/dashboard')}}">Home</a></li>
@@ -32,6 +19,19 @@
 
     <section class="section dashboard">
         <div class="container-fluid">
+            @if (session('success'))
+                <div class="alert alert-success alert-dismissible fade show mt-2" role="alert">
+                    {{ session('success') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
+
+            @if (session('error'))
+                <div class="alert alert-danger alert-dismissible fade show mt-2" role="alert">
+                    {{ session('error') }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+            @endif
             {{-- Request Field --}}
             <form action="{{ route('executeQuery') }}" method="POST">
                 @csrf

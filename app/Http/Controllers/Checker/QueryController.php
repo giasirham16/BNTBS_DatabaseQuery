@@ -13,8 +13,11 @@ class QueryController extends Controller
     public function index()
     {
         $approval = ApprovalQuery::whereRaw("LOWER(queryRequest) NOT LIKE 'select%'")
-            ->where('checker', Auth::user()->username)
-            ->orWhere('checker', null)
+            ->where(function ($query) {
+                $query->where('checker', Auth::user()->username)
+                    ->orWhere('checker', null);
+            })
+            ->orderBy('created_at', 'desc')
             ->get();
         return view('checker.ApprovalQuery')->with('approval', $approval);
     }

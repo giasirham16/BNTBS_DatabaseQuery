@@ -11,7 +11,7 @@ class LogActivityController extends Controller
 {
     public function index()
     {
-        $logActivities = LogActivity::get();
+        $logActivities = LogActivity::orderBy('created_at', 'desc')->get();
         return view('supervisor.LogActivity')->with('data', $logActivities);
     }
 
