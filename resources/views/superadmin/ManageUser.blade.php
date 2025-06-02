@@ -69,6 +69,7 @@
                                         <tr>
                                             <th>No</th>
                                             <th>Username</th>
+                                            <th>Email</th>
                                             <th>Role</th>
                                             <th>Reason</th>
                                             <th>Status Approval</th>
@@ -83,6 +84,7 @@
                                                 <tr>
                                                     <td>{{ $loop->iteration }}</td>
                                                     <td>{{ $value->username }}</td>
+                                                    <td>{{ $value->email }}</td>
                                                     <td>{{ $value->role }}</td>
                                                     <td>{{ $value->reasonApproval ?? '-' }}</td>
                                                     <td>

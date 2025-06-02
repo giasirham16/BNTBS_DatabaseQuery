@@ -42,7 +42,7 @@
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
-                <div class="mb-5 position-relative">
+                <div class="mb-3 position-relative">
                     <label for="password" class="form-label">Password</label>
                     <input type="password" class="form-control @error('password') is-invalid @enderror" id="password"
                         name="password" required>
@@ -51,7 +51,22 @@
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror
                 </div>
-
+                {{-- Captcha Image and Input --}}
+                <div class="mb-3">
+                    <label for="captcha" class="form-label">Captcha</label>
+                    <div class="d-flex align-items-center mb-2">
+                        <img src="{{ route('captcha.image') }}?r={{ rand() }}" id="captcha-image" class="me-2"
+                            alt="captcha">
+                        <button type="button" class="btn btn-sm btn-primary" onclick="refreshCaptcha()">
+                            <i class="bi bi-arrow-clockwise"></i>
+                        </button>
+                    </div>
+                    <input type="text" class="form-control w-50 @error('captcha') is-invalid @enderror" id="captcha"
+                        name="captcha" placeholder="Masukkan captcha" required>
+                    @error('captcha')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
                 <button type="submit" class="btn w-100 btn-login">Login</button>
             </form>
             <!-- 🔽 FOOTER VERSI -->
@@ -69,5 +84,11 @@
             passwordField.type = type;
             this.classList.toggle('fa-eye-slash'); // Toggle between eye and eye-slash
         });
+
+        //Refresh Captcha
+        function refreshCaptcha() {
+            const img = document.getElementById('captcha-image');
+            img.src = "{{ route('captcha.image') }}?r=" + Date.now();
+        }
     </script>
 @endsection

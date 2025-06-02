@@ -1,4 +1,5 @@
-<link href="{{ url('admin/assets/img/fav.jpeg') }}" rel="icon">
+<link rel="shortcut icon" href="{{ asset('admin/assets/img/fav.jpeg') }}" type="image/jpeg">
+<link rel="icon" type="image/jpeg" sizes="32x32" href="{{ asset('admin/assets/img/fav.jpeg') }}">
 
 
 <!-- Google Fonts -->

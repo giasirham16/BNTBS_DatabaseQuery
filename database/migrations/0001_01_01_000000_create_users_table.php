@@ -15,12 +15,11 @@ return new class extends Migration
             $table->id();
             $table->string('username');
             $table->string('email')->unique();
+            $table->string('password');
             $table->string('role');
             $table->string('reasonApproval')->nullable();
             $table->string('statusApproval');
             $table->integer('loginAttempts')->default(0);
-            $table->timestamp('otp')->nullable();
-            $table->string('password');
             $table->rememberToken();
             $table->timestamps();
         });

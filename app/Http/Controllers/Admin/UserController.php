@@ -46,7 +46,7 @@ class UserController extends Controller
             return redirect()->route('viewUser')->with('error', 'Username sudah digunakan!');
         } else {
             try {
-                $data = $request->only(['username', 'password', 'role', 'statusApproval']);
+                $data = $request->only(['username', 'password', 'role', 'email', 'statusApproval']);
                 $saved = User::create($data);
 
                 if ($saved) {

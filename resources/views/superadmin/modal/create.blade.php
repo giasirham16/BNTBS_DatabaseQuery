@@ -14,6 +14,10 @@
                         <input type="text" class="form-control" name="username" id="username" required>
                     </div>
                     <div class="mb-3">
+                        <label for="namaDB" class="col-form-label">Email</label>
+                        <input type="text" class="form-control" name="email" id="email" required>
+                    </div>
+                    <div class="mb-3">
                         <label for="namaDB" class="col-form-label">Password</label>
                         <input type="password"
                             class="form-control {{ session('show_modal') && $errors->has('password') ? 'is-invalid' : '' }}"

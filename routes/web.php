@@ -10,6 +10,9 @@ use App\Http\Controllers\Supervisor\QueryController as SupervisorQueryController
 use App\Http\Controllers\Operator\RunQueryController;
 use App\Http\Controllers\Operator\ManageDatabaseController;
 use App\Http\Controllers\Supervisor\LogActivityController;
+use Gregwar\Captcha\CaptchaBuilder;
+use Illuminate\Support\Facades\Session;
+use Illuminate\Support\Facades\Response;
 
 Route::get('/', function () {
     return view('welcome');
@@ -19,7 +22,50 @@ Route::prefix('admin/v1')->group(function () {
     Route::get('/login', [AuthController::class, 'showLoginForm'])->name('login');
     Route::post('/logout', [AuthController::class, 'logout'])->name('logout');
     Route::post('/login', [AuthController::class, 'login'])->name('login.post');
+
+    // OTP route
+    Route::get('/verify-otp', [AuthController::class, 'showOtpForm'])->name('otp.verify.form');
+    Route::post('/verify-otp', [AuthController::class, 'verifyOtp'])->name('otp.verify');
+    Route::post('/resend-otp', [AuthController::class, 'resendOtp'])->name('otp.resend');
+    
+    // Captcha route
+    Route::get('/captcha', function () {
+        $a = rand(1, 10);
+        $b = rand(1, 10);
+
+        // Pilih operator hanya + atau -
+        $operators = ['+', '-'];
+        $operator = $operators[array_rand($operators)];
+
+        // Jika operator minus, pastikan hasil >= 0 (agar tidak negatif)
+        if ($operator === '-' && $a < $b) {
+            // tukar nilai agar a selalu >= b
+            [$a, $b] = [$b, $a];
+        }
+
+        $expression = "$a $operator $b";
+
+        // Evaluasi hasil
+        if ($operator === '+') {
+            $result = $a + $b;
+        } else { // operator '-'
+            $result = $a - $b;
+        }
+
+        Session::put('captcha_phrase', (string) $result);
+
+        // Buat gambar captcha dari ekspresi
+        $builder = new CaptchaBuilder($expression);
+        $builder->build();
+
+        ob_start();
+        $builder->output();
+        $image = ob_get_clean();
+
+        return Response::make($image, 200, ['Content-Type' => 'image/jpeg']);
+    })->name('captcha.image');
 });
+
 
 Route::prefix('admin/v1')->middleware(['auth', 'session.timeout'])->group(function () {
     // Menu superadmin

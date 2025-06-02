@@ -24,7 +24,6 @@ class User extends Authenticatable
         'statusApproval',
         'reasonApproval',
         'loginAttempts',
-        'otp',
         'role'
     ];
 

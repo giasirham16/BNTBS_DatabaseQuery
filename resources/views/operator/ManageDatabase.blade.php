@@ -1,7 +1,7 @@
 @extends('admin.layouts.app')
 
 @section('title')
-    Run Query | Bank NTB Syariah
+    Manage Database | Bank NTB Syariah
 @endsection
 
 @section('content')

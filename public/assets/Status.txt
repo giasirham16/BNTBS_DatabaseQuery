@@ -43,10 +43,6 @@ Tambahkan download csv auditlog (done)
 Blokir 3x salah 
 Login sensitiv case (done)
 Pembuatan password harus minimal 8 karakter, ada huruf besar, angka, dan symbol (done)
-captcha dan version (jangan im not robot)dan OTP 
-*saat login menggunakan otp (service sms/email) validasi kode otp.
-
-
-attempLogin
-email
-OTP
+captcha dan version (jangan im not robot)dan OTP (done) *saat login menggunakan otp (service sms/email) validasi kode otp.
+Edit email user
+Unblock user
