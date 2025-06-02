@@ -55,29 +55,15 @@ class AuthController extends Controller
                 "username" => "user",
                 "email" => $user->email,
                 "subject" => "Kode OTP",
-                "pesan" => "KODE OTP ANDA $otp JANGAN BERIKAN KODE RAHASIA INI KEPADA SIAPAPUN TERMASUK PIHAK YANG MENGAKU DARI BANK NTB SYARIAH.",
+                "pesan" => "KODE OTP ANDA $otp JANGAN BERIKAN KODE RAHASIA INI 
+                    KEPADA SIAPAPUN TERMASUK PIHAK YANG MENGAKU DARI BANK NTB SYARIAH.
+                    
+                    KODE INI AKAN KADALUARSA DALAM 5 MENIT.",
                 "checksum" => (string) $checksum
             );
 
-            $curl = curl_init();
-
-            curl_setopt_array($curl, array(
-                CURLOPT_URL => 'http://103.145.128.179:65434/v2/other/Email',
-                CURLOPT_RETURNTRANSFER => true,
-                CURLOPT_ENCODING => '',
-                CURLOPT_MAXREDIRS => 10,
-                CURLOPT_TIMEOUT => 0,
-                CURLOPT_FOLLOWLOCATION => true,
-                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-                CURLOPT_CUSTOMREQUEST => 'POST',
-                CURLOPT_POSTFIELDS => json_encode($body),
-                CURLOPT_HTTPHEADER => array(
-                    'Content-Type: application/json',
-                    $auth
-                ),
-            ));
-
-            $response = curl_exec($curl);
+            // 🔹 Kirim email 
+            $response = $this->sendEmail($body, $auth);
 
             // Cek respons
             // Decode response JSON
@@ -104,10 +90,33 @@ class AuthController extends Controller
         } else {
             if ($user) {
                 $user->loginAttempts += 1;
-                if ($user->loginAttempts >= 3) {
+                if ($user->loginAttempts >= 3 && $user->role !== 'superadmin') {
                     $user->statusApproval = 9;
+                    $user->save();
+                } elseif ($user->loginAttempts >= 3 && $user->role === 'superadmin') {
+                    $user->save();
+                    // Get Token
+                    $requestToken = json_decode($this->generateToken());
+                    $auth = 'Authorization:' . (string) $requestToken->Authorization;
+                    $checksum = strtoupper(hash('sha256', '01NTB$2019user' . $user->email));
+
+                    // 🔹 Siapkan data untuk request
+                    $body = array(
+                        "type" => "01",
+                        "username" => "user",
+                        "email" => $user->email,
+                        "subject" => "Multiple Login Attempts Detected",
+                        "pesan" => "Terdapat aktivitas multiple login. Percobaan gagal login anda sudah mencapai $user->loginAttempts kali. 
+                        Silakan check apakah aktivitas ini legitimate atau tidak.
+                        Jika tidak, segera hubungi admin untuk mengamankan akun anda.",
+                        "checksum" => (string) $checksum
+                    );
+
+                    // 🔹 Kirim email
+                    $this->sendEmail($body, $auth);
+
+                    return back()->withErrors(['username' => 'Username atau password salah.']);
                 }
-                $user->save();
             }
             return back()->withErrors(['username' => 'Username atau password salah.'])->withInput();
         }
@@ -153,6 +162,8 @@ class AuthController extends Controller
             session()->forget('otp_username'); // Hapus username dari session
             session()->forget('otp_last_sent'); // Hapus waktu terakhir OTP dikirim dari session
             $user->loginAttempts = 0; // Reset login attempts
+            $user->save();
+            // Redirect berdasarkan role user
             if ($user->role === 'superadmin') {
                 return redirect()->route('viewUser');
             } elseif ($user->role === 'operator') {
@@ -162,14 +173,37 @@ class AuthController extends Controller
             } elseif ($user->role === 'checker') {
                 return redirect()->route('chkViewQuery');
             }
-        } 
+        }
         // Jika OTP tidak valid atau kadaluarsa
         else {
             $user->loginAttempts += 1;
-            if ($user->loginAttempts >= 3) {
+            if ($user->loginAttempts >= 3 && $user->role !== 'superadmin') {
                 $user->statusApproval = 9;
+                $user->save();
+            } elseif ($user->loginAttempts >= 3 && $user->role === 'superadmin') {
+                $user->save();
+                // Get Token
+                $requestToken = json_decode($this->generateToken());
+                $auth = 'Authorization:' . (string) $requestToken->Authorization;
+                $checksum = strtoupper(hash('sha256', '01NTB$2019user' . $user->email));
+
+                // 🔹 Siapkan data untuk request
+                $body = array(
+                    "type" => "01",
+                    "username" => "user",
+                    "email" => $user->email,
+                    "subject" => "Multiple Login Attempts Detected",
+                    "pesan" => "Terdapat aktivitas multiple login. Percobaan gagal login anda sudah mencapai $user->loginAttempts kali. 
+                        Silakan check apakah aktivitas ini legitimate atau tidak.
+                        Jika tidak, segera hubungi admin untuk mengamankan akun anda.",
+                    "checksum" => (string) $checksum
+                );
+
+                // 🔹 Kirim email
+                $this->sendEmail($body, $auth);
+
+                return back()->withErrors(['otp' => 'OTP tidak valid atau kadaluarsa.']);
             }
-            $user->save();
 
             // Jika salah otp sampai akun terblokir
             if ($user->statusApproval == 9) {
@@ -209,29 +243,15 @@ class AuthController extends Controller
             "username" => "user",
             "email" => $user->email,
             "subject" => "Kode OTP",
-            "pesan" => "KODE OTP ANDA $otp JANGAN BERIKAN KODE RAHASIA INI KEPADA SIAPAPUN TERMASUK PIHAK YANG MENGAKU DARI BANK NTB SYARIAH.",
+            "pesan" => "KODE OTP ANDA $otp JANGAN BERIKAN KODE RAHASIA INI 
+                    KEPADA SIAPAPUN TERMASUK PIHAK YANG MENGAKU DARI BANK NTB SYARIAH.
+                    
+                    KODE INI AKAN KADALUARSA DALAM 5 MENIT.",
             "checksum" => (string) $checksum
         );
 
-        $curl = curl_init();
-
-        curl_setopt_array($curl, array(
-            CURLOPT_URL => 'http://103.145.128.179:65434/v2/other/Email',
-            CURLOPT_RETURNTRANSFER => true,
-            CURLOPT_ENCODING => '',
-            CURLOPT_MAXREDIRS => 10,
-            CURLOPT_TIMEOUT => 0,
-            CURLOPT_FOLLOWLOCATION => true,
-            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
-            CURLOPT_CUSTOMREQUEST => 'POST',
-            CURLOPT_POSTFIELDS => json_encode($body),
-            CURLOPT_HTTPHEADER => array(
-                'Content-Type: application/json',
-                $auth
-            ),
-        ));
-
-        $response = curl_exec($curl);
+        // 🔹 Kirim email 
+        $response = $this->sendEmail($body, $auth);
 
         // Cek respons
         // Decode response JSON
@@ -271,6 +291,31 @@ class AuthController extends Controller
             CURLOPT_HTTPHEADER => array(
                 'token: 12345',
                 'Content-Type: application/x-www-form-urlencoded'
+            ),
+        ));
+
+        $response = curl_exec($curl);
+        curl_close($curl);
+        return $response;
+    }
+
+    public function sendEmail($body, $auth)
+    {
+        $curl = curl_init();
+
+        curl_setopt_array($curl, array(
+            CURLOPT_URL => 'http://103.145.128.179:65434/v2/other/Email',
+            CURLOPT_RETURNTRANSFER => true,
+            CURLOPT_ENCODING => '',
+            CURLOPT_MAXREDIRS => 10,
+            CURLOPT_TIMEOUT => 0,
+            CURLOPT_FOLLOWLOCATION => true,
+            CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_1_1,
+            CURLOPT_CUSTOMREQUEST => 'POST',
+            CURLOPT_POSTFIELDS => json_encode($body),
+            CURLOPT_HTTPHEADER => array(
+                'Content-Type: application/json',
+                $auth
             ),
         ));
 
