@@ -22,6 +22,9 @@ class User extends Authenticatable
         'email',
         'password',
         'statusApproval',
+        'reasonApproval',
+        'loginAttempts',
+        'otp',
         'role'
     ];
 
