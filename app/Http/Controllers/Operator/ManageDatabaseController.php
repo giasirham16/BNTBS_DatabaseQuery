@@ -71,18 +71,22 @@ class ManageDatabaseController extends Controller
   public function update(Request $request)
   {
     try {
-      $update = ([
-        "namaDB" => $request->namaDB,
-        "ipHost" => $request->ipHost,
-        "port" => $request->port,
-        "driver" => $request->driver,
-        "reason" => $request->reason,
-        "statusApproval" => 3
+
+      $data = DatabaseParameter::findOrFail($request->id);
+
+      // Simpan perubahan yang diajukan di pendingChanges
+      $data->pendingChanges = json_encode([
+        'namaDB' => $request->namaDB,
+        'ipHost' => $request->ipHost,
+        'port' => $request->port,
+        'driver' => $request->driver,
       ]);
 
-      $data = DatabaseParameter::find($request->id);
-      $data->created_at = now();
-      $status = $data->update($update);
+      $data->reason = $request->reason;
+      $data->checker = null; // Reset checker
+      $data->supervisor = null; // Reset supervisor
+      $data->statusApproval = 3; // Menunggu persetujuan
+      $status = $data->save();
 
       if ($status) {
         LogActivity::create([

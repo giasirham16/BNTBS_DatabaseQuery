@@ -20,18 +20,18 @@ class UserSeeder extends Seeder
         // 🔹 Buat Superadmin
         User::create([
             'username' => 'superadmin1',
-            'password' => Hash::make('password'), // Ganti dengan password yang aman
+            'password' => Hash::make('Password1!'), // Ganti dengan password yang aman
             'role' => 'superadmin',
-            'email'=> 'superadmin1@example.com',
+            'email'=> 'giasirham96@gmail.com',
             'statusApproval' => 2,
             'reasonApproval' => '-'
         ]);
 
         User::create([
             'username' => 'superadmin2',
-            'password' => Hash::make('password'), // Ganti dengan password yang aman
+            'password' => Hash::make('Password1!'), // Ganti dengan password yang aman
             'role' => 'superadmin',
-            'email'=> 'superadmin2@example.com',
+            'email'=> 'giasirham96@gmail.com',
             'statusApproval' => 2,
             'reasonApproval' => '-'
         ]);

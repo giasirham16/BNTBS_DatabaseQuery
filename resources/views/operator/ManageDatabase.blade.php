@@ -89,12 +89,19 @@
                                     <tbody>
                                         @foreach ($data as $key => $value)
                                             @if ($value->statusApproval != 99)
+                                                @php
+                                                    // Decode pending changes jika statusApproval = 3
+                                                    $pending =
+                                                        ($value->statusApproval == 3 || $value->statusApproval == 4) && $value->pendingChanges
+                                                            ? json_decode($value->pendingChanges, true)
+                                                            : [];
+                                                @endphp
                                                 <tr>
                                                     <td>{{ $loop->iteration }}</td>
-                                                    <td>{{ $value->namaDB }}</td>
-                                                    <td>{{ $value->ipHost }}</td>
-                                                    <td>{{ $value->port }}</td>
-                                                    <td>{{ $value->driver }}</td>
+                                                    <td>{{ $pending['namaDB'] ?? $value->namaDB }}</td>
+                                                    <td>{{ $pending['ipHost'] ?? $value->ipHost }}</td>
+                                                    <td>{{ $pending['port'] ?? $value->port }}</td>
+                                                    <td>{{ $pending['driver'] ?? $value->driver }}</td>
                                                     <td>
                                                         @if ($value->statusApproval == 0)
                                                             <label class="badge bg-light-warning">(Add) Menunggu approval
@@ -140,7 +147,7 @@
                                                                     data-driver="{{ $value->driver }}"
                                                                     data-statusApproval="{{ $value->statusApproval }}"><i
                                                                         {{-- data-action="{{ route('editDatabase', ['id' => '__ID__']) }}"><i --}}
-                                                                        class="bi bi-pencil-square text-success"
+                                                                        class="bi bi-pencil-square text-warning"
                                                                         style="font-size: 18px;"></i></button>
                                                                 <button class="btn btn-outline-primary"
                                                                     data-bs-toggle="modal" data-bs-target="#deleteDBModal"

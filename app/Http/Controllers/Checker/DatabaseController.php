@@ -24,6 +24,12 @@ class DatabaseController extends Controller
     {
         try {
             $data = DatabaseParameter::find($request->id);
+            // Decode pending changes jika statusApproval = 3
+            $pending =
+                ($data->statusApproval == 3 || $data->statusApproval == 4) && $data->pendingChanges
+                ? json_decode($data->pendingChanges, true)
+                : [];
+
             $statusMap = [
                 0 => 1, //Add
                 3 => 4, //Update
@@ -31,9 +37,9 @@ class DatabaseController extends Controller
             ];
 
             $rejectMap = [
-                0 => 7,
-                3 => 2,
-                5 => 2
+                0 => 7, //Add
+                3 => 2, //Update
+                5 => 2 //Delete
             ];
 
             if ($request->approval == 1) {
@@ -49,14 +55,14 @@ class DatabaseController extends Controller
             if ($status) {
                 // Simpan ke log activity
                 LogActivity::create([
-                    'namaDB' => $data->namaDB,
-                    'ipHost' => $data->ipHost,
-                    'port' => $data->port,
-                    'driver' => $data->driver,
+                    'namaDB' => $pending['namaDB'] ?? $data->namaDB,
+                    'ipHost' =>  $pending['ipHost'] ?? $data->ipHost,
+                    'port' =>  $pending['port'] ?? $data->port,
+                    'driver' =>  $pending['driver'] ?? $data->driver,
                     'queryRequest' => $data->queryRequest,
                     'queryResult' => $data->queryResult,
                     'deskripsi' => $data->deskripsi,
-                    'reason' => $data->reasonApproval,
+                    'reason' => $data->reason,
                     'menu' => "Database",
                     'statusApproval' => $data->statusApproval,
                     'performedBy' => Auth::user()->username,

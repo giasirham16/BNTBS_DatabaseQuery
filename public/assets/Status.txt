@@ -8,16 +8,20 @@ Manage Database:
 6 = (Delete) Menunggu approval supervisor
 7 = Direject checker
 8 = Direject supervisor
+99 = Dihapus
 
 Manage User:
 0 = (Add) Menunggu approval superadmin2
 1 = (Add) Menunggu approval superadmin1
 2 = Approved
-3 = (Delete) Menunggu approval superadmin2
-4 = (Delete) Menunggu approval superadmin1
-5 = Direject superadmin2
-6 = Direject superadmin1
-7 = Terblokir
+3 = (Update) Menunggu approval superadmin2
+4 = (Update) Menunggu approval superadmin1
+5 = (Delete) Menunggu approval superadmin2
+6 = (Delete) Menunggu approval superadmin1
+7 = Direject superadmin2
+8 = Direject superadmin1
+9 = Terblokir
+99 = Dihapus
 
 Manage Query:
 0 = Menunggu approval checker
@@ -40,9 +44,10 @@ Supervisor bisa melihat data sebelum dan sesudah di update (done)
 
 Tambahan SIT
 Tambahkan download csv auditlog (done)
-Blokir 3x salah 
+Blokir 3x salah
 Login sensitiv case (done)
 Pembuatan password harus minimal 8 karakter, ada huruf besar, angka, dan symbol (done)
 captcha dan version (jangan im not robot)dan OTP (done) *saat login menggunakan otp (service sms/email) validasi kode otp.
-Edit email user
-Unblock user
+Edit email user (done)
+Unblock user (done)
+Tambahkan table pending changes -> perbaiki menu update (done)

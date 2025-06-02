@@ -27,7 +27,7 @@ Route::prefix('admin/v1')->group(function () {
     Route::get('/verify-otp', [AuthController::class, 'showOtpForm'])->name('otp.verify.form');
     Route::post('/verify-otp', [AuthController::class, 'verifyOtp'])->name('otp.verify');
     Route::post('/resend-otp', [AuthController::class, 'resendOtp'])->name('otp.resend');
-    
+
     // Captcha route
     Route::get('/captcha', function () {
         $a = rand(1, 10);
@@ -75,6 +75,8 @@ Route::prefix('admin/v1')->middleware(['auth', 'session.timeout'])->group(functi
         Route::post('/manageUser', [AdminUserController::class, 'store'])->name('addUser');
         Route::post('/manageUser/approve', [AdminUserController::class, 'approve'])->name('approveUser');
         Route::post('/manageUser/delete', [AdminUserController::class, 'destroy'])->name('deleteUser');
+        Route::post('/manageUser/update', [AdminUserController::class, 'update'])->name('updateUser');
+        Route::get('/manageUser/unblock/{id}', [AdminUserController::class, 'unblock'])->name('unblockUser');
     });
 
     // Menu operator

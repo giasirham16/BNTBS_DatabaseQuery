@@ -21,6 +21,7 @@ return new class extends Migration
             $table->string('operator')->nullable();
             $table->string('checker')->nullable();
             $table->string('supervisor')->nullable();
+            $table->json('pendingChanges')->nullable();
             $table->integer('statusApproval')->default(0);
             $table->timestamps();
         });

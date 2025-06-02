@@ -27,7 +27,7 @@
                         <button type="submit" id="resendButton" class="btn btn-warning btn-sm" disabled>Kirim Ulang
                             OTP</button>
                     </form>
-                    <a href="{{ route('login') }}" class="btn btn-warning btn-sm">Kembali ke Login</a>
+                    <a href="{{ route('login') }}" class="btn bi-house-fill btn-success btn-sm"></a>
                 </div>
 
                 <div class="text-muted text-center mt-2" id="resendTimerInfo"></div>

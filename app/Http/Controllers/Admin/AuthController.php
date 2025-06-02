@@ -28,8 +28,13 @@ class AuthController extends Controller
         ]);
 
         $user = User::whereRaw('BINARY username = ?', [$request->username])
-            ->whereIn('statusApproval', [2, 3, 4])
+            ->whereIn('statusApproval', [2, 3, 4, 9])
             ->first();
+
+        // Jika user statusnya terblokir tampilkan pesan error
+        if ($user && $user->statusApproval == 9) {
+            return back()->withErrors(['username' => 'Akun Anda telah diblokir. Silakan hubungi admin.']);
+        }
 
         Auth::logout();
 
@@ -100,7 +105,7 @@ class AuthController extends Controller
             if ($user) {
                 $user->loginAttempts += 1;
                 if ($user->loginAttempts >= 3) {
-                    $user->statusApproval = 7;
+                    $user->statusApproval = 9;
                 }
                 $user->save();
             }
@@ -138,12 +143,16 @@ class AuthController extends Controller
             ->where('expired_at', '>', now())
             ->first();
 
+        $user = User::where('username', session('otp_username'))->first();
+
+        // Jika OTP valid login user
         if ($otpRecord) {
-            $user = User::where('username', $otpRecord->username)->first();
             Auth::login($user);
             $request->session()->regenerate();
             Otp::where('username', $user->username)->delete(); // Hapus OTP setelah login
-
+            session()->forget('otp_username'); // Hapus username dari session
+            session()->forget('otp_last_sent'); // Hapus waktu terakhir OTP dikirim dari session
+            $user->loginAttempts = 0; // Reset login attempts
             if ($user->role === 'superadmin') {
                 return redirect()->route('viewUser');
             } elseif ($user->role === 'operator') {
@@ -153,9 +162,22 @@ class AuthController extends Controller
             } elseif ($user->role === 'checker') {
                 return redirect()->route('chkViewQuery');
             }
-        }
+        } 
+        // Jika OTP tidak valid atau kadaluarsa
+        else {
+            $user->loginAttempts += 1;
+            if ($user->loginAttempts >= 3) {
+                $user->statusApproval = 9;
+            }
+            $user->save();
 
-        return back()->withErrors(['otp' => 'OTP tidak valid atau kadaluarsa.']);
+            // Jika salah otp sampai akun terblokir
+            if ($user->statusApproval == 9) {
+                return redirect()->route('login')->withErrors(provider: ['username' => 'Akun Anda telah diblokir. Silakan hubungi admin.']);
+            }
+
+            return back()->withErrors(['otp' => 'OTP tidak valid atau kadaluarsa.']);
+        }
     }
 
     // 🔹 PROSES KIRIM ULANG OTP
@@ -163,7 +185,7 @@ class AuthController extends Controller
     {
         $username = session('otp_username');
         $lastSent = session('otp_last_sent');
-   
+
         if (!$username || !$lastSent || Carbon::parse($lastSent)->diffInMinutes(now()) < 2) {
             return back()->withErrors(['otp' => 'Anda hanya dapat meminta OTP setiap 2 menit.']);
         }

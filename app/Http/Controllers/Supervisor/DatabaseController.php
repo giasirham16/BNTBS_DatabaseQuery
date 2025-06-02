@@ -21,18 +21,33 @@ class DatabaseController extends Controller
     {
         try {
             $rejectMap = [
-                1 => 8,
-                4 => 2,
-                6 => 2
+                1 => 8, // Add reject
+                4 => 2, // Update reject
+                6 => 2 // Delete reject
             ];
 
             $data = DatabaseParameter::find($request->id);
 
+            // Approve Delete
             if ($request->approval == 1 && $data->statusApproval == 6) {
                 $data->statusApproval = 99;
-            } else if ($request->approval == 1 && $data->statusApproval != 6) {
+            }
+            // Approve Add 
+            else if ($request->approval == 1 && $data->statusApproval == 1) {
                 $data->statusApproval = 2;
-            } else if ($request->approval == 0) {
+            }
+            //Approve Update
+            else if ($request->approval == 1 && $data->statusApproval == 4) {
+                $pending = json_decode($data->pendingChanges, true);
+
+                // Terapkan perubahan ke kolom utama
+                $data->fill($pending);
+                $data->pendingChanges = null;
+                $data->statusApproval = 2;
+                $data->save();
+            }
+            // Reject Based on reject map
+            else if ($request->approval == 0) {
                 $data->statusApproval = $rejectMap[$data->statusApproval];
             }
 
@@ -51,7 +66,7 @@ class DatabaseController extends Controller
                     'queryRequest' => $data->queryRequest,
                     'queryResult' => $data->queryResult,
                     'deskripsi' => $data->deskripsi,
-                    'reason' => $data->reasonApproval,
+                    'reason' => $data->reason,
                     'menu' => "Database",
                     'statusApproval' => $data->statusApproval,
                     'performedBy' => Auth::user()->username,
