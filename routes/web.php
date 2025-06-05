@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Session;
 use Illuminate\Support\Facades\Response;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('admin.pages.login.login');
 });
 
 Route::prefix('admin/v1')->group(function () {

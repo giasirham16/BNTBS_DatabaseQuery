@@ -19,9 +19,14 @@
                     </div>
                     <div class="mb-3">
                         <label for="namaDB" class="col-form-label">Password</label>
-                        <input type="password"
-                            class="form-control {{ session('show_modal') && $errors->has('password') ? 'is-invalid' : '' }}"
-                            name="password" id="passUser" required>
+                        <div class="input-group">
+                            <input type="password"
+                                class="form-control {{ session('show_modal') && $errors->has('password') ? 'is-invalid' : '' }}"
+                                name="password" id="passUser" required>
+                            <span class="input-group-text" onclick="togglePassword()" style="cursor: pointer;">
+                                <i class="bi bi-eye-fill" id="toggleIcon"></i>
+                            </span>
+                        </div>
                     </div>
 
                     {{-- Error per field --}}
@@ -56,3 +61,15 @@
         </div>
     </div>
 </div>
+
+<script>
+    function togglePassword() {
+        const passwordField = document.getElementById("passUser");
+        const icon = document.getElementById("toggleIcon");
+        const isPassword = passwordField.type === "password";
+
+        passwordField.type = isPassword ? "text" : "password";
+        icon.classList.toggle("bi-eye-fill");
+        icon.classList.toggle("bi-eye-slash");
+    }
+</script>
