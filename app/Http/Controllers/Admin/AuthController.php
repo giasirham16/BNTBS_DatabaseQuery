@@ -60,10 +60,9 @@ class AuthController extends Controller
             //     "type" => "01",
             //     "username" => "user",
             //     "email" => $user->email,
-            //     "subject" => "Kode OTP",
-            //     "pesan" => "KODE OTP ANDA $otp JANGAN BERIKAN KODE RAHASIA INI 
-            //         KEPADA SIAPAPUN TERMASUK PIHAK YANG MENGAKU DARI BANK NTB SYARIAH.
-                    
+            //     "subject" => "Kode OTP Database Query",
+            //     "pesan" => "KODE OTP ANDA $otp JANGAN BERIKAN KODE RAHASIA INI KEPADA PIHAK SIAPAPUN.
+
             //         KODE INI AKAN KADALUARSA DALAM 5 MENIT.",
             //     "checksum" => (string) $checksum
             // );
@@ -81,7 +80,7 @@ class AuthController extends Controller
             // }
 
             $otp = 123456; // Untuk testing, ganti dengan kode OTP yang diinginkan
-            
+
             // 🔹 Simpan OTP ke DB
             Otp::create([
                 'username' => $user->username,
@@ -258,9 +257,8 @@ class AuthController extends Controller
             "type" => "01",
             "username" => "user",
             "email" => $user->email,
-            "subject" => "Kode OTP",
-            "pesan" => "KODE OTP ANDA $otp JANGAN BERIKAN KODE RAHASIA INI 
-                    KEPADA SIAPAPUN TERMASUK PIHAK YANG MENGAKU DARI BANK NTB SYARIAH.
+            "subject" => "Kode OTP Database Query",
+            "pesan" => "KODE OTP ANDA $otp JANGAN BERIKAN KODE RAHASIA INI KEPADA PIHAK SIAPAPUN.
                     
                     KODE INI AKAN KADALUARSA DALAM 5 MENIT.",
             "checksum" => (string) $checksum
