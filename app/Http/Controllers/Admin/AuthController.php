@@ -43,37 +43,45 @@ class AuthController extends Controller
             $otp = random_int(100000, 999999);
             $expired = now()->addMinutes(5);
 
-            // 🔹 Kirim OTP lewat API
-            // Get Token
-            $requestToken = json_decode($this->generateToken());
-            $auth = 'Authorization:' . (string) $requestToken->Authorization;
-            $checksum = strtoupper(hash('sha256', '01NTB$2019user' . $user->email));
+            // // 🔹 Kirim OTP lewat API
+            // // Get Token
+            // $requestToken = json_decode($this->generateToken());
 
-            // 🔹 Siapkan data untuk request
-            $body = array(
-                "type" => "01",
-                "username" => "user",
-                "email" => $user->email,
-                "subject" => "Kode OTP",
-                "pesan" => "KODE OTP ANDA $otp JANGAN BERIKAN KODE RAHASIA INI 
-                    KEPADA SIAPAPUN TERMASUK PIHAK YANG MENGAKU DARI BANK NTB SYARIAH.
+            // // Cek jika requestToken tidak true
+            // if ($requestToken === null || $requestToken->status !== true || !isset($requestToken->Authorization)) {
+            //     return back()->withErrors(['username' => 'Gagal mengirim OTP. Silakan coba lagi.']);
+            // }
+
+            // $auth = 'Authorization:' . (string) $requestToken->Authorization;
+            // $checksum = strtoupper(hash('sha256', '01NTB$2019user' . $user->email));
+
+            // // 🔹 Siapkan data untuk request
+            // $body = array(
+            //     "type" => "01",
+            //     "username" => "user",
+            //     "email" => $user->email,
+            //     "subject" => "Kode OTP",
+            //     "pesan" => "KODE OTP ANDA $otp JANGAN BERIKAN KODE RAHASIA INI 
+            //         KEPADA SIAPAPUN TERMASUK PIHAK YANG MENGAKU DARI BANK NTB SYARIAH.
                     
-                    KODE INI AKAN KADALUARSA DALAM 5 MENIT.",
-                "checksum" => (string) $checksum
-            );
+            //         KODE INI AKAN KADALUARSA DALAM 5 MENIT.",
+            //     "checksum" => (string) $checksum
+            // );
 
-            // 🔹 Kirim email 
-            $response = $this->sendEmail($body, $auth);
+            // // 🔹 Kirim email 
+            // $response = $this->sendEmail($body, $auth);
 
-            // Cek respons
-            // Decode response JSON
-            $data = json_decode($response, true);
+            // // Cek respons
+            // // Decode response JSON
+            // $data = json_decode($response, true);
 
-            // Cek jika rcode tidak 00
-            if (!isset($data['rcode']) || $data['rcode'] !== '00') {
-                return back()->withErrors(['username' => 'Gagal mengirim OTP. Silakan coba lagi.']);
-            }
+            // // Cek jika rccode tidak 00
+            // if (!isset($data['rcode']) || $data['rcode'] !== '00') {
+            //     return back()->withErrors(['username' => 'Gagal mengirim OTP. Silakan coba lagi.']);
+            // }
 
+            $otp = 123456; // Untuk testing, ganti dengan kode OTP yang diinginkan
+            
             // 🔹 Simpan OTP ke DB
             Otp::create([
                 'username' => $user->username,
@@ -90,11 +98,13 @@ class AuthController extends Controller
         } else {
             if ($user) {
                 $user->loginAttempts += 1;
-                if ($user->loginAttempts >= 3 && $user->role !== 'superadmin') {
+                $user->save();
+                if ($user->loginAttempts >= 3) {
+                    // Jika login attempts sudah 3 kali, blokir akun
                     $user->statusApproval = 9;
                     $user->save();
-                } elseif ($user->loginAttempts >= 3 && $user->role === 'superadmin') {
-                    $user->save();
+                }
+                if ($user->loginAttempts >= 3 && $user->role === 'superadmin') {
                     // Get Token
                     $requestToken = json_decode($this->generateToken());
                     $auth = 'Authorization:' . (string) $requestToken->Authorization;
@@ -108,7 +118,7 @@ class AuthController extends Controller
                         "subject" => "Multiple Login Attempts Detected",
                         "pesan" => "Terdapat aktivitas multiple login. Percobaan gagal login anda sudah mencapai $user->loginAttempts kali. 
                         Silakan check apakah aktivitas ini legitimate atau tidak.
-                        Jika tidak, segera hubungi admin untuk mengamankan akun anda.",
+                        Akun anda telah diblokir dan harus diaktifkan oleh admin.",
                         "checksum" => (string) $checksum
                     );
 
@@ -234,6 +244,12 @@ class AuthController extends Controller
 
         // Get Token
         $requestToken = json_decode($this->generateToken());
+
+        // Cek jika requestToken tidak true
+        if ($requestToken === null || $requestToken->status !== true || !isset($requestToken->Authorization)) {
+            return back()->withErrors(['username' => 'Gagal mengirim OTP. Silakan coba lagi.']);
+        }
+        
         $auth = 'Authorization:' . (string) $requestToken->Authorization;
         $checksum = strtoupper(hash('sha256', '01NTB$2019user' . $user->email));
 

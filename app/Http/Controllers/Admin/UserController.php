@@ -24,11 +24,13 @@ class UserController extends Controller
                 'required',
                 'string',
                 'min:8',
-                'regex:/^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&]).+$/', // At least one uppercase letter, one digit, and one special character
+                'regex:/^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*#?&]).+$/',
             ],
+            'passConfirm' => 'required_with:password|same:password',
         ], [
             'password.min' => 'Password minimal 8 karakter.',
             'password.regex' => 'Password harus mengandung huruf besar, angka, dan simbol.',
+            'passConfirm.same' => 'Konfirmasi password tidak cocok.',
         ]);
 
         if ($validator->fails()) {

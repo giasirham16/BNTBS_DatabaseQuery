@@ -18,22 +18,39 @@
                         <input type="text" class="form-control" name="email" id="email" required>
                     </div>
                     <div class="mb-3">
-                        <label for="namaDB" class="col-form-label">Password</label>
+                        <label for="passUser" class="col-form-label">Password</label>
                         <div class="input-group">
                             <input type="password"
                                 class="form-control {{ session('show_modal') && $errors->has('password') ? 'is-invalid' : '' }}"
                                 name="password" id="passUser" required>
-                            <span class="input-group-text" onclick="togglePassword()" style="cursor: pointer;">
+                            <span class="input-group-text" onclick="togglePassword1()" style="cursor: pointer;">
                                 <i class="bi bi-eye-fill" id="toggleIcon"></i>
                             </span>
                         </div>
                     </div>
-
-                    {{-- Error per field --}}
+                    {{-- Error untuk password --}}
                     <div class="invalid-feedback d-block {{ session('show_modal') && $errors->has('password') ? '' : 'd-none' }}"
                         id="password-error">
                         {{ $errors->first('password') }}
                     </div>
+                    <div class="mb-3">
+                        <label for="passConfirm" class="col-form-label">Confirm Password</label>
+                        <div class="input-group">
+                            <input type="password"
+                                class="form-control {{ session('show_modal') && $errors->has('passConfirm') ? 'is-invalid' : '' }}"
+                                name="passConfirm" id="passConfirm" required>
+                            <span class="input-group-text" onclick="togglePassword2()" style="cursor: pointer;">
+                                <i class="bi bi-eye-fill" id="toggleIcon2"></i>
+                            </span>
+                        </div>
+                    </div>
+                    {{-- Error untuk passConfirm --}}
+                    <div class="invalid-feedback d-block {{ session('show_modal') && $errors->has('passConfirm') ? '' : 'd-none' }}"
+                        id="passConfirm-error">
+                        {{ $errors->first('passConfirm') }}
+                    </div>
+
+
 
                     <div class="mb-3">
                         <label for="roleDropdown" class="form-label">Role</label>
@@ -63,7 +80,7 @@
 </div>
 
 <script>
-    function togglePassword() {
+    function togglePassword1() {
         const passwordField = document.getElementById("passUser");
         const icon = document.getElementById("toggleIcon");
         const isPassword = passwordField.type === "password";
@@ -71,5 +88,15 @@
         passwordField.type = isPassword ? "text" : "password";
         icon.classList.toggle("bi-eye-fill");
         icon.classList.toggle("bi-eye-slash");
+    }
+
+    function togglePassword2() {
+        const passwordField = document.getElementById("passConfirm");
+        const icon2 = document.getElementById("toggleIcon2");
+        const isPassword = passwordField.type === "password";
+
+        passwordField.type = isPassword ? "text" : "password";
+        icon2.classList.toggle("bi-eye-fill");
+        icon2.classList.toggle("bi-eye-slash");
     }
 </script>
