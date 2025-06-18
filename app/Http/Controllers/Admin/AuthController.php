@@ -43,43 +43,43 @@ class AuthController extends Controller
             $otp = random_int(100000, 999999);
             $expired = now()->addMinutes(5);
 
-            // // 🔹 Kirim OTP lewat API
-            // // Get Token
-            // $requestToken = json_decode($this->generateToken());
+            // 🔹 Kirim OTP lewat API
+            // Get Token
+            $requestToken = json_decode($this->generateToken());
 
-            // // Cek jika requestToken tidak true
-            // if ($requestToken === null || $requestToken->status !== true || !isset($requestToken->Authorization)) {
-            //     return back()->withErrors(['username' => 'Gagal mengirim OTP. Silakan coba lagi.']);
-            // }
+            // Cek jika requestToken tidak true
+            if ($requestToken === null || $requestToken->status !== true || !isset($requestToken->Authorization)) {
+                return back()->withErrors(['username' => 'Gagal mengirim OTP. Silakan coba lagi.']);
+            }
 
-            // $auth = 'Authorization:' . (string) $requestToken->Authorization;
-            // $checksum = strtoupper(hash('sha256', '01NTB$2019user' . $user->email));
+            $auth = 'Authorization:' . (string) $requestToken->Authorization;
+            $checksum = strtoupper(hash('sha256', '01NTB$2019user' . $user->email));
 
-            // // 🔹 Siapkan data untuk request
-            // $body = array(
-            //     "type" => "01",
-            //     "username" => "user",
-            //     "email" => $user->email,
-            //     "subject" => "Kode OTP Database Query",
-            //     "pesan" => "KODE OTP ANDA $otp JANGAN BERIKAN KODE RAHASIA INI KEPADA PIHAK SIAPAPUN.
+            // 🔹 Siapkan data untuk request
+            $body = array(
+                "type" => "01",
+                "username" => "user",
+                "email" => $user->email,
+                "subject" => "Kode OTP Database Query",
+                "pesan" => "KODE OTP ANDA $otp JANGAN BERIKAN KODE RAHASIA INI KEPADA PIHAK SIAPAPUN.
 
-            //         KODE INI AKAN KADALUARSA DALAM 5 MENIT.",
-            //     "checksum" => (string) $checksum
-            // );
+                    KODE INI AKAN KADALUARSA DALAM 5 MENIT.",
+                "checksum" => (string) $checksum
+            );
 
-            // // 🔹 Kirim email 
-            // $response = $this->sendEmail($body, $auth);
+            // 🔹 Kirim email 
+            $response = $this->sendEmail($body, $auth);
 
-            // // Cek respons
-            // // Decode response JSON
-            // $data = json_decode($response, true);
+            // Cek respons
+            // Decode response JSON
+            $data = json_decode($response, true);
 
-            // // Cek jika rccode tidak 00
-            // if (!isset($data['rcode']) || $data['rcode'] !== '00') {
-            //     return back()->withErrors(['username' => 'Gagal mengirim OTP. Silakan coba lagi.']);
-            // }
+            // Cek jika rccode tidak 00
+            if (!isset($data['rcode']) || $data['rcode'] !== '00') {
+                return back()->withErrors(['username' => 'Gagal mengirim OTP. Silakan coba lagi.']);
+            }
 
-            $otp = 123456; // Untuk testing, ganti dengan kode OTP yang diinginkan
+            // $otp = 123456; // Untuk testing, ganti dengan kode OTP yang diinginkan
 
             // 🔹 Simpan OTP ke DB
             Otp::create([
