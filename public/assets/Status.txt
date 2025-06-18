@@ -60,5 +60,5 @@ Tambahan UAT
 5. Ubah driver kedalam bentuk dropdown saat pembuatan (Done)
 6. Hilangkan query result tulisan dan tablenya ketika status blm approve (Done)
 7. Database tidak terbaca pada user lainnya (Done)
-2. Ubah google font kedalam bentuk lokal
+8. Ubah asset kedalam bentuk lokal (Done)
 
