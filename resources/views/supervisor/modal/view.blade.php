@@ -76,7 +76,7 @@
                 </div>
                 <div class="row">
                     <div class="col">
-                        <label for="queryResultTable" class="col-form-label">Query Result</label>
+                        <label id="queryResultLabel" for="queryResultTable" class="col-form-label">Query Result</label>
                         <table id="queryResultTable" class="table table-hover table-bordered">
                             <thead class="table-head-custom">
                                 <!-- Akan diisi oleh JavaScript -->

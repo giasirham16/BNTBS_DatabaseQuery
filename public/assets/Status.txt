@@ -51,3 +51,14 @@ captcha dan version (jangan im not robot)dan OTP (done) *saat login menggunakan 
 Edit email user (done)
 Unblock user (done)
 Tambahkan table pending changes -> perbaiki menu update (done)
+
+Tambahan UAT
+1. Captcha harusnya inputkan hasil captcha (Done)
+2. Approval di superadmin bug, gagal approve pertama, yg kedua sukses (Done)
+3. Tambahkan export hasil query (Done)
+4. Jika query insert, tampilkan untuk checker dan supervisor apa saja field2 pada table yang akan diinputkan (Done)
+5. Ubah driver kedalam bentuk dropdown saat pembuatan (Done)
+6. Hilangkan query result tulisan dan tablenya ketika status blm approve (Done)
+7. Database tidak terbaca pada user lainnya (Done)
+2. Ubah google font kedalam bentuk lokal
+

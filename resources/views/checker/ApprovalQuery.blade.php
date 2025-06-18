@@ -161,14 +161,14 @@
 
 @section('scripts')
     <script>
-        // Set timeout hilangkan notif
-        setTimeout(() => {
-            const alerts = document.querySelectorAll('.alert');
-            alerts.forEach(alert => {
-                const bsAlert = new bootstrap.Alert(alert);
-                bsAlert.close();
-            });
-        }, 4000); // hilang dalam 4 detik
+        // // Set timeout hilangkan notif
+        // setTimeout(() => {
+        //     const alerts = document.querySelectorAll('.alert');
+        //     alerts.forEach(alert => {
+        //         const bsAlert = new bootstrap.Alert(alert);
+        //         bsAlert.close();
+        //     });
+        // }, 4000); // hilang dalam 4 detik
 
         // Aktifkan orderby, pagination dan search
         $(document).ready(function() {
@@ -281,7 +281,6 @@
                 const queryRequest = button.getAttribute('data-queryRequest');
                 const dataBeforeRaw = button.getAttribute('data-before');
 
-
                 // Konversi status approval
                 let status = "Tidak diketahui";
                 if (statusApproval == 0) status = "Menunggu approval checker";
@@ -301,6 +300,33 @@
                 document.getElementById('query-deskripsi').value = deskripsi;
                 document.getElementById('query-statusApproval').value = status;
                 document.getElementById('query-queryRequest').value = queryRequest;
+                document.getElementById('query-namaKolom').value = dataBeforeRaw;
+                const dataBeforeTable = document.getElementById('dataBeforeTable');
+                const dataBeforeLabel = document.getElementById('dataBeforeLabel');
+                const namaKolom = document.getElementById('query-namaKolom');
+                const namaKolomLabel = document.getElementById('query-namaKolomLabel');
+
+                // Tampilkan data sebelum update jika query adalah update
+                if (queryRequest && queryRequest.toLowerCase().startsWith('update')) {
+                    // Tampilkan data sebelum update
+                    dataBeforeTable.style.display = 'inline-block';
+                    dataBeforeLabel.style.display = 'inline-block';
+                } else {
+                    // Sembunyikan data sebelum update
+                    dataBeforeTable.style.display = 'none';
+                    dataBeforeLabel.style.display = 'none';
+                }
+
+                // Tampilkan nama kolom jika query adalah insert
+                if (queryRequest && queryRequest.toLowerCase().startsWith('insert')) {
+                    // Tampilkan nama kolom
+                    namaKolom.style.display = 'inline-block';
+                    namaKolomLabel.style.display = 'inline-block';
+                } else {
+                    // Sembunyikan nama kolom
+                    namaKolom.style.display = 'none';
+                    namaKolomLabel.style.display = 'none';
+                }
 
                 // Render table before update
                 renderTable('dataBeforeTable', dataBeforeRaw);
@@ -323,6 +349,17 @@
                 const statusApproval = button.getAttribute('data-statusApproval');
                 const queryRequest = button.getAttribute('data-queryRequest');
                 const queryResultRaw = button.getAttribute('data-query-result');
+                const queryResultLabel = document.getElementById('queryResultLabel');
+                const queryResultTable = document.getElementById('queryResultTable');
+
+                // Tampilkan tabel jika status approval adalah 2 (approved)
+                if (statusApproval == 2) {
+                    queryResultLabel.style.display = 'inline-block';
+                    queryResultTable.style.display = 'table';
+                } else {
+                    queryResultLabel.style.display = 'none';
+                    queryResultTable.style.display = 'none';
+                }
 
                 // Konversi status approval
                 let status = "Tidak diketahui";

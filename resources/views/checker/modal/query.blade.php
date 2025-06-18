@@ -14,13 +14,11 @@
                     <div class="row">
                         <div class="col">
                             <label for="query-namaDB" class="col-form-label">Nama DB</label>
-                            <input type="text" class="form-control bg-light" id="query-namaDB"
-                                readonly>
+                            <input type="text" class="form-control bg-light" id="query-namaDB" readonly>
                         </div>
                         <div class="col">
                             <label for="query-ipHost" class="col-form-label">Source</label>
-                            <input type="text" class="form-control bg-light" id="query-ipHost"
-                                readonly>
+                            <input type="text" class="form-control bg-light" id="query-ipHost" readonly>
                         </div>
                     </div>
                     <div class="row">
@@ -30,15 +28,13 @@
                         </div>
                         <div class="col">
                             <label for="query-driver" class="col-form-label">Driver</label>
-                            <input type="text" class="form-control bg-light" id="query-driver"
-                                readonly>
+                            <input type="text" class="form-control bg-light" id="query-driver" readonly>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col">
                             <label for="query-statusApproval" class="col-form-label">Status Approval</label>
-                            <input type="text" class="form-control bg-light"
-                                id="query-statusApproval" readonly>
+                            <input type="text" class="form-control bg-light" id="query-statusApproval" readonly>
                         </div>
                         <div class="col">
                             <label for="query-reason" class="col-form-label">Reason</label>
@@ -48,13 +44,11 @@
                     <div class="row">
                         <div class="col">
                             <label for="query-supervisor" class="col-form-label">Requested By</label>
-                            <input type="text" class="form-control bg-light" id="query-operator"
-                                readonly>
+                            <input type="text" class="form-control bg-light" id="query-operator" readonly>
                         </div>
                         <div class="col">
                             <label for="query-tanggalRequest" class="col-form-label">Tanggal Request</label>
-                            <input type="text" class="form-control bg-light" id="query-tanggalRequest"
-                                readonly>
+                            <input type="text" class="form-control bg-light" id="query-tanggalRequest" readonly>
                         </div>
                     </div>
                     <div class="row">
@@ -73,7 +67,15 @@
                     </div>
                     <div class="row">
                         <div class="col">
-                            <label for="dataBeforeTable" class="col-form-label">Data Before Update</label>
+                            <label id="query-namaKolomLabel" for="query-namaKolom" class="col-form-label">List Nama Kolom</label>
+                            <textarea rows="2" style="resize: vertical; overflow-y: auto;" class="form-control bg-light" id="query-namaKolom"
+                                readonly></textarea>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col">
+                            <label id="dataBeforeLabel" for="dataBeforeTable" class="col-form-label">Data Before
+                                Update</label>
                             <table id="dataBeforeTable" class="table table-hover table-bordered">
                                 <thead class="table-head-custom">
                                     <tr>

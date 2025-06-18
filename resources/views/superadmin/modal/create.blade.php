@@ -50,8 +50,6 @@
                         {{ $errors->first('passConfirm') }}
                     </div>
 
-
-
                     <div class="mb-3">
                         <label for="roleDropdown" class="form-label">Role</label>
                         <div class="form-floating">

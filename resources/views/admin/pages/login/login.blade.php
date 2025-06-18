@@ -62,7 +62,7 @@
                         </button>
                     </div>
                     <input type="text" class="form-control w-50 @error('captcha') is-invalid @enderror" id="captcha"
-                        name="captcha" placeholder="Masukkan captcha" required>
+                        name="captcha" placeholder="Masukkan hasil captcha" required>
                     @error('captcha')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror

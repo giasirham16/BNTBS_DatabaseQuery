@@ -14,13 +14,11 @@
                     <div class="row">
                         <div class="col">
                             <label for="query-namaDB" class="col-form-label">Nama DB</label>
-                            <input type="text" class="form-control bg-light" id="query-namaDB"
-                                readonly>
+                            <input type="text" class="form-control bg-light" id="query-namaDB" readonly>
                         </div>
                         <div class="col">
                             <label for="query-ipHost" class="col-form-label">Source</label>
-                            <input type="text" class="form-control bg-light" id="query-ipHost"
-                                readonly>
+                            <input type="text" class="form-control bg-light" id="query-ipHost" readonly>
                         </div>
                     </div>
                     <div class="row">
@@ -30,15 +28,13 @@
                         </div>
                         <div class="col">
                             <label for="query-driver" class="col-form-label">Driver</label>
-                            <input type="text" class="form-control bg-light" id="query-driver"
-                                readonly>
+                            <input type="text" class="form-control bg-light" id="query-driver" readonly>
                         </div>
                     </div>
                     <div class="row">
                         <div class="col">
                             <label for="query-statusApproval" class="col-form-label">Status Approval</label>
-                            <input type="text" class="form-control bg-light"
-                                id="query-statusApproval" readonly>
+                            <input type="text" class="form-control bg-light" id="query-statusApproval" readonly>
                         </div>
                         <div class="col">
                             <label for="query-reason" class="col-form-label">Reason</label>
@@ -48,13 +44,11 @@
                     <div class="row">
                         <div class="col">
                             <label for="query-supervisor" class="col-form-label">Requested By</label>
-                            <input type="text" class="form-control bg-light" id="query-operator"
-                                readonly>
+                            <input type="text" class="form-control bg-light" id="query-operator" readonly>
                         </div>
                         <div class="col">
                             <label for="query-checker" class="col-form-label">Checker</label>
-                            <input type="text" class="form-control bg-light" id="query-checker"
-                                readonly>
+                            <input type="text" class="form-control bg-light" id="query-checker" readonly>
                         </div>
                     </div>
                     <div class="row">
@@ -71,9 +65,17 @@
                                 readonly></textarea>
                         </div>
                     </div>
+                    <div class="row">
+                        <div class="col">
+                            <label id="query-namaKolomLabel" for="query-namaKolom" class="col-form-label">List Nama
+                                Kolom</label>
+                            <textarea rows="2" style="resize: vertical; overflow-y: auto;" class="form-control bg-light" id="query-namaKolom"
+                                readonly></textarea>
+                        </div>
+                    </div>
                     <div id="dataBeforeWrapper" class="row">
                         <div class="col">
-                            <label for="dataBeforeTable" class="col-form-label">Data Before Update</label>
+                            <label id="dataBeforeLabel" for="dataBeforeTable" class="col-form-label">Data Before Update</label>
                             <table id="dataBeforeTable" class="table table-hover table-bordered">
                                 <thead class="table-head-custom">
                                     <tr>
@@ -90,7 +92,7 @@
                     </div>
                     <div id="dataAfterWrapper" class="row">
                         <div class="col">
-                            <label for="dataAfterTable" class="col-form-label">Data After Update</label>
+                            <label id="dataAfterLabel" for="dataAfterTable" class="col-form-label">Data After Update</label>
                             <table id="dataAfterTable" class="table table-hover table-bordered">
                                 <thead class="table-head-custom">
                                     <tr>

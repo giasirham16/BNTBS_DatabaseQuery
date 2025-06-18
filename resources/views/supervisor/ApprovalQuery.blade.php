@@ -288,6 +288,10 @@
                 const queryRequest = button.getAttribute('data-queryRequest');
                 const dataBeforeRaw = button.getAttribute('data-before');
                 const dataAfterRaw = button.getAttribute('data-after');
+                const dataBeforeTable = document.getElementById('dataBeforeTable');
+                const dataBeforeLabel = document.getElementById('dataBeforeLabel');
+                const namaKolom = document.getElementById('query-namaKolom');
+                const namaKolomLabel = document.getElementById('query-namaKolomLabel');
 
                 // Konversi status approval
                 let status = "Tidak diketahui";
@@ -308,9 +312,36 @@
                 document.getElementById('query-deskripsi').value = deskripsi;
                 document.getElementById('query-statusApproval').value = status;
                 document.getElementById('query-queryRequest').value = queryRequest;
+                document.getElementById('query-namaKolom').value = dataBeforeRaw;
 
-                // Deteksi apakah query adalah update
-                const isUpdateQuery = queryRequest.toUpperCase().startsWith('UPDATE');
+                // Tampilkan data sebelum dan sesudah update jika query adalah update
+                if (queryRequest && queryRequest.toLowerCase().startsWith('update')) {
+                    console.log('Query adalah update');
+                    // Tampilkan data sebelum update
+                    dataBeforeTable.style.display = 'inline-block';
+                    dataBeforeLabel.style.display = 'inline-block';
+                    // Tampilkan data setelah update
+                    dataAfterTable.style.display = 'inline-block';
+                    dataAfterLabel.style.display = 'inline-block';
+                } else {
+                    // Sembunyikan data sebelum update
+                    dataBeforeTable.style.display = 'none';
+                    dataBeforeLabel.style.display = 'none';
+                    // Sembunyikan data setelah update
+                    dataAfterTable.style.display = 'none';
+                    dataAfterLabel.style.display = 'none';
+                }
+
+                // Tampilkan nama kolom jika query adalah insert
+                if (queryRequest && queryRequest.toLowerCase().startsWith('insert')) {
+                    // Tampilkan nama kolom
+                    namaKolom.style.display = 'inline-block';
+                    namaKolomLabel.style.display = 'inline-block';
+                } else {
+                    // Sembunyikan nama kolom
+                    namaKolom.style.display = 'none';
+                    namaKolomLabel.style.display = 'none';
+                }
 
                 // Ambil elemen wrapper
                 const beforeWrapper = document.getElementById('dataBeforeWrapper');
@@ -319,10 +350,6 @@
                 // Render table before update
                 renderTable('dataBeforeTable', dataBeforeRaw);
                 renderTable('dataAfterTable', dataAfterRaw);
-
-                // Tampilkan atau sembunyikan
-                beforeWrapper.style.display = isUpdateQuery ? 'block' : 'none';
-                afterWrapper.style.display = isUpdateQuery ? 'block' : 'none';
 
             })
 
@@ -345,6 +372,17 @@
                 const statusApproval = button.getAttribute('data-statusApproval');
                 const queryRequest = button.getAttribute('data-queryRequest');
                 const queryResultRaw = button.getAttribute('data-query-result');
+                const queryResultLabel = document.getElementById('queryResultLabel');
+                const queryResultTable = document.getElementById('queryResultTable');
+
+                // Tampilkan tabel jika status approval adalah 2 (approved)
+                if (statusApproval == 2) {
+                    queryResultLabel.style.display = 'inline-block';
+                    queryResultTable.style.display = 'table';
+                } else {
+                    queryResultLabel.style.display = 'none';
+                    queryResultTable.style.display = 'none';
+                }
 
                 // Konversi status approval
                 let status = "Tidak diketahui";

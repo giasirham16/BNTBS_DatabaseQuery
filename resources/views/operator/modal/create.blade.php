@@ -10,8 +10,16 @@
                 <form action="{{ route('addDatabase') }}" method="POST">
                     @csrf
                     <div class="mb-3">
-                        <label for="namaDB" class="col-form-label">Driver</label>
-                        <input type="text" class="form-control" name="driver" id="driver" required>
+                        <label for="driver" class="form-label">Driver</label>
+                        <div class="form-floating">
+                            <select class="form-select" name="driver" id="driver" required>
+                                <option selected value="" disabled>--Select Driver--</option>
+                                <option name="driver" value="mysql">mysql</option>
+                                <option name="driver" value="pgsql">pgsql</option>
+                                <option name="driver" value="sqlite">sqlite</option>
+                                <option name="driver" value="sqlsrv">sqlsrv</option>
+                            </select>
+                        </div>
                     </div>
                     <div class="mb-3">
                         <label for="namaDB" class="col-form-label">Nama DB</label>

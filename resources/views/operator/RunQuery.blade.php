@@ -61,41 +61,49 @@
                         <div class="card">
                             <div class="row">
                                 <div class="card-body">
-                                    <label for="ipHostDBDropdown" class="form-label">IP Host</label>
+                                    <label for="driverDropdown" class="form-label">Driver</label>
                                     <div class="form-floating">
-                                        <select class="form-select" name="ipHost" id="ipHostDBDropdown" required>
-                                            <option selected value="" disabled>--Select IP Host DB--</option>
-                                            @foreach ($data as $key => $value)
-                                                <option value={{ $value->ipHost }}>{{ $value->ipHost }}</option>
+                                        <select class="form-select" name="driver" id="driverDropdown" required>
+                                            <option selected value="" disabled>--Select Driver--</option>
+                                            @foreach (collect($data)->pluck('driver')->unique() as $driver)
+                                                <option value="{{ $driver }}">{{ $driver }}</option>
                                             @endforeach
                                         </select>
                                     </div>
                                 </div>
                             </div>
+
                             <div class="row">
                                 <div class="card-body">
-                                    <label for="driverInput" class="form-label">Driver</label>
-                                    <input type="text" placeholder="Autofill if IP Host Selected"
-                                        class="form-query bg-light" name="driver" id="driverInput" readonly>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="card-body">
-                                    <label for="portInput" class="form-label">Port</label>
-                                    <input type="text" placeholder="Autofill if IP Host Selected"
-                                        class="form-query bg-light" name="port" id="portInput" readonly>
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="card-body">
-                                    <label for="namaDBDropdown" class="form-label">Nama Database</label>
+                                    <label for="ipHostDBDropdown" class="form-label">IP Host</label>
                                     <div class="form-floating">
-                                        <select class="form-select" name="namaDB" id="namaDBDropdown" required>
-                                            <option selected value="">--Select IP Host DB First--</option>
+                                        <select class="form-select" name="ipHost" id="ipHostDBDropdown" required disabled>
+                                            <option selected value="" disabled>--Select Driver First--</option>
                                         </select>
                                     </div>
                                 </div>
                             </div>
+
+                            <div class="row">
+                                <div class="card-body">
+                                    <label for="namaDBDropdown" class="form-label">Nama Database</label>
+                                    <div class="form-floating">
+                                        <select class="form-select" name="namaDB" id="namaDBDropdown" required disabled>
+                                            <option selected value="">--Select IP Host First--</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="card-body">
+                                    <label for="portInput" class="form-label">Port</label>
+                                    <input type="text" placeholder="Auto fill after IP Host selected"
+                                        class="form-query bg-light" name="port" id="portInput" readonly>
+                                </div>
+                            </div>
+
+
                             <div class="row">
                                 <div class="card-body">
                                     <label for="usernameDB" class="form-label">Username</label>
@@ -223,37 +231,84 @@
 
 @section('scripts')
     <script>
-        // Set timeout hilangkan notif
-        setTimeout(() => {
-            const alerts = document.querySelectorAll('.alert');
-            alerts.forEach(alert => {
-                const bsAlert = new bootstrap.Alert(alert);
-                bsAlert.close();
-            });
-        }, 5000); // hilang dalam 5 detik
-
+        // // Set timeout hilangkan notif
+        // setTimeout(() => {
+        //     const alerts = document.querySelectorAll('.alert');
+        //     alerts.forEach(alert => {
+        //         const bsAlert = new bootstrap.Alert(alert);
+        //         bsAlert.close();
+        //     });
+        // }, 5000); // hilang dalam 5 detik
 
         // Map data dari IP ke port & driver
-        const ipMap = @json(collect($data)->keyBy('ipHost'));
         const dbData = @json($data);
-        document.getElementById('ipHostDBDropdown').addEventListener('change', function() {
+
+        const driverDropdown = document.getElementById('driverDropdown');
+        const ipHostDropdown = document.getElementById('ipHostDBDropdown');
+        const namaDBDropdown = document.getElementById('namaDBDropdown');
+        const portInput = document.getElementById('portInput');
+
+        driverDropdown.addEventListener('change', function() {
+            const selectedDriver = this.value;
+
+            // Filter IP Hosts berdasarkan driver
+            const matchedIpHosts = dbData
+                .filter(entry => entry.driver === selectedDriver)
+                .map(entry => entry.ipHost)
+                .filter((value, index, self) => self.indexOf(value) === index); // unik
+
+            // Populate IP Host dropdown
+            let ipOptions = '<option value="" disabled selected>--Select IP Host--</option>';
+            matchedIpHosts.forEach(ipHost => {
+                ipOptions += `<option value="${ipHost}">${ipHost}</option>`;
+            });
+
+            ipHostDropdown.innerHTML = ipOptions;
+            ipHostDropdown.disabled = false;
+
+            // Reset Nama DB & Port
+            namaDBDropdown.innerHTML = '<option value="" disabled selected>--Select IP Host First--</option>';
+            namaDBDropdown.disabled = true;
+            portInput.value = '';
+        });
+
+        ipHostDropdown.addEventListener('change', function() {
+            const selectedDriver = driverDropdown.value;
             const selectedIp = this.value;
-            if (ipMap[selectedIp]) {
-                document.getElementById('portInput').value = ipMap[selectedIp].port;
-                document.getElementById('driverInput').value = ipMap[selectedIp].driver;
 
-                const matchedData = dbData.filter(entry => entry.ipHost === selectedIp);
+            // Filter Nama DB berdasarkan driver & ipHost
+            const matchedDBs = dbData
+                .filter(entry => entry.driver === selectedDriver && entry.ipHost === selectedIp)
+                .map(entry => entry.namaDB)
+                .filter((value, index, self) => self.indexOf(value) === index); // unik
 
-                let options = '<option value="" disabled>--Pilih Nama Database--</option>';
-                matchedData.forEach(entry => {
-                    options += `<option value="${entry.namaDB}">${entry.namaDB}</option>`;
-                });
-                // Isi dropdown namaDB
-                document.getElementById('namaDBDropdown').innerHTML = options;
+            // Populate Nama DB dropdown
+            let dbOptions = '<option value="" disabled selected>--Select Nama Database--</option>';
+            matchedDBs.forEach(namaDB => {
+                dbOptions += `<option value="${namaDB}">${namaDB}</option>`;
+            });
 
+            namaDBDropdown.innerHTML = dbOptions;
+            namaDBDropdown.disabled = false;
+            portInput.value = '';
+        });
+
+        namaDBDropdown.addEventListener('change', function() {
+            const selectedDriver = driverDropdown.value;
+            const selectedIp = ipHostDropdown.value;
+            const selectedDB = this.value;
+
+            // Cari entry yang cocok driver + ipHost + namaDB
+            const matchedEntry = dbData.find(entry =>
+                entry.driver === selectedDriver &&
+                entry.ipHost === selectedIp &&
+                entry.namaDB === selectedDB
+            );
+
+            if (matchedEntry) {
+                portInput.value = matchedEntry.port;
             } else {
-                document.getElementById('portInput').value = '';
-                document.getElementById('driverInput').value = '';
+                portInput.value = '';
             }
         });
 
@@ -351,10 +406,55 @@
                 document.getElementById('view-reason').value = reason;
                 document.getElementById('view-deskripsi').value = deskripsi;
                 document.getElementById('view-queryRequest').value = queryRequest;
+                const downloadButton = document.getElementById('downloadQueryResult');
+                const queryResultLabel = document.getElementById('queryResultLabel');
+                const queryResultTable = document.getElementById('queryResultTable');
 
+                // Tampilkan tabel jika status approval adalah 2 (approved)
+                if (statusApproval == 2) {
+                    queryResultLabel.style.display = 'inline-block';
+                    queryResultTable.style.display = 'table';
+                } else {
+                    queryResultLabel.style.display = 'none';
+                    queryResultTable.style.display = 'none';
+                }
+    
                 // Set table
                 const tableHead = document.querySelector('#queryResultTable thead');
                 const tableBody = document.querySelector('#queryResultTable tbody');
+
+                // Tampilkan tombol download jika query adalah select
+                if (queryRequest && queryRequest.toLowerCase().startsWith('select') && queryResultRaw) {
+                    // Tampilkan tombol download
+                    downloadButton.style.display = 'inline-block';
+                } else {
+                    // Sembunyikan tombol download
+                    downloadButton.style.display = 'none';
+                }
+
+                // Pasang event click untuk download
+                downloadButton.onclick = function() {
+                    const blob = new Blob([queryResultRaw], {
+                        type: 'text/plain;charset=utf-8'
+                    });
+                    const link = document.createElement('a');
+                    link.href = URL.createObjectURL(blob);
+                    // Buat timestamp
+                    const now = new Date();
+                    const timestamp = now.getFullYear() + '-' +
+                        String(now.getMonth() + 1).padStart(2, '0') + '-' +
+                        String(now.getDate()).padStart(2, '0') + '_' +
+                        String(now.getHours()).padStart(2, '0') + '-' +
+                        String(now.getMinutes()).padStart(2, '0') + '-' +
+                        String(now.getSeconds()).padStart(2, '0');
+
+                    // Set nama file
+                    link.download = `query_result_${timestamp}.txt`;
+                    document.body.appendChild(link);
+                    link.click();
+                    document.body.removeChild(link);
+                    URL.revokeObjectURL(link.href);
+                };
 
                 // Kosongkan isi table
                 tableHead.innerHTML = '';

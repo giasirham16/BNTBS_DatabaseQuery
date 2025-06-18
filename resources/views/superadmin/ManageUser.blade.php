@@ -188,19 +188,19 @@
 
 @section('scripts')
     <script>
-        // Set timeout hilangkan notif
-        setTimeout(() => {
-            const alerts = document.querySelectorAll('.alert');
-            alerts.forEach(alert => {
-                const bsAlert = new bootstrap.Alert(alert);
-                bsAlert.close();
-            });
-        }, 5000); // hilang dalam 5 detik
+        // // Set timeout hilangkan notif
+        // setTimeout(() => {
+        //     const alerts = document.querySelectorAll('.alert');
+        //     alerts.forEach(alert => {
+        //         const bsAlert = new bootstrap.Alert(alert);
+        //         bsAlert.close();
+        //     });
+        // }, 5000); // hilang dalam 5 detik
 
         // Aktifkan orderby, pagination dan search
         $(document).ready(function() {
             $('#userTable').DataTable({
-                scrollX: true,
+                // scrollX: true,
                 "ordering": true,
                 "paging": true,
                 "searching": true,

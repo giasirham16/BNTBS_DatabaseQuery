@@ -13,8 +13,7 @@ class ManageDatabaseController extends Controller
   public function index()
   {
     // session()->forget('success');
-    $data = DatabaseParameter::where('operator', Auth::user()->username)
-      ->orderBy('created_at', 'desc')
+    $data = DatabaseParameter::orderBy('created_at', 'desc')
       ->get();
     return view('operator.ManageDatabase')->with('data', $data);
   }

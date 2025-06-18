@@ -229,8 +229,8 @@ class AuthController extends Controller
         $username = session('otp_username');
         $lastSent = session('otp_last_sent');
 
-        if (!$username || !$lastSent || Carbon::parse($lastSent)->diffInMinutes(now()) < 2) {
-            return back()->withErrors(['otp' => 'Anda hanya dapat meminta OTP setiap 2 menit.']);
+        if (!$username || !$lastSent || Carbon::parse($lastSent)->diffInMinutes(now()) < 1) {
+            return back()->withErrors(['otp' => 'Anda hanya dapat meminta OTP setiap 1 menit.']);
         }
 
         $user = User::where('username', $username)->first();
@@ -293,7 +293,8 @@ class AuthController extends Controller
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
-            CURLOPT_URL => 'http://103.145.128.179:65434/v2/Login',
+            CURLOPT_URL => 'http://103.145.128.179:65434/v2/Login', // Dev
+            // CURLOPT_URL => 'http://172.29.130.10:8001/v2/Login', // Prod
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,
@@ -318,7 +319,8 @@ class AuthController extends Controller
         $curl = curl_init();
 
         curl_setopt_array($curl, array(
-            CURLOPT_URL => 'http://103.145.128.179:65434/v2/other/Email',
+            CURLOPT_URL => 'http://103.145.128.179:65434/v2/other/Email', // Dev
+            // CURLOPT_URL => 'http://172.29.130.10:8001/v2/other/Email', // Prod
             CURLOPT_RETURNTRANSFER => true,
             CURLOPT_ENCODING => '',
             CURLOPT_MAXREDIRS => 10,

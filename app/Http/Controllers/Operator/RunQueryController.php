@@ -99,12 +99,59 @@ class RunQueryController extends Controller
             }
             // Jika query insert, delete
             else if ((str_starts_with($lowerQuery, 'insert')) || (str_starts_with($lowerQuery, 'delete'))) {
+                if (str_starts_with($lowerQuery, 'insert')) {
+                    // Konversi query insert menjadi select
+                    $querySelect = $this->convertInsertToSelect($query);
+
+                    // Konfigurasi koneksi
+                    $config = [
+                        'driver'    => $driver,
+                        'host'      => $host,
+                        'port'      => $port,
+                        'database'  => $database,
+                        'username'  => $username,
+                        'password'  => $password,
+                        'charset'   => 'utf8mb4',
+                        'collation' => 'utf8mb4_unicode_ci',
+                        'prefix'    => '',
+                        'strict'    => true,
+                    ];
+
+                    $queryResult = $this->runDynamicQuery($config, $querySelect);
+
+                    if ($queryResult === false) {
+                        return redirect()->route('viewQuery')->with('error', 'Data gagal diproses, query salah!');
+                    } else if (is_array($queryResult)) {
+                        // Jika returnnya array error
+                        if (isset($queryResult['error'])) {
+                            // dd($queryResult);
+                            return redirect()->route('viewQuery')->with('error', 'Data gagal diproses, query error!');
+                        }
+                    }
+                }
+
+                $resultBefore = '';
+                // Jika query insert, simpan hasil select nama kolomnya
+                foreach ($queryResult as $item) {
+                    $keys = array_keys(get_object_vars($item));
+
+                    foreach ($keys as $index => $key) {
+                        $resultBefore .= $key;
+
+                        // Cek kalau ini BUKAN key terakhir
+                        if ($index !== array_key_last($keys)) {
+                            $resultBefore .= ', ';
+                        }
+                    }
+                }
+
                 ApprovalQuery::create([
                     'namaDB' => $database,
                     'ipHost' => $host,
                     'port' => $port,
                     'driver' => $driver,
                     'queryRequest' => $query,
+                    'updateBefore' => isset($resultBefore) ? $resultBefore : null,
                     'deskripsi' => $request->deskripsi,
                     'username' => $username,
                     'statusApproval' => 0,
@@ -154,12 +201,12 @@ class RunQueryController extends Controller
                 $resultBefore = $this->runDynamicQuery($config, $querySelect);
 
                 if ($resultBefore === false) {
-                    return redirect()->route('viewQuery')->with('error', 'Data gagal diproses, query salah 1!');
+                    return redirect()->route('viewQuery')->with('error', 'Data gagal diproses, query salah!');
                 } else if (is_array($resultBefore)) {
                     // Jika returnnya array error
                     if (isset($resultBefore['error'])) {
                         // dd($queryResult);
-                        return redirect()->route('viewQuery')->with('error', 'Data gagal diproses, query salah 2!');
+                        return redirect()->route('viewQuery')->with('error', 'Data gagal diproses, query error!');
                     }
                 }
 
@@ -208,6 +255,21 @@ class RunQueryController extends Controller
         }
     }
 
+    // Fungsi untuk mengkonversi query INSERT menjadi SELECT
+    function convertInsertToSelect($query)
+    {
+        // Cari nama tabel
+        $pattern = "/INSERT\s+INTO\s+([^\s(]+)/i";
+
+        if (preg_match($pattern, $query, $matches)) {
+            $tableName = $matches[1]; // Ambil nama tabel
+            return "SELECT * FROM {$tableName};";
+        } else {
+            return '-- INVALID QUERY --';
+        }
+    }
+
+    // Fungsi untuk mengkonversi query UPDATE menjadi SELECT
     public function convertUpdateToSelect($updateQuery)
     {
         // Normalisasi spasi
@@ -227,6 +289,7 @@ class RunQueryController extends Controller
         return $selectQuery;
     }
 
+    // Fungsi untuk menerapkan update ke hasil select
     public function applyUpdateToSelectResult($updateQuery, $queryResult)
     {
         // Normalisasi spasi

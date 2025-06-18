@@ -46,7 +46,8 @@
                     </div>
                     <div class="col">
                         <label for="view-supervisor" class="col-form-label">Supervisor</label>
-                        <input type="text" class="form-control bg-light" name="supervisor" id="view-supervisor" readonly>
+                        <input type="text" class="form-control bg-light" name="supervisor" id="view-supervisor"
+                            readonly>
                     </div>
                 </div>
                 <div class="row">
@@ -63,9 +64,14 @@
                             readonly></textarea>
                     </div>
                 </div>
+
+                <!-- Tombol download, posisikan kanan atas -->
+                <div class="d-flex justify-content-start mt-4 mb-1">
+                    <button id="downloadQueryResult" class="btn btn-primary btn-sm"><i class="bi bi-download"></i> Download Query Result</button>
+                </div>
                 <div class="row">
                     <div class="col">
-                        <label for="queryResultTable" class="col-form-label">Query Result</label>
+                        <label id="queryResultLabel" for="queryResultTable" class="col-form-label">Query Result</label>
                         <table id="queryResultTable" class="table table-hover table-bordered">
                             <thead class="table-head-custom">
                                 <tr>

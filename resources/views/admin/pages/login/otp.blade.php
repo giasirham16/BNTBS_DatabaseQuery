@@ -37,7 +37,7 @@
 
     @php
         $lastSent = session('otp_last_sent');
-        $availableAt = $lastSent ? \Carbon\Carbon::parse($lastSent)->addMinutes(2)->timestamp : now()->timestamp;
+        $availableAt = $lastSent ? \Carbon\Carbon::parse($lastSent)->addMinutes(1)->timestamp : now()->timestamp;
     @endphp
 
     <script>
