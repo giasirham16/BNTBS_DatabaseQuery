@@ -46,7 +46,7 @@
                     <label for="password" class="form-label">Password</label>
                     <input type="password" class="form-control @error('password') is-invalid @enderror" id="password"
                         name="password" required>
-                    <i id="togglePassword" class="fa fa-eye"></i>
+                    <i id="togglePassword" class="bi bi-eye-fill text-dark"></i>
                     @error('password')
                         <div class="invalid-feedback">{{ $message }}</div>
                     @enderror

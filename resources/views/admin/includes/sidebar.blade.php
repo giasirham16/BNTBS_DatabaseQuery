@@ -13,7 +13,7 @@
                 <a class="nav-link {{ request()->routeIs('viewQuery') ? '' : 'collapsed' }}"
                     href="{{ route('viewQuery') }}">
                     <i
-                        class="bi {{ request()->routeIs('viewQuery') ? 'bi-database-fill' : 'bi-database' }}"></i>
+                        class="bi {{ request()->routeIs('viewQuery') ? 'bi-file-text-fill' : 'bi-file-text' }}"></i>
                     <span>Run Query</span>
                 </a>
             </li>
@@ -21,7 +21,7 @@
                 <a class="nav-link {{ request()->routeIs('viewDatabase') ? '' : 'collapsed' }}"
                     href="{{ route('viewDatabase') }}">
                     <i
-                        class="bi {{ request()->routeIs('viewDatabase') ? 'bi-database-fill-add' : 'bi-database-add' }}"></i>
+                        class="bi {{ request()->routeIs('viewDatabase') ? 'bi-collection-fill' : 'bi-collection' }}"></i>
                     <span>Manage Database</span>
                 </a>
             </li>
@@ -30,7 +30,7 @@
                 <a class="nav-link {{ request()->routeIs('chkViewQuery') ? '' : 'collapsed' }}"
                     href="{{ route('chkViewQuery') }}">
                     <i
-                        class="bi {{ request()->routeIs('chkViewQuery') ? 'bi-database-fill' : 'bi-database' }}"></i>
+                        class="bi {{ request()->routeIs('chkViewQuery') ? 'bi-file-check-fill' : 'bi-file-check' }}"></i>
                     <span>Query Approval</span>
                 </a>
             </li>
@@ -38,7 +38,7 @@
                 <a class="nav-link {{ request()->routeIs('chkViewDatabase') ? '' : 'collapsed' }}"
                     href="{{ route('chkApproveDatabase') }}">
                     <i
-                        class="bi {{ request()->routeIs('chkViewDatabase') ? 'bi-database-fill-add' : 'bi-database-add' }}"></i>
+                        class="bi {{ request()->routeIs('chkViewDatabase') ? 'bi-collection-fill' : 'bi-collection' }}"></i>
                     <span>Database Approval</span>
                 </a>
             </li>
@@ -47,7 +47,7 @@
                 <a class="nav-link {{ request()->routeIs('spvViewQuery') ? '' : 'collapsed' }}"
                     href="{{ route('spvViewQuery') }}">
                     <i
-                        class="bi {{ request()->routeIs('spvViewQuery') ? 'bi-database-fill' : 'bi-database' }}"></i>
+                        class="bi {{ request()->routeIs('spvViewQuery') ? 'bi-file-check-fill' : 'bi-file-check' }}"></i>
                     <span>Query Approval</span>
                 </a>
             </li>
@@ -55,7 +55,7 @@
                 <a class="nav-link {{ request()->routeIs('spvViewDatabase') ? '' : 'collapsed' }}"
                     href="{{ route('spvApproveDatabase') }}">
                     <i
-                        class="bi {{ request()->routeIs('spvViewDatabase') ? 'bi-database-fill-add' : 'bi-database-add' }}"></i>
+                        class="bi {{ request()->routeIs('spvViewDatabase') ? 'bi-collection-fill' : 'bi-collection' }}"></i>
                     <span>Database Approval</span>
                 </a>
             </li>

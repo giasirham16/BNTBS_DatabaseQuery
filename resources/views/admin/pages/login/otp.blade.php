@@ -5,7 +5,7 @@
     <div class="container mt-5">
         <div class="card mx-auto" style="max-width: 400px">
             <div class="card-body">
-                <h5 class="text-center mb-3">Verifikasi OTP</h5>
+                <h5 class="text-center mt-4 mb-3">Verifikasi OTP</h5>
 
                 <form action="{{ route('otp.verify') }}" method="POST">
                     @csrf

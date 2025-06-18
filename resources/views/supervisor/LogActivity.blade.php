@@ -33,7 +33,7 @@
                                 </div>
                                 {{-- Export CSV button --}}
                                 <div class="col-md-3 text-end">
-                                    <a href="{{ route('log.export') }}" class="btn btn-primary mt-4">Export to CSV</a>
+                                    <a href="{{ route('log.export') }}" class="btn btn-primary mt-4"><i class="bi bi-download"></i> Export to CSV</a>
                                 </div>
                             </div>
 

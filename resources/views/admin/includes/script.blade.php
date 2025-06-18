@@ -5,9 +5,10 @@
 <!-- Template Main JS File -->
 <script src="{{ url('admin/assets/js/main.js') }}"></script>
 
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-<script src="https://kit.fontawesome.com/168dbc5fa4.js" crossorigin="anonymous"></script>
+<script src="{{ asset('js/jquery-3.6.0.min.js') }}"></script>
+<script src="{{ asset('js/select2.min.js') }}"></script>
+<link href="{{ asset('css/all.min.css') }}" rel="stylesheet">
+
 
 {{-- <script>
     function previewImage() {

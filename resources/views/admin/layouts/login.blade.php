@@ -7,7 +7,7 @@
     <title>@yield('title', 'Bank NTB Syariah')</title>
     <!-- Favicons -->
     @include('admin.includes.style')
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+>
     <style>
         body {
             min-height: 100vh;
@@ -37,14 +37,14 @@
             color: #005C3C
         }
     </style>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <link href="{{ asset('css/all.min.css') }}" rel="stylesheet">
 
 </head>
 
 <body>
     @yield('content')
 </body>
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+<script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
 
 
 </html>
